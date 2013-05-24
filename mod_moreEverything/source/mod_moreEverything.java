@@ -9,7 +9,7 @@ import javax.script.*;
 
 public class mod_moreEverything extends BaseMod
 {
-    public static final String VERSION_TEXT = "25 May 2013, build 229";
+    public static final String VERSION_TEXT = "25 May 2013, build 231";
     public static final int WILDCARD = 32767;
     protected static Map<Integer,Integer> fuelMap = new HashMap<Integer,Integer>();
     protected static File configDir;
@@ -288,6 +288,11 @@ public class mod_moreEverything extends BaseMod
 
     public void load()
     {
+    }
+
+    // Need to load after all other mods...
+    public void modsLoaded()
+    {
         configDir = getConfigDir();
         File file = new File(configDir, "mod_moreEverything.js");
         if(!file.exists()) extractDefaultConfig();
@@ -329,7 +334,7 @@ public class mod_moreEverything extends BaseMod
     // Yay for old Minecraft support!
     public void ModsLoaded()
     {
-        if (!loaded) load();
+        if (!loaded) modsLoaded();
     }
 
     public int addFuel(int id)
