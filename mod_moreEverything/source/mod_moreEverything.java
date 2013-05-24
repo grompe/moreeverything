@@ -9,7 +9,7 @@ import javax.script.*;
 
 public class mod_moreEverything extends BaseMod
 {
-    public static final String VERSION_TEXT = "24 May 2013, build 227";
+    public static final String VERSION_TEXT = "25 May 2013, build 228";
     public static final int WILDCARD = 32767;
     protected static Map<Integer,Integer> fuelMap = new HashMap<Integer,Integer>();
     protected static File configDir;

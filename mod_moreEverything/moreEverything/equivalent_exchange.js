@@ -20,7 +20,7 @@ var AddTransmutation1to1 = function() { log("Error: AddTransmutation1to1 is not 
     i1.unshift(mods.equivalentexchange.miniumStone);
     AddShapelessRecipe(result, i1);
     var i2 = input.slice();
-    i2.unshift(mods.equivalentexchange.philStone);
+    i2.unshift(mods.equivalentexchange.philosophersStone);
     AddShapelessRecipe(result, i2);
   }
 
