@@ -24,13 +24,10 @@ Hard/Tricky/Unknown
   Basically convert between java.lang.Class and JavaClass.
   (Class -> JavaClass: WrapFactory.wrapJavaClass()?)
   (JavaClass -> Class: getClassObject() or unwrap()?)
-  
 
 
 Maintenance/Boring
 ==================
-- Move mod item ID detection to a separate script
-
 - Ensure correct mod load order
 
 - Wrap ItemStack and Method in JavaScript pseudo-classes for more straightforward work
