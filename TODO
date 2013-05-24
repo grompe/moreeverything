@@ -1,0 +1,97 @@
+Easy
+====
+- Add Equivalent Exchange support for some other mods:
+  ExtraBiomes and BOP logs/wood, saplings,
+
+- Add Thaumcraft aspects for mod items/blocks
+
+- Convert __getFile() and __findMatch() to JavaScript, put __getConfigDir()
+
+- Make recipe for Underground Biomes limestone block -> MineFantasy 4 limestone hunks
+
+
+Medium
+======
+- Use Forge's adding trades
+
+
+Hard/Tricky/Unknown
+===================
+- Hook CommandBase/ICommand to be Minecraft version independent
+
+- Figure out how to access ModLoader in Packages for easier API access,
+  considering that Forge moves it from the classpath
+  Basically convert between java.lang.Class and JavaClass.
+  (Class -> JavaClass: WrapFactory.wrapJavaClass()?)
+  (JavaClass -> Class: getClassObject() or unwrap()?)
+  
+
+
+Maintenance/Boring
+==================
+- Move mod item ID detection to a separate script
+
+- Ensure correct mod load order
+
+- Wrap ItemStack and Method in JavaScript pseudo-classes for more straightforward work
+  Alternatively, find out if it's possible to add fields into these specifically for JS engine
+
+- Write introduction, documentation, etc.
+
+- Allow to easily turn off certain tweaks by main configuration script.
+
+- Fix the case when exceptions occur and script still reports 0 warnings 0 errors.
+
+
+Future
+======
+- more Thaumcraft API support
+- existing IDs, recipes inspection to help adding missing ones
+- dispenser planting seeds
+- allow changing chests loot
+- allow changing mob drops
+  - also rare skulls drop?
+- allow nether warts to grow in overworld, if shielded from sky and having light level 15
+- make lava update properly and disappear when source block is removed, for Minecraft 1.5.2 and older
+  (https://mojang.atlassian.net/browse/MC-4631)
+- plant more stuff in pots
+- villagers drop last trade (if it's enabled) when killed by a player?
+- villagers show a bubble with last viewed offer
+- on medium and especially hard difficulty, regenerating from full hunger bar makes player hungry
+- charge double amount of XP instead of showing "too expensive!" on anvils
+- change fishing interval?
+- chicken mating makes an egg instead of a chicken;
+  if possible, such an egg has 1/2 chance to hatch as opposed to 1/8
+  if possible, such an egg hatches instead of disappearing in 5 minutes 
+- use lapis in brewing potions?
+- make bookshelves have direction
+
+
+---
+= Trades to add =
+Priest buying
+soul sand 36-63 for 1e,
+(as proof of monsters being killed)
+gunpowder 18-32 for 1e,
+rotten flesh 36-63 for 1e,
+spider eyes 6-11 for 1e,
+blaze rods 18-32 for 1e,
+ender pearls 6-11 for 1e,
+ghast tears 6-11 for 1e,
+bones 36-63 for 1e
+
+Farmers buying
+carrots 18-21 for 1e
+cooked potatoes 18-21 for 1e
+        selling
+saplings 3-5 for 1e
+sugar canes 3-5 for 1e
+pumpkins 1-2 for 1e
+lily pads 5-8 for 1e
+
+Librarians selling
+maps 1 for 10-11e,
+item frames 1 for 1-2e
+	
+Butchers selling
+leather 1-3 for 1 emerald

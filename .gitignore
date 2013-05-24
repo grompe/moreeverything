@@ -1,0 +1,7 @@
+*.zip
+*.class
+.git/
+config/
+deps*/
+old/
+temp/
