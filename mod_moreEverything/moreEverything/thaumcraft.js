@@ -83,18 +83,17 @@ var RegisterObjectTag = function() { log("Error: RegisterObjectTag is not availa
     RegisterObjectTag(mods.equivalentexchange.miniumShard, -1, "power", 1, "evil", 1);
   }
 
-  if (mods.extrabiomesxl && GetFile("extrabiomes/extrabiomes.cfg"))
+  if (mods.extrabiomesxl)
   {
-    var redrock = FindIntMatch(/I:redrock.id=(\d+)/);
-    RegisterObjectTag(redrock, 0, "rock", 2); // smooth red rock
-    RegisterObjectTag(redrock, 1, "rock", 1, "destruction", 1); // red rock cobblestone
-    RegisterObjectTag(redrock, 2, "rock", 2); // red rock bricks
-    RegisterObjectTag(FindIntMatch(/I:crackedsand.id=(\d+)/), -1, "destruction", 1, "earth", 1);
+    RegisterObjectTag(mods.extrabiomesxl.redRock, 0, "rock", 2); // smooth red rock
+    RegisterObjectTag(mods.extrabiomesxl.redRock, 1, "rock", 1, "destruction", 1); // red rock cobblestone
+    RegisterObjectTag(mods.extrabiomesxl.redRock, 2, "rock", 2); // red rock bricks
+    RegisterObjectTag(mods.extrabiomesxl.crackedSand, -1, "destruction", 1, "earth", 1);
   }
 
-  if (mods.minefantasy && GetFile("MineFantasy.cfg"))
+  if (mods.minefantasy)
   {
-    RegisterObjectTag(FindIntMatch(/I:Herb=(\d+)/), -1, "plant", 2);
+    RegisterObjectTag(mods.minefantasy.herb, -1, "plant", 2);
   }
   
 })();

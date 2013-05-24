@@ -464,7 +464,7 @@ function AddFuel(burnTime, id, damage)
     log("AddFuel 1st argument must be a number greater than 0.", logLevel.error);
     return;
   }
-  if (typeof damage == "undefined") damage = 32767;
+  if (typeof damage == "undefined") damage = 32767; // Java program always uses 32767 as wildcard
   __api.__addFuel(id, damage, burnTime);
   var logitem = (damage != 32767) ? (id + ":" + damage) : id;
   log("Added fuel: ID "+logitem+" to burn for "+burnTime+" ticks.", logLevel.debug);

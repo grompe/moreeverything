@@ -177,106 +177,86 @@ var AddTransmutation1to1 = function() { log("Error: AddTransmutation1to1 is not 
     AddTransmutation(SetItemStackSize(iron[0], 8), item.goldNugget);
   }
 
-  if (mods.thaumcraft && GetFile("Thaumcraft.cfg"))
+  if (mods.thaumcraft)
   {
-    var shard = FindIntMatch(/I:ItemShard=(\d+)/)+256;
-    var marker = FindIntMatch(/I:BlockMarker=(\d+)/);
-    var candle = FindIntMatch(/I:BlockCandle=(\d+)/);
-    var wstone = FindIntMatch(/I:BlockSecure=(\d+)/);
-    var cluster = FindIntMatch(/I:BlockCrystal=(\d+)/);
-    var obsidianTile = FindIntMatch(/I:BlockCosmeticSolid=(\d+)/);
-
     // Air shard -> fire shard -> water shard -> earth shard -> air shard; same for clusters
     for (var i = 0; i < 4; i++)
     {
-      AddTransmutation(NewItemStack(shard  , 1, (i == 3) ? 0 : i+1), NewItemStack(shard  , 1, i));
-      AddTransmutation(NewItemStack(cluster, 1, (i == 3) ? 0 : i+1), NewItemStack(cluster, 1, i));
+      AddTransmutation(NewItemStack(mods.thaumcraft.shard,   1, (i == 3) ? 0 : i+1), NewItemStack(mods.thaumcraft.shard,   1, i));
+      AddTransmutation(NewItemStack(mods.thaumcraft.crystal, 1, (i == 3) ? 0 : i+1), NewItemStack(mods.thaumcraft.crystal, 1, i));
     }
 
     // Vis shard = 3 dull shards
-    AddTransmutation(NewItemStack(shard, 1, 4), ArrayOf(NewItemStack(shard, 1, 5), 3));
-    AddTransmutation(NewItemStack(shard, 3, 5), NewItemStack(shard, 1, 4));
+    AddTransmutation(NewItemStack(mods.thaumcraft.shard, 1, 4), ArrayOf(NewItemStack(mods.thaumcraft.shard, 1, 5), 3));
+    AddTransmutation(NewItemStack(mods.thaumcraft.shard, 3, 5), NewItemStack(mods.thaumcraft.shard, 1, 4));
 
     // Change marker, candle and warded stone colors
     for (var i = 0; i < 16; i++)
     {
-      AddTransmutation(NewItemStack(marker, 1, (i == 15) ? 0 : i+1), NewItemStack(marker, 1, i));
-      AddTransmutation(NewItemStack(candle, 1, (i == 15) ? 0 : i+1), NewItemStack(candle, 1, i));
-      AddTransmutation(NewItemStack(wstone, 1, (i == 15) ? 0 : i+1), NewItemStack(wstone, 1, i));
+      AddTransmutation(NewItemStack(mods.thaumcraft.marker, 1, (i == 15) ? 0 : i+1), NewItemStack(mods.thaumcraft.marker, 1, i));
+      AddTransmutation(NewItemStack(mods.thaumcraft.candle, 1, (i == 15) ? 0 : i+1), NewItemStack(mods.thaumcraft.candle, 1, i));
+      AddTransmutation(NewItemStack(mods.thaumcraft.secure, 1, (i == 15) ? 0 : i+1), NewItemStack(mods.thaumcraft.secure, 1, i));
     }
 
     // Uncrafting: obsidian tile -> obsidian
-    AddTransmutation(item.obsidian, NewItemStack(obsidianTile, 1, 1));
+    AddTransmutation(item.obsidian, NewItemStack(mods.thaumcraft.cosmeticSolid, 1, 1));
   }
 
-  if (mods.natura && GetFile("Natura.txt"))
+  if (mods.natura)
   {
-    var foodItems = FindIntMatch(/I:"Food Items"=(\d+)/)+256;
-    var barleySeeds = FindIntMatch(/I:"Barley Seed"=(\d+)/)+256;
-    var cloud =  FindIntMatch(/I:"Cloud Block"=(\d+)/);
     // Barley = wheat
-    AddTransmutation1to1(item.wheat, NewItemStack(foodItems, 1, 0));
+    AddTransmutation1to1(item.wheat, NewItemStack(mods.natura.foodItems, 1, 0));
     // Seeds = barley seeds
-    AddTransmutation1to1(item.seeds, NewItemStack(barleySeeds, 1, 0));
+    AddTransmutation1to1(item.seeds, NewItemStack(mods.natura.barleySeeds, 1, 0));
     // Wheat flour = barley flour
-    AddTransmutation1to1(NewItemStack(foodItems, 1, 1), NewItemStack(foodItems, 1, 2));
+    AddTransmutation1to1(NewItemStack(mods.natura.foodItems, 1, 1), NewItemStack(mods.natura.foodItems, 1, 2));
     // Uncrafting: gunpowder -> 4 sulfur (foodItems, heh)
-    AddTransmutation(NewItemStack(foodItems, 4, 4), item.gunpowder);
+    AddTransmutation(NewItemStack(mods.natura.foodItems, 4, 4), item.gunpowder);
     // Uncrafting: sulfur -> 4 sulfur cloud
-    AddTransmutation(NewItemStack(cloud, 4, 3), NewItemStack(foodItems, 1, 4));
+    AddTransmutation(NewItemStack(mods.natura.cloud, 4, 3), NewItemStack(mods.natura.foodItems, 1, 4));
   }
 
-  if (mods.undergroundbiomes && GetFile("UndergroundBiomes.cfg"))
+  if (mods.undergroundbiomes)
   {
-    var anthracite  = FindIntMatch(/I:"Anthracite Block ID:"=(\d+)/);
-    var ign_brick   = FindIntMatch(/I:"Igneous Brick ID:"=(\d+)/);
-    var ign_cobble  = FindIntMatch(/I:"Igneous Cobblestone ID:"=(\d+)/);
-    var ign_slab    = FindIntMatch(/I:"Igneous Stone Brick Slab ID .half.:"=(\d+)/);
-    var igneous     = FindIntMatch(/I:"Igneous Stone ID:"=(\d+)/);
-    var lignite     = FindIntMatch(/I:"Lignite Item ID:"=(\d+)/)+256;
-    var meta_brick  = FindIntMatch(/I:"Metamorphic Brick ID:"=(\d+)/);
-    var meta_cobble = FindIntMatch(/I:"Metamorphic Cobblestone ID:"=(\d+)/);
-    var meta_slab   = FindIntMatch(/I:"Metamorphic Stone Brick Slab ID .half.:"=(\d+)/);
-    var metamorphic = FindIntMatch(/I:"Metamorphic Stone ID:"=(\d+)/);
-    var sedimentary = FindIntMatch(/I:"Sedimentary Stone ID:"=(\d+)/);
+    var ub = mods.undergroundbiomes;
 
     // Transmute stones in cycle
     for (var i = 0; i < 8; i++)
     {
-      AddTransmutation(NewItemStack(igneous,     1, (i == 7) ? 0 : i+1), NewItemStack(igneous,     1, i));
-      AddTransmutation(NewItemStack(metamorphic, 1, (i == 7) ? 0 : i+1), NewItemStack(metamorphic, 1, i));
-      AddTransmutation(NewItemStack(ign_brick,   1, (i == 7) ? 0 : i+1), NewItemStack(ign_brick,   1, i));
-      AddTransmutation(NewItemStack(ign_cobble,  1, (i == 7) ? 0 : i+1), NewItemStack(ign_cobble,  1, i));
-      AddTransmutation(NewItemStack(ign_slab,    1, (i == 7) ? 0 : i+1), NewItemStack(ign_slab,    1, i));
-      AddTransmutation(NewItemStack(meta_brick,  1, (i == 7) ? 0 : i+1), NewItemStack(meta_brick,  1, i));
-      AddTransmutation(NewItemStack(meta_cobble, 1, (i == 7) ? 0 : i+1), NewItemStack(meta_cobble, 1, i));
-      AddTransmutation(NewItemStack(meta_slab,   1, (i == 7) ? 0 : i+1), NewItemStack(meta_slab,   1, i));
+      AddTransmutation(NewItemStack(ub.igneousStone,           1, (i == 7) ? 0 : i+1), NewItemStack(ub.igneousStone,           1, i));
+      AddTransmutation(NewItemStack(ub.metamorphicStone,       1, (i == 7) ? 0 : i+1), NewItemStack(ub.metamorphicStone,       1, i));
+      AddTransmutation(NewItemStack(ub.igneousBrick,           1, (i == 7) ? 0 : i+1), NewItemStack(ub.igneousBrick,           1, i));
+      AddTransmutation(NewItemStack(ub.igneousCobblestone,     1, (i == 7) ? 0 : i+1), NewItemStack(ub.igneousCobblestone,     1, i));
+      AddTransmutation(NewItemStack(ub.igneousBrickSlab,       1, (i == 7) ? 0 : i+1), NewItemStack(ub.igneousBrickSlab,       1, i));
+      AddTransmutation(NewItemStack(ub.metamorphicBrick,       1, (i == 7) ? 0 : i+1), NewItemStack(ub.metamorphicBrick,       1, i));
+      AddTransmutation(NewItemStack(ub.metamorphicCobblestone, 1, (i == 7) ? 0 : i+1), NewItemStack(ub.metamorphicCobblestone, 1, i));
+      AddTransmutation(NewItemStack(ub.metamorphicStoneSlab,   1, (i == 7) ? 0 : i+1), NewItemStack(ub.metamorphicStoneSlab,   1, i));
       if (i == 4) continue; // Skip the lignite block
-      AddTransmutation(NewItemStack(sedimentary, 1, (i == 7) ? 0 : (i == 3) ? 5 : i+1), NewItemStack(sedimentary, 1, i));
+      AddTransmutation(NewItemStack(ub.sedimentaryStone, 1, (i == 7) ? 0 : (i == 3) ? 5 : i+1), NewItemStack(ub.sedimentaryStone, 1, i));
     }
     
     // Uncook stone to cobble (can do only in pairs)
     for (var i = 0; i < 8; i++)
     {
-      AddTransmutation(NewItemStack(ign_cobble,  2, i), ArrayOf(NewItemStack(igneous,     1, i), 2));
-      AddTransmutation(NewItemStack(meta_cobble, 2, i), ArrayOf(NewItemStack(metamorphic, 1, i), 2));
+      AddTransmutation(NewItemStack(ub.igneousCobblestone,     2, i), ArrayOf(NewItemStack(ub.igneousStone,     1, i), 2));
+      AddTransmutation(NewItemStack(ub.metamorphicCobblestone, 2, i), ArrayOf(NewItemStack(ub.metamorphicStone, 1, i), 2));
     }
     
     // Convert igneous/metamorphic stone to vanilla flint
-    AddTransmutation(item.flint, ArrayOf(NewItemStack(ign_cobble,  1), 4));
-    AddTransmutation(item.flint, ArrayOf(NewItemStack(meta_cobble, 1), 4));
+    AddTransmutation(item.flint, ArrayOf(NewItemStack(ub.igneousCobblestone,     1), 4));
+    AddTransmutation(item.flint, ArrayOf(NewItemStack(ub.metamorphicCobblestone, 1), 4));
     // And from sedimentary stone, only flint block
-    AddTransmutation(item.flint, ArrayOf(NewItemStack(sedimentary, 1, 5), 4));
+    AddTransmutation(item.flint, ArrayOf(NewItemStack(ub.sedimentaryStone, 1, 5), 4));
     
     // Joining slabs
     for (var i = 0; i < 8; i++)
     {
-      AddTransmutation(NewItemStack(ign_brick, 1, i), ArrayOf(NewItemStack(ign_slab,  1, i), 2));
-      AddTransmutation(NewItemStack(meta_brick,1, i), ArrayOf(NewItemStack(meta_slab, 1, i), 2));
+      AddTransmutation(NewItemStack(ub.igneousBrick,     1, i), ArrayOf(NewItemStack(ub.igneousBrickSlab,     1, i), 2));
+      AddTransmutation(NewItemStack(ub.metamorphicBrick, 1, i), ArrayOf(NewItemStack(ub.metamorphicStoneSlab, 1, i), 2));
     }
     
     // Uncrafting
-    AddTransmutation(NewItemStack(item.coal, 4), anthracite);
+    AddTransmutation(NewItemStack(item.coal, 4), ub.anthracite);
 
   }
 })();
