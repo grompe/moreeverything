@@ -9,7 +9,7 @@ import javax.script.*;
 
 public class mod_moreEverything extends BaseMod
 {
-    public static final String VERSION_TEXT = "25 May 2013, build 228";
+    public static final String VERSION_TEXT = "25 May 2013, build 229";
     public static final int WILDCARD = 32767;
     protected static Map<Integer,Integer> fuelMap = new HashMap<Integer,Integer>();
     protected static File configDir;
@@ -222,7 +222,6 @@ public class mod_moreEverything extends BaseMod
         catch(ScriptException e)
         {
             log("!SE! "+e.toString());
-            e.printStackTrace();
         }
     }
 
@@ -308,7 +307,6 @@ public class mod_moreEverything extends BaseMod
         catch(ScriptException e)
         {
             log("!SE! "+e.toString());
-            e.printStackTrace();
         }
         catch(NoSuchMethodException e)
         {
