@@ -222,6 +222,7 @@ public class mod_moreEverything extends BaseMod
         catch(ScriptException e)
         {
             log("!SE! "+e.toString());
+            e.printStackTrace();
         }
     }
 
@@ -307,6 +308,7 @@ public class mod_moreEverything extends BaseMod
         catch(ScriptException e)
         {
             log("!SE! "+e.toString());
+            e.printStackTrace();
         }
         catch(NoSuchMethodException e)
         {
