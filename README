@@ -53,15 +53,21 @@ Current features
 
 Supported mods
 ==============
-Equivalent Exchange 3
-Thaumcraft
-Natura
-ExtrabiomesXL
-Biomes O' Plenty
-Tinkers' Construct
-Twilight Forest
-Buildcraft
-MineFantasy
+Supported APIs:
+
+  Equivalent Exchange 3
+  Thaumcraft
+
+Supported block/item IDs:
+
+  Natura
+  ExtrabiomesXL
+  Biomes O' Plenty
+  Tinkers' Construct
+  Twilight Forest
+  Buildcraft
+  MineFantasy
+  Underground Biomes
 
 
 Future
