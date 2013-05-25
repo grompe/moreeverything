@@ -3,23 +3,25 @@ var mods;
 
 (function(){
   // If mod exists, make storage for mod-specific variables such as item IDs
-  function init(pkg)
+  function init(name, pkg)
   {
-    return isEmpty(pkg) ? false : {};
+    if (isEmpty(pkg)) return false;
+    log("Found mod "+name+".", logLevel.debug);
+    return {};
   }
   
   mods =
   {
-    equivalentexchange : init(Packages.com.pahimar.ee3.EquivalentExchange3),
-    thaumcraft         : init(Packages.thaumcraft.common.Thaumcraft),
-    natura             : init(Packages.mods.natura.Natura),
-    extrabiomesxl      : init(Packages.extrabiomes.Extrabiomes),
-    biomesoplenty      : init(Packages.biomesoplenty.BiomesOPlenty),
-    tinkersconstruct   : init(Packages.mods.tinker.tconstruct.TConstruct),
-    twilightforest     : init(Packages.twilightforest.TwilightForestMod),
-    buildcraft         : init(Packages.buildcraft.BuildCraftCore),
-    minefantasy        : init(Packages.minefantasy.MineFantasyBase),
-    undergroundbiomes  : init(Packages.exterminatorJeff.undergroundBiomes.common.UndergroundBiomes)
+    equivalentexchange : init("Equivalent Exchange 3", Packages.com.pahimar.ee3.EquivalentExchange3),
+    thaumcraft         : init("Thaumcraft", Packages.thaumcraft.common.Thaumcraft),
+    natura             : init("Natura", Packages.mods.natura.Natura),
+    extrabiomesxl      : init("ExtraBiomesXL", Packages.extrabiomes.Extrabiomes),
+    biomesoplenty      : init("Biomes O' Plenty", Packages.biomesoplenty.BiomesOPlenty),
+    tinkersconstruct   : init("Tinkers' Construct", Packages.mods.tinker.tconstruct.TConstruct),
+    twilightforest     : init("Twilight Forest", Packages.twilightforest.TwilightForestMod),
+    buildcraft         : init("Buildcraft", Packages.buildcraft.BuildCraftCore),
+    minefantasy        : init("MineFantasy", Packages.minefantasy.MineFantasyBase),
+    undergroundbiomes  : init("Underground Biomes", Packages.exterminatorJeff.undergroundBiomes.common.UndergroundBiomes)
   };
 
   if (mods.equivalentexchange && GetFile("EE3/EE3.cfg"))
