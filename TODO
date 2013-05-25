@@ -7,8 +7,6 @@ Easy
 
 - Convert __getFile() and __findMatch() to JavaScript, put __getConfigDir()
 
-- Make recipe for Underground Biomes limestone block -> MineFantasy 4 limestone hunks
-
 
 Medium
 ======
@@ -24,6 +22,8 @@ Hard/Tricky/Unknown
   Basically convert between java.lang.Class and JavaClass.
   (Class -> JavaClass: WrapFactory.wrapJavaClass()?)
   (JavaClass -> Class: getClassObject() or unwrap()?)
+
+- Make Minecraft 1.6 compatible directory detection
 
 
 Maintenance/Boring
@@ -62,6 +62,16 @@ Future
   if possible, such an egg hatches instead of disappearing in 5 minutes 
 - use lapis in brewing potions?
 - make bookshelves have direction
+
+
+Forum suggestions
+=================
+- Enriched Gravel mod API: http://www.minecraftforum.net/topic/1783653-
+  (lets you either add drops to enriched gravel or add custom sifter block drops for any block and metadata)
+- IC2 recipe support -- macerator, extractor, compressor
+- Thermal Expansion recipe support -- pulverizer, induction smelter, sawmill
+- Forestry recipe support -- carpenter, centrifuge 
+- GregTech
 
 
 ---
