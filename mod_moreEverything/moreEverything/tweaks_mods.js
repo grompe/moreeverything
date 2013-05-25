@@ -52,6 +52,12 @@
     // Bug: burns forever for some reason
     //AddFuel(300, mods.tinkersconstruct.woodPattern);
     AddFuel(160, mods.tinkersconstruct.materials, 0); // Paper stack
+    // Add missing silver nuggets -> silver ingot recipe
+    var silver = GetOres("ingotSilver");
+    if (silver.length > 0)
+    {
+      AddShapelessRecipe(silver[0], ArrayOf(NewItemStack(mods.tinkersconstruct.materials, 1, 23), 9));
+    }
   }
 
   if (mods.buildcraft)
