@@ -184,7 +184,7 @@ var AddTransmutation1to1 = function() { log("Error: AddTransmutation1to1 is not 
     }
   }
   var m;
-  if (optionalFeature.ee_thaumcraft_transmutations && m = mods.thaumcraft)
+  if (optionalFeature.ee_thaumcraft_transmutations && (m = mods.thaumcraft))
   {
     // Air shard -> fire shard -> water shard -> earth shard -> air shard; same for clusters
     for (var i = 0; i < 4; i++)
@@ -209,7 +209,7 @@ var AddTransmutation1to1 = function() { log("Error: AddTransmutation1to1 is not 
     AddTransmutation(item.obsidian, NewItemStack(m.cosmeticSolid, 1, 1));
   }
 
-  if (optionalFeature.ee_natura_transmutations && m = mods.natura)
+  if (optionalFeature.ee_natura_transmutations && (m = mods.natura))
   {
     // Barley = wheat
     AddTransmutation1to1(item.wheat, NewItemStack(m.foodItems, 1, 0));
@@ -223,7 +223,7 @@ var AddTransmutation1to1 = function() { log("Error: AddTransmutation1to1 is not 
     AddTransmutation(NewItemStack(m.cloud, 4, 3), NewItemStack(m.foodItems, 1, 4));
   }
 
-  if (optionalFeature.ee_underground_biomes_transmutations && m = mods.undergroundbiomes)
+  if (optionalFeature.ee_underground_biomes_transmutations && (m = mods.undergroundbiomes))
   {
     // Transmute stones in cycle
     for (var i = 0; i < 8; i++)
