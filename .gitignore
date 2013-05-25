@@ -5,3 +5,5 @@ config/
 deps*/
 old/
 temp/
+mod_moreEverything/source/
+buildnumber
