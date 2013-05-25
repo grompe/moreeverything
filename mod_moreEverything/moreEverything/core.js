@@ -18,7 +18,24 @@ var defaultScripts = [
   "moreEverything/tweaks_mods.js",
   "moreEverything/equivalent_exchange.js",
   "moreEverything/thaumcraft.js",
+  "moreEverything/optional.js"
 ];
+
+var optionalFeature = {
+  more_vanilla_fuel: 1,
+  wool_bleaching: 1,
+  mod_tweaks: 1,
+  ee_vanilla_transmutations: 1,
+  ee_vanilla_uncrafting: 1,
+  ee_ore_transmutations: 1,
+  ee_thaumcraft_transmutations: 1,
+  ee_natura_transmutations: 1,
+  ee_underground_biomes_transmutations: 1,
+  thaumcraft_vanilla_aspects: 1,
+  thaumcraft_mod_aspects: 1,
+
+  rotten_flesh_to_leather: 0,
+};
 
 function isEmpty(obj)
 {

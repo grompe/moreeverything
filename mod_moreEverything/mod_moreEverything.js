@@ -7,7 +7,23 @@ https://github.com/grompe/moreeverything/tree/master/mod_moreEverything/moreEver
 */
 
 // Uncomment for debugging; valid logLevels are debug, info, warning, error
-currentLogLevel = logLevel.debug;
+//currentLogLevel = logLevel.debug;
+
+// Uncomment to disable default features
+//optionalFeature.more_vanilla_fuel = 0;
+//optionalFeature.wool_bleaching = 0;
+//optionalFeature.mod_tweaks = 0;
+//optionalFeature.ee_vanilla_transmutations = 0;
+//optionalFeature.ee_vanilla_uncrafting = 0;
+//optionalFeature.ee_ore_transmutations = 0;
+//optionalFeature.ee_thaumcraft_transmutations = 0;
+//optionalFeature.ee_natura_transmutations = 0;
+//optionalFeature.ee_underground_biomes_transmutations = 0;
+//optionalFeature.thaumcraft_vanilla_aspects = 0;
+//optionalFeature.thaumcraft_mod_aspects = 0;
+
+// Uncomment to enable optional features
+//optionalFeature.rotten_flesh_to_leather = 1;
 
 // Remove "Internal" word if you want the scripts to be extracted for you to modify
 // If you do extract default scripts, you'll have to update (delete) them manually
@@ -57,42 +73,6 @@ Dependency: core.js
 Examples:
   AddFuel(20, item.feather);
 
-
-// Shaped recipe test
-AddRecipe(item.wool, "x ", " y", Chr("x"), item.cobblestone, Chr("y"), item.dirt);
-// Shapeless recipe test
-AddShapelessRecipe(item.wool, item.cobblestone, item.cobblestone);
-// Shaped ore recipe test
-AddRecipe(item.wool, "x ", " y", Chr("x"), "ingotSilver", Chr("y"), "ingotCopper");
-// Shapeless ore recipe test
-AddShapelessRecipe(item.wool, "ingotSilver", "ingotSilver");
-// Smelting test
-AddSmelting(item.dirt, item.cobblestone, 5.0);
-// Ore dictionary test
-RegisterOre("ingotIron", item.ironIngot);
-AddShapelessRecipe(item.wool, "ingotIron", "ingotIron");
-
-
-Equivalent Exchange example:
-
-if (hasEquivalentexchange)
-{
-  AddTransmutation(item.coal, ArrayOf(item.redstone, 2));
-  AddTransmutation(NewItemStack(item.redstone, 2), NewItemStack(item.coal, 1, 0));
-  AddTransmutation1to1(item.stonePressurePlate, item.woodenPressurePlate);
-  // ...
-}  
-
-
-Thaumcraft example:
-
-if (hasThaumcraft)
-{
-  RegisterObjectTag(item.trappedChest, -1, "wood", 2, "void", 4, "trap", 1);
-  // ...
-}
-
-
 Look inside default scripts for more documentation and examples!
 
 */ ////////////////////////
@@ -105,13 +85,31 @@ currentLogLevel = logLevel.debug;
   //
   // Add code that doesn't depend on mods here
   //
-  if (mods.biomesoplenty)
+  // Shaped recipe test
+  //AddRecipe(item.wool, "x ", " y", Chr("x"), item.cobblestone, Chr("y"), item.dirt);
+  // Shapeless recipe test
+  //AddShapelessRecipe(item.wool, item.cobblestone, item.cobblestone);
+  // Shaped ore recipe test
+  //AddRecipe(item.wool, "x ", " y", Chr("x"), "ingotSilver", Chr("y"), "ingotCopper");
+  // Shapeless ore recipe test
+  //AddShapelessRecipe(item.wool, "ingotSilver", "ingotSilver");
+  // Smelting test
+  //AddSmelting(item.dirt, item.cobblestone, 5.0);
+  // Ore dictionary test
+  //RegisterOre("ingotIron", item.ironIngot);
+  //AddShapelessRecipe(item.wool, "ingotIron", "ingotIron");
+
+  if (mods.equivalentexchange)
   {
-    // Do something with Biomes O' Plenty
+    // Do something with Equivalent Exchange
+    //AddTransmutation(item.coal, ArrayOf(item.redstone, 2));
+    //AddTransmutation(NewItemStack(item.redstone, 2), NewItemStack(item.coal, 1, 0));
+    //AddTransmutation1to1(item.stonePressurePlate, item.woodenPressurePlate);
   }
   if (mods.thaumcraft)
   {
     // Do something with Thaumcraft
+    //RegisterObjectTag(item.trappedChest, -1, "wood", 2, "void", 4, "trap", 1);
   }
   // etc.
 })();

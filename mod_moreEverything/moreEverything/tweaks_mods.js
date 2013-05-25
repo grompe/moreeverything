@@ -3,6 +3,8 @@
 
 (function ()
 {
+  if (!optionalFeature.mod_tweaks) return;
+
   if (mods.biomesoplenty)
   {
     AddFuel(40, mods.biomesoplenty.plant, 0);     // Dead grass
