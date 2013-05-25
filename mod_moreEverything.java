@@ -356,6 +356,6 @@ public class mod_moreEverything extends BaseMod
     {
         mod_moreEverything me = new mod_moreEverything();
         me.standalone = true;
-        me.load();
+        me.modsLoaded();
     }
 }

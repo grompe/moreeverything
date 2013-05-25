@@ -1,4 +1,4 @@
-// Mod fuel tweaks
+// Mod tweaks
 // By Grom PE
 
 (function ()
