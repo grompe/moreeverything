@@ -15,9 +15,9 @@ var defaultScripts = [
   "moreEverything/defs.js",
   "moreEverything/tweaks_vanilla.js",
   "moreEverything/mods_init.js",
-  "moreEverything/tweaks_mod_fuel.js",
+  "moreEverything/tweaks_mods.js",
   "moreEverything/equivalent_exchange.js",
-  "moreEverything/thaumcraft.js"
+  "moreEverything/thaumcraft.js",
 ];
 
 function isEmpty(obj)

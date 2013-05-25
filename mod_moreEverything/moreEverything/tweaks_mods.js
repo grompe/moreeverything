@@ -67,5 +67,10 @@
     AddFuel(1000, mods.minefantasy.itemBaseId+42, 6);  // Fire essence
     AddFuel(1000, mods.minefantasy.itemBaseId+42, 11); // Ember
     AddFuel(300,  mods.minefantasy.itemBaseId+135);    // Ironbark door
+    // Underground Biomes limestone to 4 MineFantasy limestone hunks
+    if (mods.undergroundbiomes)
+    {
+      AddShapelessRecipe(NewItemStack(mods.minefantasy.itemBaseId+42, 4, 66), NewItemStack(mods.undergroundbiomes.sedimentaryStone, 1, 0));
+    }
   }
 })();
