@@ -23,6 +23,9 @@ Hard/Tricky/Unknown
   (Class -> JavaClass: WrapFactory.wrapJavaClass()?)
   (JavaClass -> Class: getClassObject() or unwrap()?)
 
+- Stupid Java engine loses WrappedException in ScriptException, making it
+  impossible to print JavaScript stack trace from Java - fix that.
+
 - Make Minecraft 1.6 compatible directory detection
 
 

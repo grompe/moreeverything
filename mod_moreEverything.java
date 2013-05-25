@@ -6,6 +6,7 @@ import java.util.*;
 import java.lang.reflect.*;
 import java.util.regex.*;
 import javax.script.*;
+import sun.org.mozilla.javascript.internal.*;
 
 public class mod_moreEverything extends BaseMod
 {
@@ -20,6 +21,11 @@ public class mod_moreEverything extends BaseMod
     public static void log(String s)
     {
         System.out.println("[mod_moreEverything] "+s);
+    }
+
+    public static void log(String s, Object... fmt)
+    {
+        log(String.format(s, fmt));
     }
 
     private static File getConfigDir()
@@ -80,11 +86,11 @@ public class mod_moreEverything extends BaseMod
             }
             catch(FileNotFoundException e)
             {
-                //log(String.format("File %s not found, ignoring.", filename));
+                //log("File %s not found, ignoring.", filename);
             }
             catch(IOException e)
             {
-                log(String.format("Error while reading %s, ignoring.", filename));
+                log("Error while reading %s, ignoring.", filename);
             }
             return false;
         }
@@ -112,20 +118,20 @@ public class mod_moreEverything extends BaseMod
                 if (hasResource(str))
                 {
                     extractFromJar(str, configDir);
-                    log(String.format("Including '%s' (extracted from jar)", str));
+                    log("Including '%s' (extracted from jar)", str);
                 } else {
-                    log(String.format("Error: unable to find '%s' to include", str));
+                    log("Error: unable to find '%s' to include", str);
                     return;
                 }
             } else {
-                log(String.format("Including '%s'", str));
+                log("Including '%s'", str);
             }
             execConfigFile(file);
         }
 
         public static void __includeInternal(String str)
         {
-            log(String.format("Including '%s' inside jar", str));
+            log("Including '%s' inside jar", str);
             execResource(str);
         }
 
@@ -199,6 +205,23 @@ public class mod_moreEverything extends BaseMod
         {
             return meth.invoke(null, args);
         }
+
+        public static void __testException() throws Exception
+        {
+            throw new IllegalArgumentException("O_O");
+        }
+    }
+
+    public static void logScriptException(ScriptException e)
+    {
+        if ((Exception)e instanceof WrappedException)
+        {
+          WrappedException we = (WrappedException)(Exception)e;
+          log("!SE!");
+          we.printStackTrace();
+        } else {
+          log("!SE! "+e.toString());
+        }
     }
 
     public static void execResource(String str)
@@ -206,7 +229,7 @@ public class mod_moreEverything extends BaseMod
         InputStream s = mod_moreEverything.class.getResourceAsStream(str);
         if (s == null)
         {
-            log(String.format("Error: unable to find '%s' to include", str));
+            log("Error: unable to find '%s' to include", str);
             return;
         }
         execStream(new InputStreamReader(s), str);
@@ -221,7 +244,7 @@ public class mod_moreEverything extends BaseMod
         }
         catch(ScriptException e)
         {
-            log("!SE! "+e.toString());
+            logScriptException(e);
         }
     }
 
@@ -235,7 +258,7 @@ public class mod_moreEverything extends BaseMod
         }
         catch(FileNotFoundException e)
         {
-            log(String.format("File %s not found, ignoring.", file.toString()));
+            log("File %s not found, ignoring.", file.toString());
         }
         catch(IOException e)
         {
@@ -274,7 +297,7 @@ public class mod_moreEverything extends BaseMod
         }
         catch(IOException e)
         {
-            log(String.format("Error: unable to extract %s.", name));
+            log("Error: unable to extract %s.", name);
             log(e.toString());
         }
     }
@@ -311,7 +334,7 @@ public class mod_moreEverything extends BaseMod
         }
         catch(ScriptException e)
         {
-            log("!SE! "+e.toString());
+            logScriptException(e);
         }
         catch(NoSuchMethodException e)
         {
