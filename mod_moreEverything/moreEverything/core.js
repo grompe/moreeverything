@@ -244,10 +244,18 @@ var GetItemDamage      = function() { log("GetItemDamage is not available!", log
   {
     if (typeof itemDamage == "undefined") itemDamage = 0;
     if (typeof stackSize == "undefined") stackSize = 1;
-    return __api.__newInstance(__itemStackConstructor, [
-      java.lang.Integer(itemID),
-      java.lang.Integer(stackSize),
-      java.lang.Integer(itemDamage)]);
+    try
+    {
+      var stack = __api.__newInstance(__itemStackConstructor, [
+        java.lang.Integer(itemID),
+        java.lang.Integer(stackSize),
+        java.lang.Integer(itemDamage)]);
+      return stack;
+    }
+    catch(e)
+    {
+      log("NewItemStack failed: "+e, logLevel.error)
+    }
   };
 
   AddRecipe = function(stack, arr)
@@ -282,14 +290,23 @@ var GetItemDamage      = function() { log("GetItemDamage is not available!", log
       shapedone = true;
       if (typeof arr[i] == "number") arr[i] = NewItemStack(arr[i], 1, WILDCARD);
     }
-    if (oredic) {
-      var recipe = __api.__newInstance(__shapedOreRecipeConstructor, [stack, ObjectArray(arr)])
-      __api.__invokeStatic(__forgeAddRecipe, [recipe]);
-      log("Added shaped ore recipe for "+stack+".", logLevel.debug);
-    } else {
-      __api.__invokeStatic(__addRecipe, [stack, ObjectArray(arr)]);
-      log("Added shaped recipe for "+stack+".", logLevel.debug);
+    try
+    {
+      if (oredic) {
+        var recipe = __api.__newInstance(__shapedOreRecipeConstructor, [stack, ObjectArray(arr)])
+        __api.__invokeStatic(__forgeAddRecipe, [recipe]);
+        log("Added shaped ore recipe for "+stack+".", logLevel.debug);
+      } else {
+        __api.__invokeStatic(__addRecipe, [stack, ObjectArray(arr)]);
+        log("Added shaped recipe for "+stack+".", logLevel.debug);
+      }
+      return true;
     }
+    catch(e)
+    {
+      log("AddRecipe failed: "+e, logLevel.error)
+    }
+    return false;
   };
 
   AddShapelessRecipe = function(stack, arr)
@@ -321,15 +338,24 @@ var GetItemDamage      = function() { log("GetItemDamage is not available!", log
       }
       if (typeof arr[i] == "number") arr[i] = NewItemStack(arr[i], 1, WILDCARD);
     }
-    if (oredic)
+    try
     {
-      var recipe = __api.__newInstance(__shapelessOreRecipeConstructor, [stack, ObjectArray(arr)]);
-      __api.__invokeStatic(__forgeAddRecipe, [recipe]);
-      log("Added shapeless ore recipe for "+stack+".", logLevel.debug);
-    } else {
-      __api.__invokeStatic(__addShapelessRecipe, [stack, ObjectArray(arr)]);
-      log("Added shapeless recipe for "+stack+".", logLevel.debug);
+      if (oredic)
+      {
+        var recipe = __api.__newInstance(__shapelessOreRecipeConstructor, [stack, ObjectArray(arr)]);
+        __api.__invokeStatic(__forgeAddRecipe, [recipe]);
+        log("Added shapeless ore recipe for "+stack+".", logLevel.debug);
+      } else {
+        __api.__invokeStatic(__addShapelessRecipe, [stack, ObjectArray(arr)]);
+        log("Added shapeless recipe for "+stack+".", logLevel.debug);
+      }
+      return true;
     }
+    catch(e)
+    {
+      log("AddShapelessRecipe failed: "+e, logLevel.error)
+    }
+    return false;
   };
 
   AddSmelting = function(input, output, experience)
@@ -341,18 +367,26 @@ var GetItemDamage      = function() { log("GetItemDamage is not available!", log
     }
     if (typeof output == "number") output = NewItemStack(output);
     if (typeof experience == "undefined") experience = 1.0;
-    if (__oldSmelting)
+    try
     {
-      __api.__invokeStatic(__addSmelting, [
-        java.lang.Integer(input),
-        java.lang.Object(output)]);
-    } else {
-      __api.__invokeStatic(__addSmelting, [
-        java.lang.Integer(input),
-        java.lang.Object(output),
-        java.lang.Float(experience)]);
+      if (__oldSmelting)
+      {
+        __api.__invokeStatic(__addSmelting, [
+          java.lang.Integer(input),
+          java.lang.Object(output)]);
+      } else {
+        __api.__invokeStatic(__addSmelting, [
+          java.lang.Integer(input),
+          java.lang.Object(output),
+          java.lang.Float(experience)]);
+      }
+      log("Added smelting: ID "+input+" cooks into "+output+".", logLevel.debug);
     }
-    log("Added smelting: ID "+input+" cooks into "+output+".", logLevel.debug);
+    catch(e)
+    {
+      log("AddSmelting failed: "+e, logLevel.error)
+    }
+    return false;
   };
 
   RegisterOre = function(name, stackOrID, itemDamage)
@@ -361,17 +395,42 @@ var GetItemDamage      = function() { log("GetItemDamage is not available!", log
     {
       stackOrID = NewItemStack(stackOrID, 1, typeof itemDamage == "number" ? itemDamage : WILDCARD);
     }
-    __api.__invokeStatic(__registerOre, [java.lang.String(name), stackOrID]);
+    try
+    {
+      __api.__invokeStatic(__registerOre, [java.lang.String(name), stackOrID]);
+      return true;
+    }
+    catch(e)
+    {
+      log("RegisterOre failed: "+e, logLevel.error)
+    }
+    return false;
   };
 
   GetOres = function(name)
   {
-    return __api.__invokeStatic(__getOres, [java.lang.String(name)]).toArray();
+    try
+    {
+      var result = NativeArray(__api.__invokeStatic(__getOres, [java.lang.String(name)]).toArray());
+      return result;
+    }
+    catch(e)
+    {
+      log("GetOres failed: "+e, logLevel.error)
+    }
   };
   
   GetOreNames = function()
   {
-    return __api.__invokeStatic(__getOreNames, []);
+    try
+    {
+      var result = __api.__invokeStatic(__getOreNames, []);
+      return result;
+    }
+    catch(e)
+    {
+      log("GetOres failed: "+e, logLevel.error)
+    }
   };
 
   if (!__api.__isStandalone())
@@ -482,7 +541,16 @@ function AddFuel(burnTime, id, damage)
     return;
   }
   if (typeof damage == "undefined") damage = 32767; // Java program always uses 32767 as wildcard
-  __api.__addFuel(id, damage, burnTime);
-  var logitem = (damage != 32767) ? (id + ":" + damage) : id;
-  log("Added fuel: ID "+logitem+" to burn for "+burnTime+" ticks.", logLevel.debug);
+  try
+  {
+    __api.__addFuel(id, damage, burnTime);
+    var logitem = (damage != 32767) ? (id + ":" + damage) : id;
+    log("Added fuel: ID "+logitem+" to burn for "+burnTime+" ticks.", logLevel.debug);
+    return true;
+  }
+  catch(e)
+  {
+    log("AddFuel failed: "+e, logLevel.error)
+  }
+  return false;
 }
