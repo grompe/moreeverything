@@ -1,7 +1,9 @@
 /* mod_moreEverything configuration script
 ==========================================
 For more information, see the forum topic:
-http://minecraftforum.net/topic/316316-/
+http://minecraftforum.net/topic/1819835-/
+And scripts:
+https://github.com/grompe/moreeverything/tree/master/mod_moreEverything/moreEverything
 */
 
 // Uncomment for debugging; valid logLevels are debug, info, warning, error
@@ -98,4 +100,30 @@ Look inside default scripts for more documentation and examples!
 // Be sure to test your additions
 currentLogLevel = logLevel.debug;
 
-// Add your code below
+(function ()
+{
+  //
+  // Add code that doesn't depend on mods here
+  //
+  if (mods.biomesoplenty)
+  {
+    // Do something with Biomes O' Plenty
+  }
+  if (mods.thaumcraft)
+  {
+    // Do something with Thaumcraft
+  }
+  // etc.
+})();
+
+// Alternatively, put the code in a new script file, for example myscripts/my.js
+// and include it here:
+// Include("myscripts/my.js");
+// or directly from the game chat, if you're admin or single player with cheats:
+// /eval Include("myscripts/my.js");
+
+// If you want to publish your additions, post them in the forum topic:
+// http://www.minecraftforum.net/topic/1819835-
+// and I'll see about adding them to the official distribution!
+// Or if you're not Minecraft Forum user, you can email me:
+// i@grompe.org.ru with subject "mod_moreEverything"
