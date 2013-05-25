@@ -34,16 +34,17 @@ This mod can indeed eventually replace them.
 
 Current features
 ================
+tweaks_vanilla.js:
 - Allows additional Minecraft blocks and items to be used as furnace fuel
-  (tweaks_vanilla.js)
 - Allows bleaching wool with bone meal
-  (tweaks_vanilla.js)
+tweaks_mods.js:
 - Allows some mods' blocks and items to be used as furnace fuel
-  (tweaks_mod_fuel.js)
+- Adds recipes for using mods' blocks and items between mods
+equivalent_exchange.js:
 - Adds Equivalent Exchange 3 transmutations for various blocks and items,
-  including other mods (equivalent_exchange.js)
+  including other mods
+thaumcraft.js:
 - Adds Thaumcraft aspects for various blocks and items from other mods
-  (thaumcraft.js)
 - If Minecraft version is compatible (limitation will be lifted eventually),
   adds /eval command to execute JavaScript code
 - Works on any not too ancient Minecraft version
