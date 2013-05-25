@@ -76,24 +76,37 @@ var RegisterObjectTag = function() { log("Error: RegisterObjectTag is not availa
   RegisterObjectTag(item.fireworkRocket, -1, "fire", 4, "motion", 4, "power", 2);
   RegisterObjectTag(item.fireworkStar, -1, "fire", 4, "power", 2);
   
-  if (mods.equivalentexchange)
+  var m;
+  if (m = mods.equivalentexchange)
   {
-    RegisterObjectTag(mods.equivalentexchange.inertStone, -1, "magic", 4, "rock", 8);
-    RegisterObjectTag(mods.equivalentexchange.miniumStone, -1, "magic", 8, "rock", 8, "power", 8, "exchange", 8);
-    RegisterObjectTag(mods.equivalentexchange.miniumShard, -1, "power", 1, "evil", 1);
+    RegisterObjectTag(m.inertStone, -1, "magic", 4, "rock", 8);
+    RegisterObjectTag(m.miniumStone, -1, "magic", 8, "rock", 8, "power", 8, "exchange", 8);
+    RegisterObjectTag(m.miniumShard, -1, "power", 1, "evil", 1);
   }
 
-  if (mods.extrabiomesxl)
+  if (m = mods.extrabiomesxl)
   {
-    RegisterObjectTag(mods.extrabiomesxl.redRock, 0, "rock", 2); // smooth red rock
-    RegisterObjectTag(mods.extrabiomesxl.redRock, 1, "rock", 1, "destruction", 1); // red rock cobblestone
-    RegisterObjectTag(mods.extrabiomesxl.redRock, 2, "rock", 2); // red rock bricks
-    RegisterObjectTag(mods.extrabiomesxl.crackedSand, -1, "destruction", 1, "earth", 1);
+    RegisterObjectTag(m.redRock, 0, "rock", 2); // smooth red rock
+    RegisterObjectTag(m.redRock, 1, "rock", 1, "destruction", 1); // red rock cobblestone
+    RegisterObjectTag(m.redRock, 2, "rock", 2); // red rock bricks
+    RegisterObjectTag(m.crackedSand, -1, "destruction", 1, "earth", 1);
   }
 
-  if (mods.minefantasy)
+  if (m = mods.minefantasy)
   {
-    RegisterObjectTag(mods.minefantasy.herb, -1, "plant", 2);
+    RegisterObjectTag(m.herb, -1, "plant", 2);
+  }
+
+  if (m = mods.undergroundbiomes)
+  {
+    RegisterObjectTag(m.igneousBrick, -1, "rock", 2, "fire", 1);
+    RegisterObjectTag(m.igneousCobblestone, -1, "rock", 1, "destruction", 1, "fire", 1);
+    RegisterObjectTag(m.igneousStone, -1, "rock", 2, "fire", 1);
+    RegisterObjectTag(m.lignite, -1, "fire", 1, "power", 1, "rock", 1);
+    RegisterObjectTag(m.metamorphicBrick, -1, "rock", 2, "exchange", 1);
+    RegisterObjectTag(m.metamorphicCobblestone, -1, "rock", 1, "destruction", 1, "exchange", 1);
+    RegisterObjectTag(m.metamorphicStone, -1, "rock", 2, "exchange", 1);
+    RegisterObjectTag(m.sedimentaryStone, -1, "rock", 1, "earth", 1);
   }
   
 })();
