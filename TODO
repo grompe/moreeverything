@@ -33,7 +33,7 @@ Maintenance/Boring
 - Wrap ItemStack and Method in JavaScript pseudo-classes for more straightforward work
   Alternatively, find out if it's possible to add fields into these specifically for JS engine
 
-- Write introduction, documentation, etc.
+- Write better documentation, etc.
 
 - Allow to easily turn off certain tweaks by main configuration script.
 

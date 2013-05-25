@@ -10,8 +10,8 @@ Put the file mod_moreEverything.zip in /mods/ directory.
 
 After the first run, mod_moreEverything.js will appear in /config/ directory.
 
-Documentation how to configure is coming later,
-for now look into .js files and inside the mod .zip.
+For more info, see Minecraft Forum topic:
+http://www.minecraftforum.net/topic/1819835-
 
 
 Goals of the mod
@@ -73,10 +73,7 @@ Supported block/item IDs:
 
 Future
 ======
-- Add Thaumcraft aspects.
-- Add villager trades tweaks.
-- More mod support
-- More flexible usage and more features
+- Look in TODO
 
 
 If you find a bug
