@@ -39,7 +39,9 @@ var optionalFeature = {
 
 function isEmpty(obj)
 {
-  for (var i in obj) return false;
+  // Java 7 throws an error if there's an empty package
+  try { for (var i in obj) return false; }
+  catch(e) {}
   return true;
 }
 
