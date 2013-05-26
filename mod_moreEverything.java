@@ -42,26 +42,53 @@ public class mod_moreEverything extends BaseMod
             }
             catch(NoSuchMethodException e)
             {
-                log("func_71380_b not found, using b");
+                log("func_71380_b() not found, using b().");
                 meth = cls.getMethod("b", noparams);
             }
             return new File((File)meth.invoke(null), "config");
         }
         catch(ClassNotFoundException e)
         {
-            log("Client not found, using current directory (server)");
+            try
+            {
+                Class<?> cls = Class.forName("net.minecraft.client.main.Main");
+                log("Have Minecraft 1.6+, trying to get its working directory from the command line.");
+                String cmd = System.getProperty("sun.java.command");
+                if (cmd != null)
+                {
+                    Pattern p = Pattern.compile("-workDir ((?:\"[^\"]+\")|(?:'[^']+')|(?:[^ ]+))");
+                    Matcher m = p.matcher(cmd);
+                    if (m.find())
+                    {
+                        String workDir = m.group(1);
+                        if ((workDir.charAt(0) == '"') || (workDir.charAt(0) == '\''))
+                        {
+                            workDir = workDir.substring(1, workDir.length()-1);
+                        }
+                        return new File(workDir, "config");
+                    } else {
+                        System.out.println("Couldn't get workDir, using current directory.");
+                    }
+                } else {
+                    System.out.println("Couldn't get command line arguments, using current directory.");
+                }
+            }
+            catch(ClassNotFoundException e2)
+            {
+                log("Client not found, using current directory (server).");
+            }
         }
         catch(NoSuchMethodException e)
         {
-            log("b not found, using current directory");
+            log("b() not found, using current directory.");
         }
         catch(IllegalAccessException e)
         {
-            log("IllegalAccessException, using current directory");
+            log("IllegalAccessException, using current directory.");
         }
         catch(InvocationTargetException e)
         {
-            log("InvocationTargetException, using current directory");
+            log("InvocationTargetException, using current directory.");
         }
         return new File("config");
     }
