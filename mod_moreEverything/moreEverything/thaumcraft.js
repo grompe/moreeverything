@@ -1,7 +1,7 @@
 // Thaumcraft aspects addons
 // By Grom PE
 
-var RegisterObjectTag = function() { throw("Error: RegisterObjectTag is not available!"); };
+var RegisterObjectTag = function() { throw("RegisterObjectTag is not available!"); };
 
 (function ()
 {
@@ -29,7 +29,8 @@ var RegisterObjectTag = function() { throw("Error: RegisterObjectTag is not avai
 
   RegisterObjectTag = function(id, damage, arr)
   {
-    if (isNaN(id)||(id <= 0)) throw("RegisterObjectTag 1st argument must be a number greater than 0.");
+    if (isNaN(id)||(id <= 0)) throw("RegisterObjectTag: 1st argument must be a number greater than 0.");
+    if (GetItem(id) == null) throw("RegisterObjectTag: no such item ID.");
     if (!(arr instanceof Array))
     {
       var tmp = [];
@@ -41,14 +42,12 @@ var RegisterObjectTag = function() { throw("Error: RegisterObjectTag is not avai
     {
       if ((typeof arr[i] != "string")||(typeof arr[i+1] != "number"))
       {
-        log("Error: RegisterObjectTag expected a string followed by a number", logLevel.error);
-        return;
+        throw("RegisterObjectTag: expected a string followed by a number");
       }
       var aspect = aspects[LowerCase(arr[i])];
       if (typeof aspect == "undefined")
       {
-        log("Error: RegisterObjectTag got unknown aspect: "+arr[i], logLevel.error);
-        return;
+        throw("RegisterObjectTag: got unknown aspect: "+arr[i]);
       }
       o.tags.put(aspects[LowerCase(arr[i])], java.lang.Integer(arr[i+1]));
     }
@@ -56,28 +55,37 @@ var RegisterObjectTag = function() { throw("Error: RegisterObjectTag is not avai
       java.lang.Integer(id), java.lang.Integer(damage), o]);
     var logitem = (damage != -1) ? (id + ":" + damage) : id;
     log("Registered object tag for "+logitem+": "+o.tags, logLevel.debug);
+    return true;
   }
 
+  function QRegisterObjectTag(id, damage, arr)
+  {
+    var result;
+    try { RegisterObjectTag(id, damage, arr); }
+    catch {};
+    return result;
+  }
+  
   if (optionalFeature.thaumcraft_vanilla_aspects)
   {
     // Some Minecraft blocks/items Thaumcraft missed!
-    RegisterObjectTag(item.slab, 3, "destruction", 1, "rock", 1); // Cobblestone slab
-    RegisterObjectTag(item.slab, 4, "fire", 1, "earth", 2); // Brick slab
-    RegisterObjectTag(item.slab, 5, "rock", 1); // Stone brick slab
-    RegisterObjectTag(item.slab, 6, "fire", 1, "rock", 1); // Nether brick slab
-    RegisterObjectTag(item.slab, 7, "pure", 2, "rock", 2, "vision", 2, "crystal", 2); // Quartz slab
-    RegisterObjectTag(item.snow, -1, "cold", 1);
-    RegisterObjectTag(item.netherBrick, -1, "fire", 1, "rock", 1);
-    RegisterObjectTag(item.netherBrickFence, -1, "fire", 1, "rock", 2);
-    RegisterObjectTag(item.netherBrickStairs, -1, "fire", 1, "rock", 2);
-    RegisterObjectTag(item.dragonEgg, -1, "eldritch", 32, "dark", 16, "magic", 16);
-    RegisterObjectTag(item.woodenSlab, -1, "wood", 1);
-    RegisterObjectTag(item.trappedChest, -1, "wood", 2, "void", 4, "trap", 1);
-    RegisterObjectTag(item.quartzBlock, 1, "pure", 3, "rock", 3, "vision", 3, "crystal", 3, "valuable", 1); // Chiseled quartz block
-    RegisterObjectTag(item.quartzBlock, 2, "pure", 3, "rock", 3, "vision", 3, "crystal", 3, "valuable", 1); // Pillar quartz block
-    RegisterObjectTag(item.quartzStairs, -1, "pure", 3, "rock", 3, "vision", 3, "crystal", 3);
-    RegisterObjectTag(item.fireworkRocket, -1, "fire", 4, "motion", 4, "power", 2);
-    RegisterObjectTag(item.fireworkStar, -1, "fire", 4, "power", 2);
+    QRegisterObjectTag(item.slab, 3, "destruction", 1, "rock", 1); // Cobblestone slab
+    QRegisterObjectTag(item.slab, 4, "fire", 1, "earth", 2); // Brick slab
+    QRegisterObjectTag(item.slab, 5, "rock", 1); // Stone brick slab
+    QRegisterObjectTag(item.slab, 6, "fire", 1, "rock", 1); // Nether brick slab
+    QRegisterObjectTag(item.slab, 7, "pure", 2, "rock", 2, "vision", 2, "crystal", 2); // Quartz slab
+    QRegisterObjectTag(item.snow, -1, "cold", 1);
+    QRegisterObjectTag(item.netherBrick, -1, "fire", 1, "rock", 1);
+    QRegisterObjectTag(item.netherBrickFence, -1, "fire", 1, "rock", 2);
+    QRegisterObjectTag(item.netherBrickStairs, -1, "fire", 1, "rock", 2);
+    QRegisterObjectTag(item.dragonEgg, -1, "eldritch", 32, "dark", 16, "magic", 16);
+    QRegisterObjectTag(item.woodenSlab, -1, "wood", 1);
+    QRegisterObjectTag(item.trappedChest, -1, "wood", 2, "void", 4, "trap", 1);
+    QRegisterObjectTag(item.quartzBlock, 1, "pure", 3, "rock", 3, "vision", 3, "crystal", 3, "valuable", 1); // Chiseled quartz block
+    QRegisterObjectTag(item.quartzBlock, 2, "pure", 3, "rock", 3, "vision", 3, "crystal", 3, "valuable", 1); // Pillar quartz block
+    QRegisterObjectTag(item.quartzStairs, -1, "pure", 3, "rock", 3, "vision", 3, "crystal", 3);
+    QRegisterObjectTag(item.fireworkRocket, -1, "fire", 4, "motion", 4, "power", 2);
+    QRegisterObjectTag(item.fireworkStar, -1, "fire", 4, "power", 2);
   }
   if (optionalFeature.thaumcraft_mod_aspects)
   {

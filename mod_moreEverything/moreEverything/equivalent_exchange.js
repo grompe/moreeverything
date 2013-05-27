@@ -1,8 +1,8 @@
 // Equivalent Exchange transmutation addons
 // By Grom PE
 
-var AddTransmutation = function()     { throw("Error: AddTransmutation is not available!"); };
-var AddTransmutation1to1 = function() { throw("Error: AddTransmutation1to1 is not available!"); };
+var AddTransmutation = function()     { throw("AddTransmutation is not available!"); };
+var AddTransmutation1to1 = function() { throw("AddTransmutation1to1 is not available!"); };
 
 (function()
 {
@@ -32,13 +32,17 @@ var AddTransmutation1to1 = function() { throw("Error: AddTransmutation1to1 is no
   // Quiet functions that don't throw exceptions
   function QAddTransmutation(result, input)
   {
-    try { return AddTransmutation(result, input); }
+    var result;
+    try { result = AddTransmutation(result, input); }
     catch(e) {};
+    return result;
   };
   function QAddTransmutation1to1(a, b)
   {
-    try { return AddTransmutation1to1(a, b); }
+    var result;
+    try { result = AddTransmutation1to1(a, b); }
     catch(e) {};
+    return result;
   };
 
   // EMC values: http://technicpack.wikia.com/wiki/Alchemical_Math

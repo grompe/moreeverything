@@ -533,31 +533,40 @@ function QFindIntMatch(regex)
 
 function QNewItemStack(itemID, stackSize, itemDamage)
 {
-  try { return NewItemStack(itemID, stackSize, itemDamage); }
+  var result;
+  try { result = NewItemStack(itemID, stackSize, itemDamage); }
   catch(e) {};
+  return result;
 }
 
 function QAddFuel(burnTime, id, damage)
 {
-  try { return AddFuel(burnTime, id, damage); }
+  var result;
+  try { result = AddFuel(burnTime, id, damage); }
   catch(e) {};
+  return result;
 }
 
 function QAddRecipe(stack, arr)
 {
-  try { return AddRecipe(stack, arr); }
+  var result;
+  try { result = AddRecipe(stack, arr); }
   catch(e) {};
+  return result;
 }
 
 function QAddShapelessRecipe(stack, arr)
 {
-  try { return AddShapelessRecipe(stack, arr); }
+  var result;
+  try { result = AddShapelessRecipe(stack, arr); }
   catch(e) {};
+  return result;
 }
 
 function QAddSmelting(input, output, experience)
 {
-  try { return AddSmelting(input, output, experience); }
+  var result;
+  try { result = AddSmelting(input, output, experience); }
   catch(e) {};
+  return result;
 }
-
