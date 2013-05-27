@@ -62,7 +62,7 @@ var RegisterObjectTag = function() { throw("RegisterObjectTag is not available!"
   {
     var result;
     try { RegisterObjectTag(id, damage, arr); }
-    catch {};
+    catch(e) {};
     return result;
   }
   
