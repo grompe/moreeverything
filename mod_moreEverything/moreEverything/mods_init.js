@@ -46,7 +46,7 @@ var mods;
       mods.thaumcraft.candle        = FindIntMatch(/I:BlockCandle=(\d+)/);
       mods.thaumcraft.secure        = FindIntMatch(/I:BlockSecure=(\d+)/);
       mods.thaumcraft.crystal       = FindIntMatch(/I:BlockCrystal=(\d+)/);
-      mods.thaumcraft.cosmeticSolid = FindIntMatch(/I:BlockCosmeticSolid=(\d+)/);
+      mods.thaumcraft.cosmeticSolid = QFindIntMatch(/I:BlockCosmeticSolid=(\d+)/);
       mods.thaumcraft.customPlant   = FindIntMatch(/I:BlockCustomPlant=(\d+)/);
     } else {
       mods.thaumcraft = false;

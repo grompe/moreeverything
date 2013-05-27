@@ -220,7 +220,7 @@ var AddTransmutation1to1 = function() { throw("AddTransmutation1to1 is not avail
     }
 
     // Uncrafting: obsidian tile -> obsidian
-    AddTransmutation(item.obsidian, NewItemStack(m.cosmeticSolid, 1, 1));
+    QAddTransmutation(item.obsidian, QNewItemStack(m.cosmeticSolid, 1, 1));
   }
 
   if (optionalFeature.ee_natura_transmutations && (m = mods.natura))
