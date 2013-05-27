@@ -6,6 +6,10 @@ var __float= java.lang.Float.TYPE;
 var __boolean= java.lang.Boolean.TYPE;
 var __objectArray= java.lang.Class.forName("[Ljava.lang.Object;");
 var __method= java.lang.Class.forName("java.lang.reflect.Method");
+var __item;
+var __block;
+var __itemStack;
+var __itemsList;
 var logLevel = {debug: 0, info: 1, warning: 2, error: 3};
 
 var hasForge;
@@ -92,17 +96,18 @@ function IncludeInternal(filename) { return __api.__includeInternal(filename); }
 var log;
 var doneLoadingEvent;
 
-var AddRecipe          = function() { log("AddRecipe is not available!", logLevel.error); };
-var AddShapelessRecipe = function() { log("AddShapelessRecipe is not available!", logLevel.error); };
-var AddSmelting        = function() { log("AddSmelting is not available!", logLevel.error); };
-var NewItemStack       = function() { log("NewItemStack is not available!", logLevel.error); };
-var RegisterOre        = function() { log("RegisterOre is not available!", logLevel.error); };
-var GetOres            = function() { log("GetOres is not available!", logLevel.error); };
-var GetOreNames        = function() { log("GetOreNames is not available!", logLevel.error); };
-var GetItemID          = function() { log("GetItemID is not available!", logLevel.error); };
-var GetItemStackSize   = function() { log("GetItemStackSize is not available!", logLevel.error); };
-var SetItemStackSize   = function() { log("SetItemStackSize is not available!", logLevel.error); };
-var GetItemDamage      = function() { log("GetItemDamage is not available!", logLevel.error); };
+var AddRecipe          = function() { throw("AddRecipe is not available!"); };
+var AddShapelessRecipe = function() { throw("AddShapelessRecipe is not available!"); };
+var AddSmelting        = function() { throw("AddSmelting is not available!"); };
+var NewItemStack       = function() { throw("NewItemStack is not available!"); };
+var RegisterOre        = function() { throw("RegisterOre is not available!"); };
+var GetOres            = function() { throw("GetOres is not available!"); };
+var GetOreNames        = function() { throw("GetOreNames is not available!"); };
+var GetItemID          = function() { throw("GetItemID is not available!"); };
+var GetItemStackSize   = function() { throw("GetItemStackSize is not available!"); };
+var SetItemStackSize   = function() { throw("SetItemStackSize is not available!"); };
+var GetItemDamage      = function() { throw("GetItemDamage is not available!"); };
+var GetItem            = function() { throw("GetItem is not available!"); };
 
 (function ()
 {
@@ -138,7 +143,6 @@ var GetItemDamage      = function() { log("GetItemDamage is not available!", log
   var __addSmelting;
   var __oldSmelting;
   var __itemStackConstructor;
-  var __itemStack;
   var __forgeAddRecipe;
   var __shapedOreRecipeConstructor;
   var __shapelessOreRecipeConstructor;
@@ -237,27 +241,24 @@ var GetItemDamage      = function() { log("GetItemDamage is not available!", log
       __getOres = __api.__getMethod(oredict, "getOres", [java.lang.String]);
       __getOreNames = __api.__getMethod(oredict, "getOreNames", []);
     }
-    log("Got all hooks!", logLevel.info);
+    log("Got all Forge hooks!", logLevel.info);
   } else {
     log("Got ModLoader hooks, but no Forge present, some features will be unavailable.", logLevel.info);
   }
 
+  GetItem = function(itemID)
+  {
+    return java.lang.reflect.Array.get(__itemsList, itemID);
+  }
   NewItemStack = function(itemID, stackSize, itemDamage)
   {
     if (typeof itemDamage == "undefined") itemDamage = 0;
     if (typeof stackSize == "undefined") stackSize = 1;
-    try
-    {
-      var stack = __api.__newInstance(__itemStackConstructor, [
-        java.lang.Integer(itemID),
-        java.lang.Integer(stackSize),
-        java.lang.Integer(itemDamage)]);
-      return stack;
-    }
-    catch(e)
-    {
-      log("NewItemStack failed: "+e, logLevel.error)
-    }
+    if (GetItem(itemID) == null) throw("NewItemStack: no such itemID "+itemID);
+    return __api.__newInstance(__itemStackConstructor, [
+      java.lang.Integer(itemID),
+      java.lang.Integer(stackSize),
+      java.lang.Integer(itemDamage)]);
   };
 
   AddRecipe = function(stack, arr)
@@ -268,11 +269,7 @@ var GetItemDamage      = function() { log("GetItemDamage is not available!", log
       for (var i = 1; i < arguments.length; i++) tmp.push(arguments[i]);
       arr = tmp;
     }
-    if (typeof stack == "undefined")
-    {
-      log("AddRecipe: stack is undefined.", logLevel.error);
-      return;
-    }
+    if (typeof stack == "undefined") throw("AddRecipe: stack is undefined.");
     if (typeof stack == "number") stack = NewItemStack(stack);
     var shapedone = false;
     var oredic = false;
@@ -285,30 +282,21 @@ var GetItemDamage      = function() { log("GetItemDamage is not available!", log
         {
           oredic = true;
         } else {
-          log("No Forge, cannot add OreDictionary recipe.", logLevel.warning);
-          return;
+          throw("No Forge, cannot add OreDictionary recipe.");
         }
       }
       shapedone = true;
       if (typeof arr[i] == "number") arr[i] = NewItemStack(arr[i], 1, WILDCARD);
     }
-    try
-    {
-      if (oredic) {
-        var recipe = __api.__newInstance(__shapedOreRecipeConstructor, [stack, ObjectArray(arr)])
-        __api.__invokeStatic(__forgeAddRecipe, [recipe]);
-        log("Added shaped ore recipe for "+stack+".", logLevel.debug);
-      } else {
-        __api.__invokeStatic(__addRecipe, [stack, ObjectArray(arr)]);
-        log("Added shaped recipe for "+stack+".", logLevel.debug);
-      }
-      return true;
+    if (oredic) {
+      var recipe = __api.__newInstance(__shapedOreRecipeConstructor, [stack, ObjectArray(arr)])
+      __api.__invokeStatic(__forgeAddRecipe, [recipe]);
+      log("Added shaped ore recipe for "+stack+".", logLevel.debug);
+    } else {
+      __api.__invokeStatic(__addRecipe, [stack, ObjectArray(arr)]);
+      log("Added shaped recipe for "+stack+".", logLevel.debug);
     }
-    catch(e)
-    {
-      log("AddRecipe failed: "+e, logLevel.error)
-    }
-    return false;
+    return true;
   };
 
   AddShapelessRecipe = function(stack, arr)
@@ -319,11 +307,7 @@ var GetItemDamage      = function() { log("GetItemDamage is not available!", log
       for (var i = 1; i < arguments.length; i++) tmp.push(arguments[i]);
       arr = tmp;
     }
-    if (typeof stack == "undefined")
-    {
-      log("AddShapelessRecipe: stack is undefined.", logLevel.error);
-      return;
-    }
+    if (typeof stack == "undefined") throw("AddShapelessRecipe: stack is undefined.");
     if (typeof stack == "number") stack = NewItemStack(stack);
     var oredic = false;
     for (var i=0; i<arr.length; i++)
@@ -334,61 +318,41 @@ var GetItemDamage      = function() { log("GetItemDamage is not available!", log
         {
           oredic = true;
         } else {
-          log("No Forge, cannot add OreDictionary recipe.", logLevel.warning);
-          return;
+          throw("No Forge, cannot add OreDictionary recipe.");
         }
       }
       if (typeof arr[i] == "number") arr[i] = NewItemStack(arr[i], 1, WILDCARD);
     }
-    try
+    if (oredic)
     {
-      if (oredic)
-      {
-        var recipe = __api.__newInstance(__shapelessOreRecipeConstructor, [stack, ObjectArray(arr)]);
-        __api.__invokeStatic(__forgeAddRecipe, [recipe]);
-        log("Added shapeless ore recipe for "+stack+".", logLevel.debug);
-      } else {
-        __api.__invokeStatic(__addShapelessRecipe, [stack, ObjectArray(arr)]);
-        log("Added shapeless recipe for "+stack+".", logLevel.debug);
-      }
-      return true;
+      var recipe = __api.__newInstance(__shapelessOreRecipeConstructor, [stack, ObjectArray(arr)]);
+      __api.__invokeStatic(__forgeAddRecipe, [recipe]);
+      log("Added shapeless ore recipe for "+stack+".", logLevel.debug);
+    } else {
+      __api.__invokeStatic(__addShapelessRecipe, [stack, ObjectArray(arr)]);
+      log("Added shapeless recipe for "+stack+".", logLevel.debug);
     }
-    catch(e)
-    {
-      log("AddShapelessRecipe failed: "+e, logLevel.error)
-    }
-    return false;
+    return true;
   };
 
   AddSmelting = function(input, output, experience)
   {
-    if (typeof input != "number")
-    {
-      log("AddSmelting 1st argument must be a number.", logLevel.error);
-      return;
-    }
+    if (typeof input != "number") throw("AddSmelting 1st argument must be a number.");
     if (typeof output == "number") output = NewItemStack(output);
     if (typeof experience == "undefined") experience = 1.0;
-    try
+    if (__oldSmelting)
     {
-      if (__oldSmelting)
-      {
-        __api.__invokeStatic(__addSmelting, [
-          java.lang.Integer(input),
-          java.lang.Object(output)]);
-      } else {
-        __api.__invokeStatic(__addSmelting, [
-          java.lang.Integer(input),
-          java.lang.Object(output),
-          java.lang.Float(experience)]);
-      }
-      log("Added smelting: ID "+input+" cooks into "+output+".", logLevel.debug);
+      __api.__invokeStatic(__addSmelting, [
+        java.lang.Integer(input),
+        java.lang.Object(output)]);
+    } else {
+      __api.__invokeStatic(__addSmelting, [
+        java.lang.Integer(input),
+        java.lang.Object(output),
+        java.lang.Float(experience)]);
     }
-    catch(e)
-    {
-      log("AddSmelting failed: "+e, logLevel.error)
-    }
-    return false;
+    log("Added smelting: ID "+input+" cooks into "+output+".", logLevel.debug);
+    return true;
   };
 
   RegisterOre = function(name, stackOrID, itemDamage)
@@ -397,47 +361,59 @@ var GetItemDamage      = function() { log("GetItemDamage is not available!", log
     {
       stackOrID = NewItemStack(stackOrID, 1, typeof itemDamage == "number" ? itemDamage : WILDCARD);
     }
-    try
-    {
-      __api.__invokeStatic(__registerOre, [java.lang.String(name), stackOrID]);
-      return true;
-    }
-    catch(e)
-    {
-      log("RegisterOre failed: "+e, logLevel.error)
-    }
-    return false;
+    __api.__invokeStatic(__registerOre, [java.lang.String(name), stackOrID]);
+    return true;
   };
 
   GetOres = function(name)
   {
-    try
-    {
-      var result = NativeArray(__api.__invokeStatic(__getOres, [java.lang.String(name)]).toArray());
-      return result;
-    }
-    catch(e)
-    {
-      log("GetOres failed: "+e, logLevel.error)
-    }
+    return NativeArray(__api.__invokeStatic(__getOres, [java.lang.String(name)]).toArray());
   };
   
   GetOreNames = function()
   {
-    try
-    {
-      var result = __api.__invokeStatic(__getOreNames, []);
-      return result;
-    }
-    catch(e)
-    {
-      log("GetOres failed: "+e, logLevel.error)
-    }
+    return __api.__invokeStatic(__getOreNames, []);
   };
 
   if (!__api.__isStandalone())
   {
-    // Detect some of obfuscated ItemStack fields/methods
+    // Find Item and Block
+    var blockoritem = [];
+    var constuctors = __itemStack.getConstructors();
+    for (var i in constuctors)
+    {
+      var parTypes = constuctors[i].getParameterTypes();
+      if (parTypes.length == 1) blockoritem.push(parTypes[0]);
+    }
+    var methods = __itemStack.getMethods();
+    for (var i in methods)
+    {
+      var retType = __api.__getReturnType(methods[i]);
+      if (retType == blockoritem[0])
+      {
+        __item = blockoritem[0];
+        __block = blockoritem[1];
+        break;
+      }
+      if (retType == blockoritem[1])
+      {
+        __item = blockoritem[1];
+        __block = blockoritem[0];
+        break;
+      }
+    }
+    // Find Item.itemsList
+    var fields = __item.getFields();
+    for (var i in fields)
+    {
+      var f = fields[i];
+      if (f.getType().isArray())
+      {
+        __itemsList = f.get(null);
+        break;
+      }
+    }
+    // Detect live some of obfuscated ItemStack fields/methods
     var __accessItemID;
     var __accessItemStackSize;
     var __accessItemStackDamage;
@@ -489,26 +465,29 @@ var GetItemDamage      = function() { log("GetItemDamage is not available!", log
       }
     }
     // Temporary class till I find how to hook CommandBase
-    try
+    if (typeof __addCommand != "undefined")
     {
-      var dunEvenTry = false;
       try
       {
-        var __x = __api.__getClass("x");
-        dunEvenTry = java.lang.reflect.Modifier.isFinal(__x.getModifiers());
+        var dunEvenTry = false;
+        try
+        {
+          var __x = __api.__getClass("x");
+          dunEvenTry = java.lang.reflect.Modifier.isFinal(__x.getModifiers());
+        }
+        catch(e){}
+        if (!dunEvenTry)
+        {
+          var __mEDependentCommand = __api.__getClass("mEDependentCommand");
+          var __newmEDependentCommand = __api.__getConstructor(__mEDependentCommand, []);
+          var __evalCommand = __api.__newInstance(__newmEDependentCommand, []);
+          __api.__invokeStatic(__addCommand, [__evalCommand]);
+        }
       }
-      catch(e){}
-      if (!dunEvenTry)
+      catch(e)
       {
-        var __mEDependentCommand = __api.__getClass("mEDependentCommand");
-        var __newmEDependentCommand = __api.__getConstructor(__mEDependentCommand, []);
-        var __evalCommand = __api.__newInstance(__newmEDependentCommand, []);
-        __api.__invokeStatic(__addCommand, [__evalCommand]);
+        log("Couldn't add /eval command, likely due to version mismatch!");
       }
-    }
-    catch(e)
-    {
-      log("Couldn't add /eval command, likely due to version mismatch!");
     }
     if (hasForge)
     {
@@ -530,29 +509,55 @@ function FindIntMatch(regex)
 {
   var res = __api.__findMatch(regex);
   if (res) return parseInt(res);
-  log("FindIntMatch: Couldn't find "+regex+", returning NaN.", logLevel.debug);
-  return NaN;
+  throw("FindIntMatch: Couldn't find "+regex);
 }
 function GetFile(filename) { return __api.__getFile(filename); }
 
 function AddFuel(burnTime, id, damage)
 {
-  if (isNaN(id)||(id <= 0))
-  {
-    log("AddFuel 1st argument must be a number greater than 0.", logLevel.error);
-    return;
-  }
+  if (isNaN(id)||(id <= 0)) throw("AddFuel 1st argument must be a number greater than 0.");
   if (typeof damage == "undefined") damage = 32767; // Java program always uses 32767 as wildcard
-  try
-  {
-    __api.__addFuel(id, damage, burnTime);
-    var logitem = (damage != 32767) ? (id + ":" + damage) : id;
-    log("Added fuel: ID "+logitem+" to burn for "+burnTime+" ticks.", logLevel.debug);
-    return true;
-  }
-  catch(e)
-  {
-    log("AddFuel failed: "+e, logLevel.error)
-  }
-  return false;
+  __api.__addFuel(id, damage, burnTime);
+  var logitem = (damage != 32767) ? (id + ":" + damage) : id;
+  log("Added fuel: ID "+logitem+" to burn for "+burnTime+" ticks.", logLevel.debug);
+  return true;
 }
+
+// Quiet functions that don't throw exceptions - don't use unless you know what you're doing
+function QFindIntMatch(regex)
+{
+  var res = __api.__findMatch(regex);
+  if (res) return parseInt(res);
+  return NaN;
+}
+
+function QNewItemStack(itemID, stackSize, itemDamage)
+{
+  try { return NewItemStack(itemID, stackSize, itemDamage); }
+  catch(e) {};
+}
+
+function QAddFuel(burnTime, id, damage)
+{
+  try { return AddFuel(burnTime, id, damage); }
+  catch(e) {};
+}
+
+function QAddRecipe(stack, arr)
+{
+  try { return AddRecipe(stack, arr); }
+  catch(e) {};
+}
+
+function QAddShapelessRecipe(stack, arr)
+{
+  try { return AddShapelessRecipe(stack, arr); }
+  catch(e) {};
+}
+
+function QAddSmelting(input, output, experience)
+{
+  try { return AddSmelting(input, output, experience); }
+  catch(e) {};
+}
+

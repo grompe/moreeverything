@@ -1,7 +1,7 @@
 // Thaumcraft aspects addons
 // By Grom PE
 
-var RegisterObjectTag = function() { log("Error: RegisterObjectTag is not available!", logLevel.error); };
+var RegisterObjectTag = function() { throw("Error: RegisterObjectTag is not available!"); };
 
 (function ()
 {
@@ -29,6 +29,7 @@ var RegisterObjectTag = function() { log("Error: RegisterObjectTag is not availa
 
   RegisterObjectTag = function(id, damage, arr)
   {
+    if (isNaN(id)||(id <= 0)) throw("RegisterObjectTag 1st argument must be a number greater than 0.");
     if (!(arr instanceof Array))
     {
       var tmp = [];

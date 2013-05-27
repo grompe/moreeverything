@@ -1,8 +1,8 @@
 // Equivalent Exchange transmutation addons
 // By Grom PE
 
-var AddTransmutation = function()     { log("Error: AddTransmutation is not available!", logLevel.error); };
-var AddTransmutation1to1 = function() { log("Error: AddTransmutation1to1 is not available!", logLevel.error); };
+var AddTransmutation = function()     { throw("Error: AddTransmutation is not available!"); };
+var AddTransmutation1to1 = function() { throw("Error: AddTransmutation1to1 is not available!"); };
 
 (function()
 {
@@ -18,18 +18,28 @@ var AddTransmutation1to1 = function() { log("Error: AddTransmutation1to1 is not 
     }
     var i1 = input.slice();
     i1.unshift(mods.equivalentexchange.miniumStone);
-    AddShapelessRecipe(result, i1);
     var i2 = input.slice();
     i2.unshift(mods.equivalentexchange.philosophersStone);
-    AddShapelessRecipe(result, i2);
-  }
+    return AddShapelessRecipe(result, i1) && AddShapelessRecipe(result, i2);
+  };
 
   AddTransmutation1to1 = function(a, b)
   {
     // TODO: possible inplace block transmutation?
-    AddTransmutation(a, b);
-    AddTransmutation(b, a);
-  }
+    return AddTransmutation(a, b) && AddTransmutation(b, a);
+  };
+
+  // Quiet functions that don't throw exceptions
+  function QAddTransmutation(result, input)
+  {
+    try { return AddTransmutation(result, input); }
+    catch(e) {};
+  };
+  function QAddTransmutation1to1(a, b)
+  {
+    try { return AddTransmutation1to1(a, b); }
+    catch(e) {};
+  };
 
   // EMC values: http://technicpack.wikia.com/wiki/Alchemical_Math
 
@@ -37,50 +47,50 @@ var AddTransmutation1to1 = function() { log("Error: AddTransmutation1to1 is not 
   {
     // Transmutations
     // 1 coal = 2 redstone
-    AddTransmutation(item.coal, ArrayOf(item.redstone, 2));
-    AddTransmutation(NewItemStack(item.redstone, 2), NewItemStack(item.coal, 1, 0));
+    QAddTransmutation(item.coal, ArrayOf(item.redstone, 2));
+    QAddTransmutation(QNewItemStack(item.redstone, 2), QNewItemStack(item.coal, 1, 0));
     // 7 coal = 1 lapis lazuli
-    AddTransmutation(NewItemStack(item.dye, 1, dye.lapisLazuli), ArrayOf(NewItemStack(item.coal, 1, 0), 7));
-    AddTransmutation(NewItemStack(item.coal, 7), NewItemStack(item.dye, 1, dye.lapisLazuli));
+    QAddTransmutation(QNewItemStack(item.dye, 1, dye.lapisLazuli), ArrayOf(QNewItemStack(item.coal, 1, 0), 7));
+    QAddTransmutation(QNewItemStack(item.coal, 7), QNewItemStack(item.dye, 1, dye.lapisLazuli));
     // 3 coal = 1 glowstone dust
-    AddTransmutation(item.glowstoneDust, ArrayOf(NewItemStack(item.coal, 1, 0), 3));
-    AddTransmutation(NewItemStack(item.coal, 3), item.glowstoneDust);
+    QAddTransmutation(item.glowstoneDust, ArrayOf(QNewItemStack(item.coal, 1, 0), 3));
+    QAddTransmutation(QNewItemStack(item.coal, 3), item.glowstoneDust);
     // 6 redstone -> 1 glowstone dust
-    AddTransmutation(item.glowstoneDust, ArrayOf(item.redstone, 6));
+    QAddTransmutation(item.glowstoneDust, ArrayOf(item.redstone, 6));
   }
   if (optionalFeature.ee_vanilla_uncrafting)
   {
     // Simple uncrafting
-    AddTransmutation(NewItemStack(item.glass, 3), ArrayOf(item.glassPane, 8));
-    AddTransmutation(NewItemStack(item.netherQuartz, 4), NewItemStack(item.quartzBlock, 1, 0));
-    AddTransmutation(item.quartzBlock, item.quartzBlock);
-    AddTransmutation(item.stone,        ArrayOf(NewItemStack(item.slab, 1, 0), 2));
-    AddTransmutation(item.sandstone,    ArrayOf(NewItemStack(item.slab, 1, 1), 2));
-    AddTransmutation(item.woodPlanks,   ArrayOf(NewItemStack(item.slab, 1, 2), 2));
-    AddTransmutation(item.cobblestone,  ArrayOf(NewItemStack(item.slab, 1, 3), 2));
-    AddTransmutation(item.bricks,       ArrayOf(NewItemStack(item.slab, 1, 4), 2));
-    AddTransmutation(item.stoneBricks,  ArrayOf(NewItemStack(item.slab, 1, 5), 2));
-    AddTransmutation(item.netherBricks, ArrayOf(NewItemStack(item.slab, 1, 6), 2));
-    AddTransmutation(item.quartzBlock,  ArrayOf(NewItemStack(item.slab, 1, 7), 2));
-    AddTransmutation(NewItemStack(item.woodPlanks, 1, 0), ArrayOf(NewItemStack(item.woodenSlab, 1, 0), 2));
-    AddTransmutation(NewItemStack(item.woodPlanks, 1, 1), ArrayOf(NewItemStack(item.woodenSlab, 1, 1), 2));
-    AddTransmutation(NewItemStack(item.woodPlanks, 1, 2), ArrayOf(NewItemStack(item.woodenSlab, 1, 2), 2));
-    AddTransmutation(NewItemStack(item.woodPlanks, 1, 3), ArrayOf(NewItemStack(item.woodenSlab, 1, 3), 2));
-    AddTransmutation(NewItemStack(item.netherBrick, 4), item.netherBricks);
-    AddTransmutation(item.netherrack, item.netherBrick);
-    AddTransmutation(NewItemStack(item.woodPlanks, 3, 0), ArrayOf(item.oakWoodStairs, 2));
-    AddTransmutation(NewItemStack(item.woodPlanks, 3, 1), ArrayOf(item.spruceWoodStairs, 2));
-    AddTransmutation(NewItemStack(item.woodPlanks, 3, 2), ArrayOf(item.birchWoodStairs, 2));
-    AddTransmutation(NewItemStack(item.woodPlanks, 3, 3), ArrayOf(item.jungleWoodStairs, 2));
-    AddTransmutation(NewItemStack(item.cobblestone, 3), ArrayOf(item.cobblestoneStairs, 2));
-    AddTransmutation(NewItemStack(item.stoneBricks, 3), ArrayOf(item.stoneBrickStairs, 2));
-    AddTransmutation(NewItemStack(item.netherBricks, 3), ArrayOf(item.netherBrickStairs, 2));
-    AddTransmutation(NewItemStack(item.sandstone, 3), ArrayOf(item.sandstoneStairs, 2));
-    AddTransmutation(NewItemStack(item.quartzBlock, 3), ArrayOf(item.quartzStairs, 2));
-    AddTransmutation(NewItemStack(item.stick, 3), item.fence);
-    AddTransmutation(item.netherBricks, item.netherBrickFence);
-    AddTransmutation(item.cobblestone, NewItemStack(item.cobblestoneWall, 1, 0));
-    AddTransmutation(item.mossStone, NewItemStack(item.cobblestoneWall, 1, 1));
+    QAddTransmutation(QNewItemStack(item.glass, 3), ArrayOf(item.glassPane, 8));
+    QAddTransmutation(QNewItemStack(item.netherQuartz, 4), QNewItemStack(item.quartzBlock, 1, 0));
+    QAddTransmutation(item.quartzBlock, item.quartzBlock);
+    QAddTransmutation(item.stone,        ArrayOf(QNewItemStack(item.slab, 1, 0), 2));
+    QAddTransmutation(item.sandstone,    ArrayOf(QNewItemStack(item.slab, 1, 1), 2));
+    QAddTransmutation(item.woodPlanks,   ArrayOf(QNewItemStack(item.slab, 1, 2), 2));
+    QAddTransmutation(item.cobblestone,  ArrayOf(QNewItemStack(item.slab, 1, 3), 2));
+    QAddTransmutation(item.bricks,       ArrayOf(QNewItemStack(item.slab, 1, 4), 2));
+    QAddTransmutation(item.stoneBricks,  ArrayOf(QNewItemStack(item.slab, 1, 5), 2));
+    QAddTransmutation(item.netherBricks, ArrayOf(QNewItemStack(item.slab, 1, 6), 2));
+    QAddTransmutation(item.quartzBlock,  ArrayOf(QNewItemStack(item.slab, 1, 7), 2));
+    QAddTransmutation(QNewItemStack(item.woodPlanks, 1, 0), ArrayOf(QNewItemStack(item.woodenSlab, 1, 0), 2));
+    QAddTransmutation(QNewItemStack(item.woodPlanks, 1, 1), ArrayOf(QNewItemStack(item.woodenSlab, 1, 1), 2));
+    QAddTransmutation(QNewItemStack(item.woodPlanks, 1, 2), ArrayOf(QNewItemStack(item.woodenSlab, 1, 2), 2));
+    QAddTransmutation(QNewItemStack(item.woodPlanks, 1, 3), ArrayOf(QNewItemStack(item.woodenSlab, 1, 3), 2));
+    QAddTransmutation(QNewItemStack(item.netherBrick, 4), item.netherBricks);
+    QAddTransmutation(item.netherrack, item.netherBrick);
+    QAddTransmutation(QNewItemStack(item.woodPlanks, 3, 0), ArrayOf(item.oakWoodStairs, 2));
+    QAddTransmutation(QNewItemStack(item.woodPlanks, 3, 1), ArrayOf(item.spruceWoodStairs, 2));
+    QAddTransmutation(QNewItemStack(item.woodPlanks, 3, 2), ArrayOf(item.birchWoodStairs, 2));
+    QAddTransmutation(QNewItemStack(item.woodPlanks, 3, 3), ArrayOf(item.jungleWoodStairs, 2));
+    QAddTransmutation(QNewItemStack(item.cobblestone, 3), ArrayOf(item.cobblestoneStairs, 2));
+    QAddTransmutation(QNewItemStack(item.stoneBricks, 3), ArrayOf(item.stoneBrickStairs, 2));
+    QAddTransmutation(QNewItemStack(item.netherBricks, 3), ArrayOf(item.netherBrickStairs, 2));
+    QAddTransmutation(QNewItemStack(item.sandstone, 3), ArrayOf(item.sandstoneStairs, 2));
+    QAddTransmutation(QNewItemStack(item.quartzBlock, 3), ArrayOf(item.quartzStairs, 2));
+    QAddTransmutation(QNewItemStack(item.stick, 3), item.fence);
+    QAddTransmutation(item.netherBricks, item.netherBrickFence);
+    QAddTransmutation(item.cobblestone, QNewItemStack(item.cobblestoneWall, 1, 0));
+    QAddTransmutation(item.mossStone, QNewItemStack(item.cobblestoneWall, 1, 1));
   }
   if (optionalFeature.ee_ore_transmutations)
   {
