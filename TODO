@@ -18,7 +18,7 @@ Hard/Tricky/Unknown
 - Hook CommandBase/ICommand to be Minecraft version independent
 
 - Figure out how to access ModLoader in Packages for easier API access,
-  considering that Forge moves it from the classpath
+  considering that Forge moves it from the classpath.
   Basically convert between java.lang.Class and JavaClass.
   (Class -> JavaClass: WrapFactory.wrapJavaClass()?)
   (JavaClass -> Class: getClassObject() or unwrap()?)
@@ -26,19 +26,17 @@ Hard/Tricky/Unknown
 - Stupid Java engine loses WrappedException in ScriptException, making it
   impossible to print JavaScript stack trace from Java - fix that.
 
-- Make Minecraft 1.6 compatible directory detection
+- Wrap ItemStack and Method in JavaScript pseudo-classes for more straightforward work
+  Alternatively, find out if it's possible to add fields into these specifically for JS engine
+
+- Make more reliable Minecraft 1.6 compatible directory detection
 
 
 Maintenance/Boring
 ==================
 - Ensure correct mod load order
 
-- Wrap ItemStack and Method in JavaScript pseudo-classes for more straightforward work
-  Alternatively, find out if it's possible to add fields into these specifically for JS engine
-
 - Write better documentation, etc.
-
-- Allow to easily turn off certain tweaks by main configuration script.
 
 - Fix the case when exceptions occur and script still reports 0 warnings 0 errors.
 
