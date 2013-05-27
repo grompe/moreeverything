@@ -24,7 +24,7 @@ var mods;
     undergroundbiomes  : init("Underground Biomes", Packages.exterminatorJeff.undergroundBiomes.common.UndergroundBiomes)
   };
 
-  if (mods.equivalentexchange && GetFile("EE3/EE3.cfg"))
+  if (mods.equivalentexchange && GetFile("EE3/EE3.cfg") || GetFile("EE3.cfg"))
   {
     mods.equivalentexchange.miniumStone = FindIntMatch(/I:stoneMinium=(\d+)/);
     mods.equivalentexchange.philosophersStone = FindIntMatch(/I:stonePhilosophers=(\d+)/);
