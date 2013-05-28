@@ -23,143 +23,150 @@ var mods;
     minefantasy        : init("MineFantasy", Packages.minefantasy.MineFantasyBase),
     undergroundbiomes  : init("Underground Biomes", Packages.exterminatorJeff.undergroundBiomes.common.UndergroundBiomes)
   };
-
-  if (mods.equivalentexchange)
+  var m;
+  if (m = mods.equivalentexchange)
   {
     if (GetFile("EE3/EE3.cfg") || GetFile("EE3.cfg"))
     {
-      mods.equivalentexchange.miniumStone = QFindIntMatch(/I:stoneMinium=(\d+)/) || FindIntMatch(/I:miniumStone=(\d+)/);
-      mods.equivalentexchange.philosophersStone = QFindIntMatch(/I:stonePhilosophers=(\d+)/) || FindIntMatch(/I:philStone=(\d+)/);
-      mods.equivalentexchange.inertStone = QFindIntMatch(/I:stoneInert=(\d+)/) || FindIntMatch(/I:inertStone=(\d+)/);
-      mods.equivalentexchange.miniumShard = QFindIntMatch(/I:shardMinium=(\d+)/) || FindIntMatch(/I:miniumShard=(\d+)/);
+      m.miniumStone = QFindIntMatch(/I:stoneMinium=(\d+)/) || FindIntMatch(/I:miniumStone=(\d+)/);
+      m.philosophersStone = QFindIntMatch(/I:stonePhilosophers=(\d+)/) || FindIntMatch(/I:philStone=(\d+)/);
+      m.inertStone = QFindIntMatch(/I:stoneInert=(\d+)/) || FindIntMatch(/I:inertStone=(\d+)/);
+      m.miniumShard = QFindIntMatch(/I:shardMinium=(\d+)/) || FindIntMatch(/I:miniumShard=(\d+)/);
     } else {
-      mods.equivalentexchange = false;
+      m = false;
       log("Couldn't find config/EE3/EE3.cfg or config/EE3.cfg", logLevel.warning);
     }
   }
-  if (mods.thaumcraft)
+  if (m = mods.thaumcraft)
   {
     if (GetFile("Thaumcraft.cfg"))
     {
-      mods.thaumcraft.shard         = FindIntMatch(/I:ItemShard=(\d+)/)+256;
-      mods.thaumcraft.marker        = FindIntMatch(/I:BlockMarker=(\d+)/);
-      mods.thaumcraft.candle        = FindIntMatch(/I:BlockCandle=(\d+)/);
-      mods.thaumcraft.secure        = FindIntMatch(/I:BlockSecure=(\d+)/);
-      mods.thaumcraft.crystal       = FindIntMatch(/I:BlockCrystal=(\d+)/);
-      mods.thaumcraft.cosmeticSolid = QFindIntMatch(/I:BlockCosmeticSolid=(\d+)/);
-      mods.thaumcraft.customPlant   = FindIntMatch(/I:BlockCustomPlant=(\d+)/);
+      m.shard         = FindIntMatch(/I:ItemShard=(\d+)/)+256;
+      m.marker        = FindIntMatch(/I:BlockMarker=(\d+)/);
+      m.candle        = FindIntMatch(/I:BlockCandle=(\d+)/);
+      m.secure        = FindIntMatch(/I:BlockSecure=(\d+)/);
+      m.crystal       = FindIntMatch(/I:BlockCrystal=(\d+)/);
+      m.cosmeticSolid = QFindIntMatch(/I:BlockCosmeticSolid=(\d+)/);
+      m.customPlant   = FindIntMatch(/I:BlockCustomPlant=(\d+)/);
     } else {
-      mods.thaumcraft = false;
+      m = false;
       log("Couldn't find config/Thaumcraft.cfg", logLevel.warning);
     }
   }
-  if (mods.natura)
+  if (m = mods.natura)
   {
     if (GetFile("Natura.txt"))
     {
-      mods.natura.foodItems   = FindIntMatch(/I:"Food Items"=(\d+)/)+256;
-      mods.natura.barleySeeds = FindIntMatch(/I:"Barley Seed"=(\d+)/)+256;
-      mods.natura.cloud       = FindIntMatch(/I:"Cloud Block"=(\d+)/);
-      mods.natura.sapling     = FindIntMatch(/I:Sapling=(\d+)/);
-      mods.natura.door        = FindIntMatch(/I:"Door Item"=(\d+)/)+256;
+      m.foodItems   = FindIntMatch(/I:"Food Items"=(\d+)/)+256;
+      m.barleySeeds = FindIntMatch(/I:"Barley Seed"=(\d+)/)+256;
+      m.cloud       = FindIntMatch(/I:"Cloud Block"=(\d+)/);
+      m.sapling     = FindIntMatch(/I:Sapling=(\d+)/);
+      m.door        = FindIntMatch(/I:"Door Item"=(\d+)/)+256;
     } else {
-      mods.natura = false;
+      m = false;
       log("Couldn't find config/Natura.txt", logLevel.warning);
     }
   }
-  if (mods.extrabiomesxl)
+  if (m = mods.extrabiomesxl)
   {
     if (GetFile("extrabiomes/extrabiomes.cfg"))
     {
-      mods.extrabiomesxl.redRock     = FindIntMatch(/I:redrock.id=(\d+)/);
-      mods.extrabiomesxl.crackedSand = FindIntMatch(/I:crackedsand.id=(\d+)/)
-      mods.extrabiomesxl.cattail     = FindIntMatch(/I:cattail.id=(\d+)/);
-      mods.extrabiomesxl.flower      = FindIntMatch(/I:flower.id=(\d+)/);
-      mods.extrabiomesxl.grass       = FindIntMatch(/I:grass.id=(\d+)/);
-      mods.extrabiomesxl.leafPile    = FindIntMatch(/I:leafpile.id=(\d+)/);
-      mods.extrabiomesxl.woodenSlab  = FindIntMatch(/I:woodslab.id=(\d+)/);
+      m.redRock     = FindIntMatch(/I:redrock.id=(\d+)/);
+      m.crackedSand = FindIntMatch(/I:crackedsand.id=(\d+)/)
+      m.cattail     = FindIntMatch(/I:cattail.id=(\d+)/);
+      m.flower      = FindIntMatch(/I:flower.id=(\d+)/);
+      m.grass       = FindIntMatch(/I:grass.id=(\d+)/);
+      m.leafPile    = FindIntMatch(/I:leafpile.id=(\d+)/);
+      m.woodenSlab  = FindIntMatch(/I:woodslab.id=(\d+)/);
     } else {
-      mods.extrabiomesxl = false;
+      m = false;
       log("Couldn't find config/extrabiomes/extrabiomes.cfg", logLevel.warning);
     }
   }
-  if (mods.biomesoplenty)
+  if (m = mods.biomesoplenty)
   {
     if (GetFile("BiomesOPlenty.cfg"))
     {
-      mods.biomesoplenty.plant       = FindIntMatch(/I:"Plant ID"=(\d+)/);
-      mods.biomesoplenty.woodenSlab1 = FindIntMatch(/I:"Wooden Single Slab 1 ID"=(\d+)/);
-      mods.biomesoplenty.woodenSlab2 = FindIntMatch(/I:"Wooden Single Slab 2 ID"=(\d+)/);
-      mods.biomesoplenty.foliage     = FindIntMatch(/I:"Foliage ID"=(\d+)/);
-      mods.biomesoplenty.bamboo      = FindIntMatch(/I:"Bamboo ID"=(\d+)/);
+      m.plant       = FindIntMatch(/I:"Plant ID"=(\d+)/);
+      m.woodenSlab1 = FindIntMatch(/I:"Wooden Single Slab 1 ID"=(\d+)/);
+      m.woodenSlab2 = FindIntMatch(/I:"Wooden Single Slab 2 ID"=(\d+)/);
+      m.foliage     = FindIntMatch(/I:"Foliage ID"=(\d+)/);
+      m.bamboo      = FindIntMatch(/I:"Bamboo ID"=(\d+)/);
+      m.redRock     = FindIntMatch(/I:"Red Rock ID"=(\d+)/);
     } else {
-      mods.biomesoplenty = false;
+      m = false;
       log("Couldn't find config/BiomesOPlenty.cfg", logLevel.warning);
     }
   }
-  if (mods.tinkersconstruct)
+  if (m = mods.tinkersconstruct)
   {
     if (GetFile("TinkersWorkshop.txt"))
     {
-      mods.tinkersconstruct.manual       = FindIntMatch(/I:"Tinker's Manual"=(\d+)/)+256;
-      mods.tinkersconstruct.blankPattern = FindIntMatch(/I:"Blank Patterns"=(\d+)/)+256;
-      mods.tinkersconstruct.woodPattern  = FindIntMatch(/I:"Wood Pattern"=(\d+)/)+256;
-      mods.tinkersconstruct.materials    = FindIntMatch(/I:Materials=(\d+)/)+256;
+      m.manual       = FindIntMatch(/I:"Tinker's Manual"=(\d+)/)+256;
+      m.blankPattern = FindIntMatch(/I:"Blank Patterns"=(\d+)/)+256;
+      m.woodPattern  = FindIntMatch(/I:"Wood Pattern"=(\d+)/)+256;
+      m.materials    = FindIntMatch(/I:Materials=(\d+)/)+256;
     } else {
-      mods.tinkersconstruct = false;
+      m = false;
       log("Couldn't find config/TinkersWorkshop.txt", logLevel.warning);
     }
   }
-  if (mods.twilightforest)
+  if (m = mods.twilightforest)
   {
     if (GetFile("TwilightForest.cfg"))
     {
-      mods.twilightforest.sapling = FindIntMatch(/I:Sapling=(\d+)/);
+      m.sapling = FindIntMatch(/I:Sapling=(\d+)/);
     } else {
-      mods.twilightforest = false;
+      m = false;
       log("Couldn't find config/TwilightForest.cfg", logLevel.warning);
     }
   }
-  if (mods.buildcraft)
+  if (m = mods.buildcraft)
   {
     if (GetFile("buildcraft/main.conf"))
     {
-      mods.buildcraft.woodenGear = FindIntMatch(/I:woodenGearItem.id=(\d+)/)+256;
+      m.woodenGear = FindIntMatch(/I:woodenGearItem.id=(\d+)/)+256;
     } else {
-      mods.buildcraft = false;
+      m = false;
       log("Couldn't find config/buildcraft/main.conf", logLevel.warning);
     }
   }
-  if (mods.minefantasy)
+  if (m = mods.minefantasy)
   {
     if (GetFile("MineFantasy.cfg"))
     {
-      mods.minefantasy.herb       = FindIntMatch(/I:Herb=(\d+)/);
-      mods.minefantasy.sapling    = FindIntMatch(/I:Sapling=(\d+)/);
-      mods.minefantasy.hayRoof    = FindIntMatch(/I:"Hay Roof"=(\d+)/);
-      mods.minefantasy.itemBaseId = FindIntMatch(/I:"Item Base Id"=(\d+)/)+256;
+      m.herb                   = FindIntMatch(/I:Herb=(\d+)/);
+      m.sapling                = FindIntMatch(/I:Sapling=(\d+)/);
+      m.hayRoof                = FindIntMatch(/I:"Hay Roof"=(\d+)/);
+      m.itemBaseId             = FindIntMatch(/I:"Item Base Id"=(\d+)/)+256;
+      m.cobblestoneBricks      = FindIntMatch(/I:"Cobblestone Bricks"=(\d+)/);
+      m.graniteBricks          = FindIntMatch(/I:"Granite Bricks"=(\d+)/);
+      m.ironbarkWood           = FindIntMatch(/I:Ironbark=(\d+)/);
+      m.ironbarkPlanks         = FindIntMatch(/I:Planks=(\d+)/);
+      m.stoneStairs            = FindIntMatch(/I:"Stone Stairs"=(\d+)/);
+      m.cobblestoneBrickStairs = FindIntMatch(/I:"Cobblestone Brick Stairs"=(\d+)/);
     } else {
-      mods.minefantasy = false;
+      m = false;
       log("Couldn't find config/MineFantasy.cfg", logLevel.warning);
     }
   }
-  if (mods.undergroundbiomes)
+  if (m = mods.undergroundbiomes)
   {
     if (GetFile("UndergroundBiomes.cfg") || GetFile("Underground Biomes.cfg"))
     {
-      mods.undergroundbiomes.anthracite             = FindIntMatch(/I:"Anthracite Block ID:"=(\d+)/);
-      mods.undergroundbiomes.igneousBrick           = FindIntMatch(/I:"Igneous Brick ID:"=(\d+)/);
-      mods.undergroundbiomes.igneousCobblestone     = FindIntMatch(/I:"Igneous Cobblestone ID:"=(\d+)/);
-      mods.undergroundbiomes.igneousBrickSlab       = FindIntMatch(/I:"Igneous Stone Brick Slab ID .half.:"=(\d+)/);
-      mods.undergroundbiomes.igneousStone           = FindIntMatch(/I:"Igneous Stone ID:"=(\d+)/);
-      mods.undergroundbiomes.lignite                = FindIntMatch(/I:"Lignite Item ID:"=(\d+)/)+256;
-      mods.undergroundbiomes.metamorphicBrick       = FindIntMatch(/I:"Metamorphic Brick ID:"=(\d+)/);
-      mods.undergroundbiomes.metamorphicCobblestone = FindIntMatch(/I:"Metamorphic Cobblestone ID:"=(\d+)/);
-      mods.undergroundbiomes.metamorphicStoneSlab   = FindIntMatch(/I:"Metamorphic Stone Brick Slab ID .half.:"=(\d+)/);
-      mods.undergroundbiomes.metamorphicStone       = FindIntMatch(/I:"Metamorphic Stone ID:"=(\d+)/);
-      mods.undergroundbiomes.sedimentaryStone       = FindIntMatch(/I:"Sedimentary Stone ID:"=(\d+)/);
+      m.anthracite             = FindIntMatch(/I:"Anthracite Block ID:"=(\d+)/);
+      m.igneousBrick           = FindIntMatch(/I:"Igneous Brick ID:"=(\d+)/);
+      m.igneousCobblestone     = FindIntMatch(/I:"Igneous Cobblestone ID:"=(\d+)/);
+      m.igneousBrickSlab       = FindIntMatch(/I:"Igneous Stone Brick Slab ID .half.:"=(\d+)/);
+      m.igneousStone           = FindIntMatch(/I:"Igneous Stone ID:"=(\d+)/);
+      m.lignite                = FindIntMatch(/I:"Lignite Item ID:"=(\d+)/)+256;
+      m.metamorphicBrick       = FindIntMatch(/I:"Metamorphic Brick ID:"=(\d+)/);
+      m.metamorphicCobblestone = FindIntMatch(/I:"Metamorphic Cobblestone ID:"=(\d+)/);
+      m.metamorphicStoneSlab   = FindIntMatch(/I:"Metamorphic Stone Brick Slab ID .half.:"=(\d+)/);
+      m.metamorphicStone       = FindIntMatch(/I:"Metamorphic Stone ID:"=(\d+)/);
+      m.sedimentaryStone       = FindIntMatch(/I:"Sedimentary Stone ID:"=(\d+)/);
     } else {
-      mods.undergroundbiomes = false;
+      m = false;
       log("Couldn't find config/UndergroundBiomes.cfg or config/Underground Biomes.cfg", logLevel.warning);
     }
   }

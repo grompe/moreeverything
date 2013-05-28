@@ -203,8 +203,8 @@ var AddTransmutation1to1 = function() { throw("AddTransmutation1to1 is not avail
     // Air shard -> fire shard -> water shard -> earth shard -> air shard; same for clusters
     for (var i = 0; i < 4; i++)
     {
-      AddTransmutation(NewItemStack(m.shard,   1, (i == 3) ? 0 : i+1), NewItemStack(m.shard,   1, i));
-      AddTransmutation(NewItemStack(m.crystal, 1, (i == 3) ? 0 : i+1), NewItemStack(m.crystal, 1, i));
+      AddTransmutation(NewItemStack(m.shard,   1, (i+1)%4), NewItemStack(m.shard,   1, i));
+      AddTransmutation(NewItemStack(m.crystal, 1, (i+1)%4), NewItemStack(m.crystal, 1, i));
     }
 
     // Vis shard = 3 dull shards
@@ -214,9 +214,9 @@ var AddTransmutation1to1 = function() { throw("AddTransmutation1to1 is not avail
     // Change marker, candle and warded stone colors
     for (var i = 0; i < 16; i++)
     {
-      AddTransmutation(NewItemStack(m.marker, 1, (i == 15) ? 0 : i+1), NewItemStack(m.marker, 1, i));
-      AddTransmutation(NewItemStack(m.candle, 1, (i == 15) ? 0 : i+1), NewItemStack(m.candle, 1, i));
-      AddTransmutation(NewItemStack(m.secure, 1, (i == 15) ? 0 : i+1), NewItemStack(m.secure, 1, i));
+      AddTransmutation(NewItemStack(m.marker, 1, (i+1)%16), NewItemStack(m.marker, 1, i));
+      AddTransmutation(NewItemStack(m.candle, 1, (i+1)%16), NewItemStack(m.candle, 1, i));
+      AddTransmutation(NewItemStack(m.secure, 1, (i+1)%16), NewItemStack(m.secure, 1, i));
     }
 
     // Uncrafting: obsidian tile -> obsidian
@@ -242,16 +242,18 @@ var AddTransmutation1to1 = function() { throw("AddTransmutation1to1 is not avail
     // Transmute stones in cycle
     for (var i = 0; i < 8; i++)
     {
-      AddTransmutation(NewItemStack(m.igneousStone,           1, (i == 7) ? 0 : i+1), NewItemStack(m.igneousStone,           1, i));
-      AddTransmutation(NewItemStack(m.metamorphicStone,       1, (i == 7) ? 0 : i+1), NewItemStack(m.metamorphicStone,       1, i));
-      AddTransmutation(NewItemStack(m.igneousBrick,           1, (i == 7) ? 0 : i+1), NewItemStack(m.igneousBrick,           1, i));
-      AddTransmutation(NewItemStack(m.igneousCobblestone,     1, (i == 7) ? 0 : i+1), NewItemStack(m.igneousCobblestone,     1, i));
-      AddTransmutation(NewItemStack(m.igneousBrickSlab,       1, (i == 7) ? 0 : i+1), NewItemStack(m.igneousBrickSlab,       1, i));
-      AddTransmutation(NewItemStack(m.metamorphicBrick,       1, (i == 7) ? 0 : i+1), NewItemStack(m.metamorphicBrick,       1, i));
-      AddTransmutation(NewItemStack(m.metamorphicCobblestone, 1, (i == 7) ? 0 : i+1), NewItemStack(m.metamorphicCobblestone, 1, i));
-      AddTransmutation(NewItemStack(m.metamorphicStoneSlab,   1, (i == 7) ? 0 : i+1), NewItemStack(m.metamorphicStoneSlab,   1, i));
+      AddTransmutation(NewItemStack(m.igneousStone,           1, (i+1)%8), NewItemStack(m.igneousStone,           1, i));
+      AddTransmutation(NewItemStack(m.metamorphicStone,       1, (i+1)%8), NewItemStack(m.metamorphicStone,       1, i));
+      AddTransmutation(NewItemStack(m.igneousBrick,           1, (i+1)%8), NewItemStack(m.igneousBrick,           1, i));
+      AddTransmutation(NewItemStack(m.igneousCobblestone,     1, (i+1)%8), NewItemStack(m.igneousCobblestone,     1, i));
+      AddTransmutation(NewItemStack(m.igneousBrickSlab,       1, (i+1)%8), NewItemStack(m.igneousBrickSlab,       1, i));
+      AddTransmutation(NewItemStack(m.metamorphicBrick,       1, (i+1)%8), NewItemStack(m.metamorphicBrick,       1, i));
+      AddTransmutation(NewItemStack(m.metamorphicCobblestone, 1, (i+1)%8), NewItemStack(m.metamorphicCobblestone, 1, i));
+      AddTransmutation(NewItemStack(m.metamorphicStoneSlab,   1, (i+1)%8), NewItemStack(m.metamorphicStoneSlab,   1, i));
       if (i == 4) continue; // Skip the lignite block
-      AddTransmutation(NewItemStack(m.sedimentaryStone, 1, (i == 7) ? 0 : (i == 3) ? 5 : i+1), NewItemStack(m.sedimentaryStone, 1, i));
+      var j = (i+1)%8;
+      if (j == 3) j = 5;
+      AddTransmutation(NewItemStack(m.sedimentaryStone, 1, j), NewItemStack(m.sedimentaryStone, 1, i));
     }
     
     // Uncook stone to cobble (can do only in pairs)
@@ -277,5 +279,41 @@ var AddTransmutation1to1 = function() { throw("AddTransmutation1to1 is not avail
     // Uncrafting
     AddTransmutation(NewItemStack(item.coal, 4), m.anthracite);
 
+  }
+  if (optionalFeature.ee_biome_mods_transmutations && (m = mods.extrabiomes))
+  {
+    // Red rock -> red rock cobblestone
+    AddTransmutation(NewItemStack(m.redRock, 1, 1), NewItemStack(m.redRock, 1, 0));
+    // 4 red rock cobblestone -> flint
+    AddTransmutation(item.flint, ArrayOf(NewItemStack(m.redRock, 1, 1), 4));
+  }
+  if (optionalFeature.ee_biome_mods_transmutations && (m = mods.biomesoplenty))
+  {
+    // Red rock -> red rock cobblestone
+    AddTransmutation(NewItemStack(m.redRock, 1, 1), NewItemStack(m.redRock, 1, 0));
+    // 4 red rock cobblestone -> flint
+    AddTransmutation(item.flint, ArrayOf(NewItemStack(m.redRock, 1, 1), 4));
+    // TODO: 1923 leaves -> :1 :2 :3 ... :7 -> 1924 leaves -> :1 :2 :3 -> 1923:0
+  }
+  if (optionalFeature.ee_biome_mods_transmutations && (m = mods.twilightforest))
+  {
+  }
+  if (optionalFeature.ee_minefantasy_transmutations && (m = mods.minefantasy))
+  {
+    for (var i = 0; i < 3; i++)
+    {
+      // cobblestone bricks -> mossy -> cracked -> normal cobblestone bricks
+      AddTransmutation(NewItemStack(m.cobblestoneBricks, 1, (i+1)%3), NewItemStack(m.cobblestoneBricks, 1, i));
+      // granite bricks -> mossy -> cracked -> normal granite bricks
+      AddTransmutation(NewItemStack(m.graniteBricks,     1, (i+1)%3), NewItemStack(m.graniteBricks,     1, i));
+    }
+    // 2 ironbark wood -> obsidian
+    AddTransmutation(item.obsidian, ArrayOf(m.ironbarkWood, 2));
+    // 4 ironbark wood planks -> 1 ironbark wood
+    AddTransmutation(m.ironbarkWood, ArrayOf(m.ironbarkPlanks, 4));
+    // 2 stone stairs -> 3 stone
+    AddTransmutation(NewItemStack(item.stone, 3), ArrayOf(m.stoneStairs, 2));
+    // 2 cobblestone brick stairs -> 3 cobblestone bricks
+    AddTransmutation(NewItemStack(m.cobblestoneBricks, 3), ArrayOf(m.cobblestoneBrickStairs, 2));
   }
 })();

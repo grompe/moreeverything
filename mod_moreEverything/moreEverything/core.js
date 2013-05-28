@@ -35,6 +35,9 @@ var optionalFeature = {
   ee_thaumcraft_transmutations: 1,
   ee_natura_transmutations: 1,
   ee_underground_biomes_transmutations: 1,
+  ee_biome_mods_transmutations: 1,
+  ee_minefantasy_transmutations: 1,
+
   thaumcraft_vanilla_aspects: 1,
   thaumcraft_mod_aspects: 1,
 
