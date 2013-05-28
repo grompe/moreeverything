@@ -31,7 +31,6 @@ def compileAndPack():
 def pack():
   zipfile = "mod_moreEverything.%d.zip"%(buildnumber)
   os.system("pushd mod_moreEverything & kzip /y /r ../%s * >nul & popd"%(zipfile))
-  os.system("copy %s mod_moreEverything.latest.zip /y >nul"%(zipfile))
   print "Wrote %s"%(zipfile)
 
 if __name__ == "__main__":
