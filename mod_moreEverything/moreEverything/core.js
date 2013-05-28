@@ -52,6 +52,11 @@ function isEmpty(obj)
   return true;
 }
 
+function isJavaClass(thing, cls)
+{
+  return (typeof thing.getClass != "undefined") && (thing.getClass() == cls);
+}
+
 function Chr(s)
 {
   return new java.lang.Character(java.lang.String(s).charAt(0));
