@@ -139,7 +139,7 @@ public class mod_moreEverything extends BaseMod
             return mat.group(1);
         }
 
-        public static void __include(String str)
+        public static void __include(String str) throws RhinoException
         {
             File file = new File(configDir, str);
             if (!file.exists())
@@ -158,7 +158,7 @@ public class mod_moreEverything extends BaseMod
             execConfigFile(file);
         }
 
-        public static void __includeInternal(String str)
+        public static void __includeInternal(String str) throws RhinoException
         {
             log("Including '%s' inside jar", str);
             execResource(str);
@@ -266,7 +266,7 @@ public class mod_moreEverything extends BaseMod
         return ca.toString().replaceAll("\tat "+boring+"[^\n]+\n", "").replaceFirst(boring, "");
     }
 
-    public static void execResource(String str)
+    public static void execResource(String str) throws RhinoException
     {
         InputStream s = mod_moreEverything.class.getResourceAsStream(str);
         if (s == null)
@@ -277,20 +277,13 @@ public class mod_moreEverything extends BaseMod
         execStream(new InputStreamReader(s), str);
     }
     
-    public static void execStream(Reader reader, String name)
+    public static void execStream(Reader reader, String name) throws RhinoException
     {
         engine.put(ScriptEngine.FILENAME, name);
-        try
-        {
-            engine.eval(reader);
-        }
-        catch(RhinoException e)
-        {
-            logRhinoException(e);
-        }
+        engine.eval(reader);
     }
 
-    public static void execConfigFile(File file)
+    public static void execConfigFile(File file) throws RhinoException
     {
         try
         {
@@ -367,8 +360,15 @@ public class mod_moreEverything extends BaseMod
         engine.put("__api", new ScriptHandler());
         // Forge moves ModLoader class during deobfuscation process, so have to save it
         engine.put("__modLoader", ModLoader.class);
-        execResource("moreEverything/core.js");
-        execConfigFile(file);
+        try
+        {
+            execResource("moreEverything/core.js");
+            execConfigFile(file);
+        }
+        catch(RhinoException e)
+        {
+            logRhinoException(e);
+        }
         /*
         engine.put(ScriptEngine.FILENAME, "moreEverything/core.js");
         try

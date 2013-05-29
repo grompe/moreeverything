@@ -31,8 +31,9 @@ public class mEDependentCommand extends x
         catch(RhinoException e)
         {
             String msg = mod_moreEverything.getScriptStacktrace(e);
+            // Leave only the interesting part of the message
+            msg = msg.substring(0, msg.indexOf("\tat mEScriptEngine.")-2).replace("\t", "    ").replace("\r\n", "\n");
             caller.a("\u00a77>>> "+command+"\u00a7c\n"+msg);
-            //, )
         }
     }
     public int compareTo(Object obj)
