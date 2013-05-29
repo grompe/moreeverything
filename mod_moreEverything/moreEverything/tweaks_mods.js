@@ -80,5 +80,7 @@
     {
       AddShapelessRecipe(NewItemStack(mods.minefantasy.itemBaseId+42, 4, 66), NewItemStack(mods.undergroundbiomes.sedimentaryStone, 1, 0));
     }
+    // Silver block is missing from Ore Dictionary
+    RegisterOre("blockSilver", NewItemStack(m.storageBlock, 1, 5));
   }
 })();

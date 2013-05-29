@@ -3,6 +3,8 @@
 
 var AddTransmutation = function()     { throw("AddTransmutation is not available!"); };
 var AddTransmutation1to1 = function() { throw("AddTransmutation1to1 is not available!"); };
+var AddEquivalency = function()       { throw("AddEquivalency is not available!"); };
+var MakeMetaCycle = function()        { throw("MakeMetaCycle is not available!"); };
 
 (function()
 {
@@ -35,9 +37,55 @@ var AddTransmutation1to1 = function() { throw("AddTransmutation1to1 is not avail
 
   AddTransmutation1to1 = function(a, b)
   {
-    // TODO: possible inplace block transmutation?
     return AddTransmutation(a, b) && AddTransmutation(b, a);
   };
+
+  AddEquivalency = function(one_or_more_objects_or_arrays)
+  {
+    var arr = [];
+    for (var i = 0; i < arguments.length; i++)
+    {
+      if (arguments[i] instanceof Array)
+      {
+        arr = arr.concat(arguments[i]);
+      } else {
+        arr.push(arguments[i]);
+      }
+    }
+    for (var i=0; i < arr.length; i++)
+    {
+      if (typeof arr[i] == "number") arr[i] = NewItemStack(arr[i], 1, WILDCARD);
+    }
+    Packages.com.pahimar.ee3.core.handlers.EquivalencyHandler.instance().addObjects(ObjectArray(arr));
+    // As moreEverything mod is running late, need to manually add the recipes
+    for (var i=0; i < arr.length; i++)
+    {
+      AddTransmutation(arr[(i+1) % arr.length], arr[i]);
+    }
+    log("Added equvalency: "+arr, logLevel.debug);
+    return true;
+  }
+
+  MakeMetaCycle = function(id, numMetaValues, skipMeta_zero_or_more_numbers_or_arrays)
+  {
+    var skipMeta = {};
+    for (var i = 2; i < arguments.length; i++)
+    {
+      if (arguments[i] instanceof Array)
+      {
+        for (var j in arguments[i]) skipMeta[arguments[i][j]] = 1;
+      } else {
+        skipMeta[arguments[i]] = 1;
+      }
+    }
+    result = [];
+    for (var i = 0; i < numMetaValues; i++)
+    {
+      if (i in skipMeta) continue;
+      result.push(NewItemStack(id, 1, i));
+    }
+    return result;
+  }
 
   // Quiet functions that don't throw exceptions
   function QAddTransmutation(result, input)
@@ -83,10 +131,10 @@ var AddTransmutation1to1 = function() { throw("AddTransmutation1to1 is not avail
     QAddTransmutation(item.stoneBricks,  QNewItemStack(item.slab, 2, 5));
     QAddTransmutation(item.netherBricks, QNewItemStack(item.slab, 2, 6));
     QAddTransmutation(item.quartzBlock,  QNewItemStack(item.slab, 2, 7));
-    QAddTransmutation(QNewItemStack(item.woodPlanks, 1, 0), QNewItemStack(item.woodenSlab, 2, 0));
-    QAddTransmutation(QNewItemStack(item.woodPlanks, 1, 1), QNewItemStack(item.woodenSlab, 2, 1));
-    QAddTransmutation(QNewItemStack(item.woodPlanks, 1, 2), QNewItemStack(item.woodenSlab, 2, 2));
-    QAddTransmutation(QNewItemStack(item.woodPlanks, 1, 3), QNewItemStack(item.woodenSlab, 2, 3));
+    for (var i = 0; i < 4; i++)
+    {
+      QAddTransmutation(QNewItemStack(item.woodPlanks, 1, i), QNewItemStack(item.woodenSlab, 2, i));
+    }
     QAddTransmutation(QNewItemStack(item.netherBrick, 4), item.netherBricks);
     QAddTransmutation(item.netherrack, item.netherBrick);
     QAddTransmutation(QNewItemStack(item.woodPlanks, 3, 0), ArrayOf(item.oakWoodStairs, 2));
@@ -106,122 +154,69 @@ var AddTransmutation1to1 = function() { throw("AddTransmutation1to1 is not avail
   if (optionalFeature.ee_ore_transmutations)
   {
     // Transmutations based on ore dictionary
-    var copper = GetOres("ingotCopper");
-    var bronze = GetOres("ingotBronze");
-    var tin = GetOres("ingotTin");
-    var silver = GetOres("ingotSilver");
-    if ((copper.length > 0) && (tin.length > 0))
+    var all_copper = ["ingotCopper", "blockCopper", "nuggetCopper"];
+    var all_bronze = ["ingotBronze", "blockBronze", "nuggetBronze"];
+    var all_tin    = ["ingotTin"   , "blockTin"   , "nuggetTin"   ];
+    var all_silver = ["ingotSilver", "blockSilver", "nuggetSilver"];
+    var all_iron   = [item.ironIngot, item.ironBlock, "nuggetIron"];
+    var all_gold   = [item.goldIngot, item.goldBlock, item.goldNugget];
+    var iron;
+    for (var i = 0; i < 3; i++)
     {
-      // 1 tin = 3 copper
-      AddTransmutation(SetItemStackSize(copper[0], 3), "ingotTin");
-      AddTransmutation(tin[0], ArrayOf("ingotCopper", 3));
-    }
-    if ((bronze.length > 0) && (tin.length > 0))
-    {
-      // 2 bronze -> 1 tin
-      AddTransmutation(tin[0], ArrayOf("ingotBronze", 2));
-    }
-    if ((silver.length > 0) && (tin.length > 0))
-    {
-      // 1 silver = 2 tin
-      AddTransmutation(SetItemStackSize(tin[0], 2), "ingotSilver");
-      AddTransmutation(silver[0], ArrayOf("ingotTin", 2));
-    }
-    if (silver.length > 0)
-    {
-      // 2 iron -> 1 silver
-      AddTransmutation(silver[0], ArrayOf(item.ironIngot, 2));
-      // 4 silver -> 1 gold
-      AddTransmutation(item.goldIngot, ArrayOf("ingotSilver", 4));
-    }
-
-    // Same but for blocks
-    var copper = GetOres("blockCopper");
-    var bronze = GetOres("blockBronze");
-    var tin = GetOres("blockTin");
-    var silver = GetOres("blockSilver");
-    if ((copper.length > 0) && (tin.length > 0))
-    {
-      // 1 tin = 3 copper
-      AddTransmutation(SetItemStackSize(copper[0], 3), "blockTin");
-      AddTransmutation(tin[0], ArrayOf("blockCopper", 3));
-    }
-    if ((bronze.length > 0) && (tin.length > 0))
-    {
-      // 2 bronze -> 1 tin
-      AddTransmutation(tin[0], ArrayOf("blockBronze", 2));
-    }
-    if ((silver.length > 0) && (tin.length > 0))
-    {
-      // 1 silver = 2 tin
-      AddTransmutation(SetItemStackSize(tin[0], 2), "blockSilver");
-      AddTransmutation(silver[0], ArrayOf("blockTin", 2));
-    }
-    if (silver.length > 0)
-    {
-      // 2 iron -> 1 silver
-      AddTransmutation(silver[0], ArrayOf(item.ironBlock, 2));
-      // 4 silver -> 1 gold
-      AddTransmutation(item.goldBlock, ArrayOf("blockSilver", 4));
+      var copper = GetOres(all_copper[i]);
+      var bronze = GetOres(all_bronze[i]);
+      var tin = GetOres(all_tin[i]);
+      var silver = GetOres(all_silver[i]);
+      if ((copper.length > 0) && (tin.length > 0))
+      {
+        // 1 tin = 3 copper
+        AddTransmutation(SetItemStackSize(copper[0], 3), all_tin[i]);
+        AddTransmutation(tin[0], ArrayOf(all_copper[i], 3));
+      }
+      if ((bronze.length > 0) && (tin.length > 0))
+      {
+        // 2 bronze -> 1 tin
+        AddTransmutation(tin[0], ArrayOf(all_bronze[i], 2));
+      }
+      if ((silver.length > 0) && (tin.length > 0))
+      {
+        // 1 silver = 2 tin
+        AddTransmutation(SetItemStackSize(tin[0], 2), all_silver[i]);
+        AddTransmutation(silver[0], ArrayOf(all_tin[i], 2));
+      }
+      if (((i != 2) || (iron = GetOres("nuggetIron")) && (iron.length > 0)) && (silver.length > 0))
+      {
+        // 2 iron -> 1 silver
+        AddTransmutation(silver[0], ArrayOf(all_iron[i], 2));
+      }
+      if (silver.length > 0)
+      {
+        // 4 silver -> 1 gold
+        AddTransmutation(all_gold[i], ArrayOf(all_silver[i], 4));
+      }
+      if ((i == 2) && (iron.length > 0))
+      {
+        // 1 golden nugget -> 8 iron nuggets
+        AddTransmutation(SetItemStackSize(iron[0], 8), all_gold[i]);
+      }
     }
 
-    // Same but for nuggets
-    var copper = GetOres("nuggetCopper");
-    var bronze = GetOres("nuggetBronze");
-    var tin = GetOres("nuggetTin");
-    var silver = GetOres("nuggetSilver");
-    var iron = GetOres("nuggetIron");
-    if ((copper.length > 0) && (tin.length > 0))
-    {
-      // 1 tin = 3 copper
-      AddTransmutation(SetItemStackSize(copper[0], 3), "nuggetTin");
-      AddTransmutation(tin[0], ArrayOf("nuggetCopper", 3));
-    }
-    if ((bronze.length > 0) && (tin.length > 0))
-    {
-      // 2 bronze -> 1 tin
-      AddTransmutation(tin[0], ArrayOf("nuggetBronze", 2));
-    }
-    if ((silver.length > 0) && (tin.length > 0))
-    {
-      // 1 silver = 2 tin
-      AddTransmutation(SetItemStackSize(tin[0], 2), "nuggetSilver");
-      AddTransmutation(silver[0], ArrayOf("nuggetTin", 2));
-    }
-    if ((silver.length > 0) && (iron.length > 0))
-    {
-      // 2 iron -> 1 silver
-      AddTransmutation(silver[0], ArrayOf("nuggetIron", 2));
-    }
-    if (silver.length > 0)
-    {
-      // 4 silver -> 1 gold
-      AddTransmutation(item.goldNugget, ArrayOf("nuggetSilver", 4));
-    }
-    if (iron.length > 0)
-    {
-      // 1 golden nugget -> 8 iron nuggets
-      AddTransmutation(SetItemStackSize(iron[0], 8), item.goldNugget);
-    }
   }
   var m;
   if (optionalFeature.ee_thaumcraft_transmutations && (m = mods.thaumcraft))
   {
     // Air shard -> fire shard -> water shard -> earth shard -> air shard; same for clusters
-    for (var i = 0; i < 4; i++)
-    {
-      AddTransmutation(NewItemStack(m.shard,   1, (i+1)%4), NewItemStack(m.shard,   1, i));
-      AddTransmutation(NewItemStack(m.crystal, 1, (i+1)%4), NewItemStack(m.crystal, 1, i));
-    }
-
+    AddEquivalency(MakeMetaCycle(m.shard, 4));
+    AddEquivalency(MakeMetaCycle(m.crystal, 4));
     // Vis shard = 3 dull shards
     AddTransmutation1to1(NewItemStack(m.shard, 1, 4), NewItemStack(m.shard, 3, 5));
 
     // Change marker, candle and warded stone colors
+    AddEquivalency(MakeMetaCycle(m.marker, 16));
+    AddEquivalency(MakeMetaCycle(m.candle, 16));
+    // Warded stone can't be transmuted in-place, only in crafting
     for (var i = 0; i < 16; i++)
     {
-      AddTransmutation(NewItemStack(m.marker, 1, (i+1)%16), NewItemStack(m.marker, 1, i));
-      AddTransmutation(NewItemStack(m.candle, 1, (i+1)%16), NewItemStack(m.candle, 1, i));
       AddTransmutation(NewItemStack(m.secure, 1, (i+1)%16), NewItemStack(m.secure, 1, i));
     }
 
@@ -232,11 +227,11 @@ var AddTransmutation1to1 = function() { throw("AddTransmutation1to1 is not avail
   if (optionalFeature.ee_natura_transmutations && (m = mods.natura))
   {
     // Barley = wheat
-    AddTransmutation1to1(item.wheat, NewItemStack(m.foodItems, 1));
+    AddEquivalency(item.wheat, NewItemStack(m.foodItems, 1));
     // Seeds = barley seeds
-    AddTransmutation1to1(item.seeds, NewItemStack(m.barleySeeds, 1));
+    AddEquivalency(item.seeds, NewItemStack(m.barleySeeds, 1));
     // Wheat flour = barley flour
-    AddTransmutation1to1(NewItemStack(m.foodItems, 1, 1), NewItemStack(m.foodItems, 1, 2));
+    AddEquivalency(NewItemStack(m.foodItems, 1, 1), NewItemStack(m.foodItems, 1, 2));
     // Uncrafting: gunpowder -> 4 sulfur (foodItems, heh)
     AddTransmutation(NewItemStack(m.foodItems, 4, 4), item.gunpowder);
     // Uncrafting: sulfur -> 4 sulfur cloud
@@ -246,21 +241,15 @@ var AddTransmutation1to1 = function() { throw("AddTransmutation1to1 is not avail
   if (optionalFeature.ee_underground_biomes_transmutations && (m = mods.undergroundbiomes))
   {
     // Transmute stones in cycle
-    for (var i = 0; i < 8; i++)
-    {
-      AddTransmutation(NewItemStack(m.igneousStone,           1, (i+1)%8), NewItemStack(m.igneousStone,           1, i));
-      AddTransmutation(NewItemStack(m.metamorphicStone,       1, (i+1)%8), NewItemStack(m.metamorphicStone,       1, i));
-      AddTransmutation(NewItemStack(m.igneousBrick,           1, (i+1)%8), NewItemStack(m.igneousBrick,           1, i));
-      AddTransmutation(NewItemStack(m.igneousCobblestone,     1, (i+1)%8), NewItemStack(m.igneousCobblestone,     1, i));
-      AddTransmutation(NewItemStack(m.igneousBrickSlab,       1, (i+1)%8), NewItemStack(m.igneousBrickSlab,       1, i));
-      AddTransmutation(NewItemStack(m.metamorphicBrick,       1, (i+1)%8), NewItemStack(m.metamorphicBrick,       1, i));
-      AddTransmutation(NewItemStack(m.metamorphicCobblestone, 1, (i+1)%8), NewItemStack(m.metamorphicCobblestone, 1, i));
-      AddTransmutation(NewItemStack(m.metamorphicStoneSlab,   1, (i+1)%8), NewItemStack(m.metamorphicStoneSlab,   1, i));
-      if (i == 4) continue; // Skip the lignite block
-      var j = (i+1)%8;
-      if (j == 3) j = 5;
-      AddTransmutation(NewItemStack(m.sedimentaryStone, 1, j), NewItemStack(m.sedimentaryStone, 1, i));
-    }
+    AddEquivalency(MakeMetaCycle(m.igneousStone,           8));
+    AddEquivalency(MakeMetaCycle(m.metamorphicStone,       8));
+    AddEquivalency(MakeMetaCycle(m.igneousBrick,           8));
+    AddEquivalency(MakeMetaCycle(m.igneousCobblestone,     8));
+    AddEquivalency(MakeMetaCycle(m.igneousBrickSlab,       8));
+    AddEquivalency(MakeMetaCycle(m.metamorphicBrick,       8));
+    AddEquivalency(MakeMetaCycle(m.metamorphicCobblestone, 8));
+    AddEquivalency(MakeMetaCycle(m.metamorphicStoneSlab,   8));
+    AddEquivalency(MakeMetaCycle(m.sedimentaryStone,       8, 4)); // Skip the lignite block
     
     // Uncook stone to cobble (can do only in pairs)
     for (var i = 0; i < 8; i++)
@@ -268,7 +257,6 @@ var AddTransmutation1to1 = function() { throw("AddTransmutation1to1 is not avail
       AddTransmutation(NewItemStack(m.igneousCobblestone,     2, i), NewItemStack(m.igneousStone,     2, i));
       AddTransmutation(NewItemStack(m.metamorphicCobblestone, 2, i), NewItemStack(m.metamorphicStone, 2, i));
     }
-    
     // Convert igneous/metamorphic stone to vanilla flint
     AddTransmutation(item.flint, NewItemStack(m.igneousCobblestone,     4, WILDCARD));
     AddTransmutation(item.flint, NewItemStack(m.metamorphicCobblestone, 4, WILDCARD));
@@ -281,7 +269,6 @@ var AddTransmutation1to1 = function() { throw("AddTransmutation1to1 is not avail
       AddTransmutation(NewItemStack(m.igneousBrick,     1, i), NewItemStack(m.igneousBrickSlab,     2, i));
       AddTransmutation(NewItemStack(m.metamorphicBrick, 1, i), NewItemStack(m.metamorphicStoneSlab, 2, i));
     }
-    
     // Uncrafting
     AddTransmutation(NewItemStack(item.coal, 4), m.anthracite);
 
@@ -306,13 +293,10 @@ var AddTransmutation1to1 = function() { throw("AddTransmutation1to1 is not avail
   }
   if (optionalFeature.ee_minefantasy_transmutations && (m = mods.minefantasy))
   {
-    for (var i = 0; i < 3; i++)
-    {
-      // cobblestone bricks -> mossy -> cracked -> normal cobblestone bricks
-      AddTransmutation(NewItemStack(m.cobblestoneBricks, 1, (i+1)%3), NewItemStack(m.cobblestoneBricks, 1, i));
-      // granite bricks -> mossy -> cracked -> normal granite bricks
-      AddTransmutation(NewItemStack(m.graniteBricks,     1, (i+1)%3), NewItemStack(m.graniteBricks,     1, i));
-    }
+    // cobblestone bricks -> mossy -> cracked -> normal cobblestone bricks
+    AddEquivalency(MakeMetaCycle(m.cobblestoneBricks, 4));
+    // granite bricks -> mossy -> cracked -> normal granite bricks
+    AddEquivalency(MakeMetaCycle(m.graniteBricks,     4));
     // 2 ironbark wood -> obsidian
     AddTransmutation(item.obsidian, ArrayOf(m.ironbarkWood, 2));
     // 4 ironbark wood planks -> 1 ironbark wood

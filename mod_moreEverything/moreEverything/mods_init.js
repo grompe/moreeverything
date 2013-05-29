@@ -145,6 +145,7 @@ var mods;
       m.ironbarkPlanks         = FindIntMatch(/I:Planks=(\d+)/);
       m.stoneStairs            = FindIntMatch(/I:"Stone Stairs"=(\d+)/);
       m.cobblestoneBrickStairs = FindIntMatch(/I:"Cobblestone Brick Stairs"=(\d+)/);
+      m.storageBlock           = FindIntMatch(/I:"Storage Block"=(\d+)/);
     } else {
       m = false;
       log("Couldn't find config/MineFantasy.cfg", logLevel.warning);
