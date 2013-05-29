@@ -240,16 +240,10 @@ public class mod_moreEverything extends BaseMod
         }
     }
 
-    public static void logScriptException(ScriptException e)
+    public static void logRhinoException(RhinoException e)
     {
-        if ((Exception)e instanceof WrappedException)
-        {
-          WrappedException we = (WrappedException)(Exception)e;
-          log("!SE!");
-          we.printStackTrace();
-        } else {
-          log("!SE! "+e.toString());
-        }
+        log("!SE!");
+        e.printStackTrace();
     }
 
     public static void execResource(String str)
@@ -270,9 +264,9 @@ public class mod_moreEverything extends BaseMod
         {
             engine.eval(reader);
         }
-        catch(ScriptException e)
+        catch(RhinoException e)
         {
-            logScriptException(e);
+            logRhinoException(e);
         }
     }
 
@@ -360,9 +354,9 @@ public class mod_moreEverything extends BaseMod
         {
             engine.invokeFunction("doneLoadingEvent");
         }
-        catch(ScriptException e)
+        catch(RhinoException e)
         {
-            logScriptException(e);
+            logRhinoException(e);
         }
         catch(NoSuchMethodException e)
         {

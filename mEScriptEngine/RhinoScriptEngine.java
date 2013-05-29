@@ -43,7 +43,7 @@ public final class RhinoScriptEngine extends AbstractScriptEngine implements Inv
       };
    }
 
-   public Object eval(Reader var1, ScriptContext var2) throws ScriptException
+   public Object eval(Reader var1, ScriptContext var2) throws RhinoException
    {
       Context var4 = enterContext();
 
@@ -55,14 +55,9 @@ public final class RhinoScriptEngine extends AbstractScriptEngine implements Inv
          var14 = var14 == null?"<Unknown source>":var14;
          var3 = var4.evaluateReader(var5, var1, var14, 1, (Object)null);
       }
-      catch (RhinoException var11)
+      catch (IOException e)
       {
-         int var6 = (var6 = var11.lineNumber()) == 0?-1:var6;
-         throw new ScriptException(var11.toString(), var11.sourceName(), var6);
-      }
-      catch (IOException var12)
-      {
-         throw new ScriptException(var12);
+         throw new WrappedException(e);
       }
       finally
       {
@@ -72,7 +67,7 @@ public final class RhinoScriptEngine extends AbstractScriptEngine implements Inv
       return this.unwrapReturnValue(var3);
    }
 
-   public Object eval(String var1, ScriptContext var2) throws ScriptException
+   public Object eval(String var1, ScriptContext var2) throws RhinoException
    {
       if(var1 == null)
       {
@@ -82,17 +77,27 @@ public final class RhinoScriptEngine extends AbstractScriptEngine implements Inv
       }
    }
 
+   public Object eval(Reader reader) throws RhinoException
+   {
+       return eval(reader, context);
+   }
+
+   public Object eval(String s) throws RhinoException
+   {
+       return eval(s, context);
+   }
+
    public Bindings createBindings()
    {
       return new SimpleBindings();
    }
 
-   public Object invokeFunction(String var1, Object ... var2) throws ScriptException, NoSuchMethodException
+   public Object invokeFunction(String var1, Object ... var2) throws RhinoException, NoSuchMethodException
    {
       return this.invoke((Object)null, var1, var2);
    }
 
-   public Object invokeMethod(Object var1, String var2, Object ... var3) throws ScriptException, NoSuchMethodException
+   public Object invokeMethod(Object var1, String var2, Object ... var3) throws RhinoException, NoSuchMethodException
    {
       if(var1 == null)
       {
@@ -102,52 +107,47 @@ public final class RhinoScriptEngine extends AbstractScriptEngine implements Inv
       }
    }
 
-   private Object invoke(Object var1, String var2, Object ... var3) throws ScriptException, NoSuchMethodException
+   private Object invoke(Object thisparam, String name, Object ... args) throws RhinoException, NoSuchMethodException
    {
-      Context var4 = enterContext();
+      Context context = enterContext();
 
-      Object var11;
+      Object obj11;
       try
       {
-         if(var2 == null)
+         if(name == null)
          {
             throw new NullPointerException("method name is null");
          }
 
-         if(var1 != null && !(var1 instanceof Scriptable))
+         if(thisparam != null && !(thisparam instanceof Scriptable))
          {
-            var1 = Context.toObject(var1, this.topLevel);
+            thisparam = Context.toObject(thisparam, this.topLevel);
          }
 
-         Scriptable var5 = this.getRuntimeScope(this.context);
-         Scriptable var17 = var1 != null?(Scriptable)var1:var5;
-         Object var7 = ScriptableObject.getProperty(var17, var2);
+         Scriptable scriptable5 = this.getRuntimeScope(this.context);
+         Scriptable scriptable17 = thisparam != null?(Scriptable)thisparam:scriptable5;
+         Object var7 = ScriptableObject.getProperty(scriptable17, name);
          if(!(var7 instanceof Function))
          {
-            throw new NoSuchMethodException("no such method: " + var2);
+            throw new NoSuchMethodException("no such method: " + name);
          }
 
          Function var8 = (Function)var7;
          Scriptable var9 = var8.getParentScope();
          if(var9 == null)
          {
-            var9 = var5;
+            var9 = scriptable5;
          }
 
-         Object var10 = var8.call(var4, var9, var17, this.wrapArguments(var3));
-         var11 = this.unwrapReturnValue(var10);
-      }
-      catch (RhinoException var15)
-      {
-         int var6 = (var6 = var15.lineNumber()) == 0?-1:var6;
-         throw new ScriptException(var15.toString(), var15.sourceName(), var6);
+         Object var10 = var8.call(context, var9, scriptable17, this.wrapArguments(args));
+         obj11 = this.unwrapReturnValue(var10);
       }
       finally
       {
          Context.exit();
       }
 
-      return var11;
+      return obj11;
    }
 
    public Object getInterface(Class var1)

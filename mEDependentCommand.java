@@ -1,5 +1,7 @@
 
 import javax.script.*;
+import sun.org.mozilla.javascript.internal.*;
+import mEScriptEngine.*;
 
 // Temporary class till I find how to hook CommandBase
 public class mEDependentCommand extends x
@@ -26,7 +28,7 @@ public class mEDependentCommand extends x
             caller.a("\u00a77>>> "+command+"\u00a7r\n"+result);
             //inv.invokeFunction("evalCommandEvent", caller, command));
         }
-        catch(ScriptException e)
+        catch(RhinoException e)
         {
             String msg = e.getMessage();
             // Leave only the interesting part of the message
