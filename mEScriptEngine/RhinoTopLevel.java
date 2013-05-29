@@ -6,12 +6,6 @@ import sun.org.mozilla.javascript.internal.*;
 
 public final class RhinoTopLevel extends ImporterTopLevel {
 
-   private static final String builtinVariables = ""
-     +"var com = Packages.com;                   \n"
-     +"var edu = Packages.edu;                   \n"
-     +"var javax = Packages.javax;               \n"
-     +"var net = Packages.net;                   \n"
-     +"var org = Packages.org;                   \n";
    private RhinoScriptEngine engine;
 
 
@@ -22,7 +16,6 @@ public final class RhinoTopLevel extends ImporterTopLevel {
       JavaAdapter.init(var1, this, false);
       String[] var3 = new String[]{"bindings", "scope", "sync"};
       this.defineFunctionProperties(var3, RhinoTopLevel.class, 2);
-      var1.evaluateString(this, builtinVariables, "<builtin>", 1, (Object)null);
    }
 
    public static Object bindings(Context var0, Scriptable var1, Object[] var2, Function var3) {
