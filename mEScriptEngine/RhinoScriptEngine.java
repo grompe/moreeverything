@@ -10,16 +10,24 @@ import com.sun.script.util.InterfaceImplementor;
 public final class RhinoScriptEngine extends AbstractScriptEngine implements Invocable
 {
    private static final boolean DEBUG = false;
-   private RhinoTopLevel topLevel;
+   private ImporterTopLevel topLevel;
    private Map indexedProps;
    private InterfaceImplementor implementor;
 
    public RhinoScriptEngine()
    {
-      Context var1 = enterContext();
+      Context context = enterContext();
       try
       {
-         this.topLevel = new RhinoTopLevel(var1, this);
+         this.topLevel = new ImporterTopLevel(context);
+         try
+         {
+            JavaAdapter javaAdapter = new JavaAdapter(this);
+            javaAdapter.setParentScope(this.topLevel);
+            javaAdapter.setPrototype(javaAdapter.getFunctionPrototype(this.topLevel));
+            javaAdapter.putProperty(topLevel, "JavaAdapter", javaAdapter);
+         }
+         catch(Exception e) { e.printStackTrace(); }
       } finally {
          Context.exit();
       }

@@ -8,17 +8,8 @@ final class JavaAdapter extends ScriptableObject implements Function {
    private Invocable engine;
 
 
-   private JavaAdapter(Invocable var1) {
+   public JavaAdapter(Invocable var1) {
       this.engine = var1;
-   }
-
-   static void init(Context var0, Scriptable var1, boolean var2) throws RhinoException {
-      RhinoTopLevel var3 = (RhinoTopLevel)var1;
-      RhinoScriptEngine var4 = var3.getScriptEngine();
-      JavaAdapter var5 = new JavaAdapter(var4);
-      var5.setParentScope(var1);
-      var5.setPrototype(getFunctionPrototype(var1));
-      ScriptableObject.putProperty(var3, "JavaAdapter", var5);
    }
 
    public String getClassName() {

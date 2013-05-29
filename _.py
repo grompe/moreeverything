@@ -26,6 +26,8 @@ def compileAndPack():
   os.system(r"del mod_moreEverything\source\mEScriptEngine\ /q >nul")
   os.system(r"xcopy *.java mod_moreEverything\source\ /y >nul")
   os.system(r"xcopy mEScriptEngine\* mod_moreEverything\source\mEScriptEngine\ /y >nul")
+  os.system(r"del mod_moreEverything\*.class /q >nul")
+  os.system(r"del mod_moreEverything\mEScriptEngine\*.class /q >nul")
   increaseBuildVersion()
   errcode = os.system("javac -source 1.6 -target 1.6 -bootclasspath c:/things/jre6u26/lib/rt.jar -d mod_moreEverything/ -Xlint:-unchecked -cp deps_modloader/*;deps_common/*;mod_moreEverything/source mod_moreEverything/source/*.java")
   if errcode == 0:
