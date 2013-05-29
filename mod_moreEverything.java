@@ -7,6 +7,7 @@ import java.lang.reflect.*;
 import java.util.regex.*;
 import javax.script.*;
 import sun.org.mozilla.javascript.internal.*;
+import mEScriptEngine.*;
 
 public class mod_moreEverything extends BaseMod
 {
@@ -16,7 +17,7 @@ public class mod_moreEverything extends BaseMod
     protected static File configDir;
     protected static boolean standalone = false;
     protected static boolean loaded = false;
-    protected static ScriptEngine engine;
+    protected static RhinoScriptEngine engine;
 
     public static void log(String s)
     {
@@ -347,17 +348,17 @@ public class mod_moreEverything extends BaseMod
         File file = new File(configDir, "mod_moreEverything.js");
         if(!file.exists()) extractDefaultConfig();
 
-        engine = (new ScriptEngineManager()).getEngineByName("JavaScript");
+        engine = new RhinoScriptEngine();
+        
         engine.put("__api", new ScriptHandler());
         // Forge moves ModLoader class during deobfuscation process, so have to save it
         engine.put("__modLoader", ModLoader.class);
         execResource("moreEverything/core.js");
         execConfigFile(file);
-        Invocable inv = (Invocable) engine;
         engine.put(ScriptEngine.FILENAME, "moreEverything/core.js");
         try
         {
-            inv.invokeFunction("doneLoadingEvent");
+            engine.invokeFunction("doneLoadingEvent");
         }
         catch(ScriptException e)
         {

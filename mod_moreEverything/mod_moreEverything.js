@@ -19,6 +19,8 @@ https://github.com/grompe/moreeverything/tree/master/mod_moreEverything/moreEver
 //optionalFeature.ee_thaumcraft_transmutations = 0;
 //optionalFeature.ee_natura_transmutations = 0;
 //optionalFeature.ee_underground_biomes_transmutations = 0;
+//optionalFeature.ee_biome_mods_transmutations = 0;
+//optionalFeature.ee_minefantasy_transmutations = 0;
 //optionalFeature.thaumcraft_vanilla_aspects = 0;
 //optionalFeature.thaumcraft_mod_aspects = 0;
 
