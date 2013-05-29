@@ -13,21 +13,6 @@ public final class RhinoScriptEngine extends AbstractScriptEngine implements Inv
    private RhinoTopLevel topLevel;
    private Map indexedProps;
    private InterfaceImplementor implementor;
-   private static final String printSource = ""
-     +"function print(str, newline) {                \n"
-     +"    if (typeof(str) == 'undefined') {         \n"
-     +"        str = 'undefined';                    \n"
-     +"    } else if (str == null) {                 \n"
-     +"        str = 'null';                         \n"
-     +"    }                                         \n"
-     +"    var out = context.getWriter();            \n"
-     +"    out.print(String(str));                   \n"
-     +"    if (newline) out.print('\\n');            \n"
-     +"    out.flush();                              \n"
-     +"}\n"
-     +"function println(str) {                       \n"
-     +"    print(str, true);                         \n"
-     +"}";
 
    public RhinoScriptEngine()
    {
@@ -194,18 +179,6 @@ public final class RhinoScriptEngine extends AbstractScriptEngine implements Inv
       } else {
          ExternalScriptable var2 = new ExternalScriptable(var1, this.indexedProps);
          var2.setPrototype(this.topLevel);
-         var2.put("context", var2, var1);
-         Context var3 = enterContext();
-
-         try
-         {
-            var3.evaluateString(var2, printSource, "print", 1, (Object)null);
-         }
-         finally
-         {
-            Context.exit();
-         }
-
          return var2;
       }
    }
