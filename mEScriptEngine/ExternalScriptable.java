@@ -7,16 +7,16 @@ import sun.org.mozilla.javascript.internal.*;
 final class ExternalScriptable implements Scriptable {
 
    private ScriptContext context;
-   private Map indexedProps;
+   private Map<Object, Object> indexedProps;
    private Scriptable prototype;
    private Scriptable parent;
 
 
    ExternalScriptable(ScriptContext var1) {
-      this(var1, new HashMap());
+      this(var1, new HashMap<Object, Object>());
    }
 
-   ExternalScriptable(ScriptContext var1, Map var2) {
+   ExternalScriptable(ScriptContext var1, Map<Object, Object> var2) {
       if(var1 == null) {
          throw new NullPointerException("context is null");
       } else {
@@ -243,7 +243,7 @@ final class ExternalScriptable implements Scriptable {
    }
 
    private String[] getAllKeys() {
-      ArrayList var1 = new ArrayList();
+      ArrayList<String> var1 = new ArrayList<String>();
       ScriptContext var2 = this.context;
       synchronized(this.context) {
          Iterator var3 = this.context.getScopes().iterator();

@@ -11,7 +11,7 @@ public final class RhinoScriptEngine extends AbstractScriptEngine implements Inv
 {
    private static final boolean DEBUG = false;
    private ImporterTopLevel topLevel;
-   private Map indexedProps;
+   private Map<Object, Object> indexedProps;
    private InterfaceImplementor implementor;
 
    public RhinoScriptEngine()
@@ -31,7 +31,7 @@ public final class RhinoScriptEngine extends AbstractScriptEngine implements Inv
       } finally {
          Context.exit();
       }
-      this.indexedProps = new HashMap();
+      this.indexedProps = new HashMap<Object, Object>();
       this.implementor = new InterfaceImplementor(this)
       {
          protected Object convertResult(Method method, Object obj) throws ScriptException
@@ -150,7 +150,7 @@ public final class RhinoScriptEngine extends AbstractScriptEngine implements Inv
       return obj11;
    }
 
-   public Object getInterface(Class var1)
+   public <T> T getInterface(Class<T> var1)
    {
       try
       {
@@ -162,7 +162,7 @@ public final class RhinoScriptEngine extends AbstractScriptEngine implements Inv
       }
    }
 
-   public Object getInterface(Object var1, Class var2)
+   public <T> T getInterface(Object var1, Class<T> var2)
    {
       if(var1 == null)
       {

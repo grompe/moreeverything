@@ -22,7 +22,7 @@ final class JavaAdapter extends ScriptableObject implements Function {
 
    public Scriptable construct(Context var1, Scriptable var2, Object[] var3) throws RhinoException {
       if(var3.length == 2) {
-         Class var4 = null;
+         Class<?> var4 = null;
          Object var5 = var3[0];
          if(var5 instanceof Wrapper) {
             Object var6 = ((Wrapper)var5).unwrap();
