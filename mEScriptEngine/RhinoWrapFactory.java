@@ -27,7 +27,6 @@ final class RhinoWrapFactory extends WrapFactory {
 
    public Scriptable wrapAsJavaObject(Context var1, Scriptable var2, Object var3, Class var4) {
       SecurityManager var5 = System.getSecurityManager();
-      ClassShutter var6 = RhinoClassShutter.getInstance();
       if(var3 instanceof ClassLoader) {
          if(var5 != null) {
             var5.checkPermission(SecurityConstants.GET_CLASSLOADER_PERMISSION);
@@ -48,31 +47,11 @@ final class RhinoWrapFactory extends WrapFactory {
          }
 
          if(var7 != null) {
-            return !var6.visibleToScripts(var7)?null:super.wrapAsJavaObject(var1, var2, var3, var4);
+            return super.wrapAsJavaObject(var1, var2, var3, var4);
          } else {
             Class var10 = var3.getClass();
             String var11 = var10.getName();
-            if(var6.visibleToScripts(var11)) {
-               return super.wrapAsJavaObject(var1, var2, var3, var4);
-            } else {
-               Class var9 = null;
-               if(var4 != null && var4.isInterface()) {
-                  var9 = var4;
-               } else {
-                  while(var10 != null) {
-                     var10 = var10.getSuperclass();
-                     var11 = var10.getName();
-                     if(var6.visibleToScripts(var11)) {
-                        var9 = var10;
-                        break;
-                     }
-                  }
-
-                  assert var9 != null : "even java.lang.Object is not accessible?";
-               }
-
-               return new RhinoJavaObject(var2, var3, var9);
-            }
+            return super.wrapAsJavaObject(var1, var2, var3, var4);
          }
       }
    }

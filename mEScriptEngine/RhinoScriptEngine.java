@@ -261,7 +261,6 @@ public final class RhinoScriptEngine extends AbstractScriptEngine implements Inv
          protected Context makeContext()
          {
             Context context = super.makeContext();
-            context.setClassShutter(RhinoClassShutter.getInstance());
             context.setWrapFactory(RhinoWrapFactory.getInstance());
             return context;
          }
