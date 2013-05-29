@@ -119,31 +119,23 @@ var GetItem            = function() { throw("GetItem is not available!"); };
 
 (function ()
 {
-  var warnings = 0;
-  var errors = 0;
-  
   log = function(msg, level)
   {
     if (typeof level == "undefined") level = logLevel.info;
     if (level == logLevel.warning)
     {
       msg = "Warning: "+msg;
-      warnings += 1;
+      __api.__incWarnings(1);
     }
     if (level == logLevel.error)
     {
       msg = "Error: "+msg;
-      errors += 1;
+      __api.__incErrors(1);
     }
     if (level >= currentLogLevel)
     {
       java.lang.System.out.println("[mE] "+msg);
     }
-  }
-
-  doneLoadingEvent = function()
-  {
-    log("Script load complete. "+warnings+" warnings, "+errors+" errors.");
   }
   
   var __addRecipe;

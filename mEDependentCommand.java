@@ -30,9 +30,8 @@ public class mEDependentCommand extends x
         }
         catch(RhinoException e)
         {
-            String msg = e.getMessage();
-            // Leave only the interesting part of the message
-            caller.a("\u00a77>>> "+command+"\u00a7c\n"+msg.substring(msg.indexOf(' ')+1, msg.indexOf(") in chat#")+1));
+            String msg = mod_moreEverything.getScriptStacktrace(e);
+            caller.a("\u00a77>>> "+command+"\u00a7c\n"+msg);
             //, )
         }
     }

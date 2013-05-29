@@ -25,9 +25,6 @@ Hard/Tricky/Unknown
   (Class -> JavaClass: WrapFactory.wrapJavaClass()?)
   (JavaClass -> Class: getClassObject() or unwrap()?)
 
-- Stupid Java engine loses WrappedException in ScriptException, making it
-  impossible to print JavaScript stack trace from Java - fix that.
-
 - Wrap ItemStack and Method in JavaScript pseudo-classes for more straightforward work
   Alternatively, find out if it's possible to add fields into these specifically for JS engine
 
@@ -39,8 +36,6 @@ Maintenance/Boring
 - Ensure correct mod load order
 
 - Write better documentation, etc.
-
-- Fix the case when exceptions occur and script still reports 0 warnings 0 errors.
 
 
 Future

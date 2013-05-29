@@ -18,6 +18,8 @@ public class mod_moreEverything extends BaseMod
     protected static boolean standalone = false;
     protected static boolean loaded = false;
     protected static RhinoScriptEngine engine;
+    protected static int warnings = 0;
+    protected static int errors = 0;
 
     public static void log(String s)
     {
@@ -34,17 +36,16 @@ public class mod_moreEverything extends BaseMod
         if (standalone) return new File("config");
         try
         {
-            Class noparams[] = {};
             Class<?> cls = Class.forName("net.minecraft.client.Minecraft");
             Method meth;
             try
             {
-                meth = cls.getMethod("func_71380_b", noparams);
+                meth = cls.getMethod("func_71380_b", (Class<?>[])null);
             }
             catch(NoSuchMethodException e)
             {
                 log("func_71380_b() not found, using b().");
-                meth = cls.getMethod("b", noparams);
+                meth = cls.getMethod("b", (Class<?>[])null);
             }
             return new File((File)meth.invoke(null), "config");
         }
@@ -238,12 +239,31 @@ public class mod_moreEverything extends BaseMod
         {
             throw new IllegalArgumentException("O_O");
         }
+
+        public static int __incWarnings(int amount)
+        {
+            return warnings += amount;
+        }
+
+        public static int __incErrors(int amount)
+        {
+            return errors += amount;
+        }
+    
     }
 
-    public static void logRhinoException(RhinoException e)
+    public static void logRhinoException(RhinoException ex)
     {
-        log("!SE!");
-        e.printStackTrace();
+        log("!SE! " + getScriptStacktrace(ex));
+    }
+
+    public static String getScriptStacktrace(RhinoException ex)
+    {
+        errors += 1;
+        CharArrayWriter ca = new CharArrayWriter();
+        ex.printStackTrace(new PrintWriter(ca));
+        String boring = "sun\\.org\\.mozilla\\.javascript\\.internal\\.";
+        return ca.toString().replaceAll("\tat "+boring+"[^\n]+\n", "").replaceFirst(boring, "");
     }
 
     public static void execResource(String str)
@@ -349,6 +369,7 @@ public class mod_moreEverything extends BaseMod
         engine.put("__modLoader", ModLoader.class);
         execResource("moreEverything/core.js");
         execConfigFile(file);
+        /*
         engine.put(ScriptEngine.FILENAME, "moreEverything/core.js");
         try
         {
@@ -362,8 +383,10 @@ public class mod_moreEverything extends BaseMod
         {
             log("doneLoadingEvent() is missing from the script, did you mess it up?");
         }
+        */
         engine.put(ScriptEngine.FILENAME, null);
         loaded = true;
+        log("Script load complete. "+warnings+" warnings, "+errors+" errors.");
     }
 
     public int addFuel(int id, int damage)
