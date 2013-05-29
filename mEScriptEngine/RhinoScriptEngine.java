@@ -7,7 +7,7 @@ import java.lang.reflect.*;
 import sun.org.mozilla.javascript.internal.*;
 import com.sun.script.util.InterfaceImplementor;
 
-public final class RhinoScriptEngine extends AbstractScriptEngine implements Invocable, Compilable
+public final class RhinoScriptEngine extends AbstractScriptEngine implements Invocable
 {
    private static final boolean DEBUG = false;
    private RhinoTopLevel topLevel;
@@ -183,40 +183,6 @@ public final class RhinoScriptEngine extends AbstractScriptEngine implements Inv
       }
    }
 
-   public CompiledScript compile(String var1) throws ScriptException
-   {
-      return this.compile((Reader)(new StringReader(var1)));
-   }
-
-   public CompiledScript compile(Reader var1) throws ScriptException
-   {
-      RhinoCompiledScript var2 = null;
-      Context var3 = enterContext();
-
-      try
-      {
-         String var4 = (String)this.get("javax.script.filename");
-         if(var4 == null)
-         {
-            var4 = "<Unknown Source>";
-         }
-
-         Scriptable var5 = this.getRuntimeScope(this.context);
-         Script var6 = var3.compileReader(var5, var1, var4, 1, (Object)null);
-         var2 = new RhinoCompiledScript(this, var6);
-      }
-      catch (Exception var10)
-      {
-         throw new ScriptException(var10);
-      }
-      finally
-      {
-         Context.exit();
-      }
-
-      return var2;
-   }
-
    static Context enterContext()
    {
       return Context.enter();
@@ -251,7 +217,7 @@ public final class RhinoScriptEngine extends AbstractScriptEngine implements Inv
 
    public ScriptEngineFactory getFactory()
    {
-      return null; // Shut up!
+      return null; // FIXME: Shut up!
    }
 
    static
