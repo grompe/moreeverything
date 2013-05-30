@@ -273,7 +273,7 @@ var MakeMetaCycle = function()        { throw("MakeMetaCycle is not available!")
     AddTransmutation(NewItemStack(item.coal, 4), m.anthracite);
 
   }
-  if (optionalFeature.ee_biome_mods_transmutations && (m = mods.extrabiomes))
+  if (optionalFeature.ee_biome_mods_transmutations && (m = mods.extrabiomesxl))
   {
     // Red rock -> red rock cobblestone
     AddTransmutation(NewItemStack(m.redRock, 1, 1), NewItemStack(m.redRock, 1));
@@ -305,5 +305,14 @@ var MakeMetaCycle = function()        { throw("MakeMetaCycle is not available!")
     AddTransmutation(NewItemStack(item.stone, 3), ArrayOf(m.stoneStairs, 2));
     // 2 cobblestone brick stairs -> 3 cobblestone bricks
     AddTransmutation(NewItemStack(m.cobblestoneBricks, 3), ArrayOf(m.cobblestoneBrickStairs, 2));
+  }
+  if (optionalFeature.ee_tinkersconstruct_transmutations && (m = mods.tinkersconstruct))
+  {
+    // ?smeltery controller 1474:0 -> 8x seared brick 14276:2
+    // ?smeltery drain 1474:1 -> 6x seared brick 14276:2
+    // seared bricks 1474:2 -> 4x seared brick 14276:2
+    // ?casting table 1477:0 -> 7x seared brick 14276:2
+    // ?seared faucet 1477:1 -> 7x seared brick 14276:2
+    // ?casting basin 1477:2 -> 7x seared brick 14276:2
   }
 })();
