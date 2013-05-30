@@ -117,6 +117,8 @@ var GetItemStackSize   = function() { throw("GetItemStackSize is not available!"
 var SetItemStackSize   = function() { throw("SetItemStackSize is not available!"); };
 var GetItemDamage      = function() { throw("GetItemDamage is not available!"); };
 var GetItem            = function() { throw("GetItem is not available!"); };
+var GetItemIDMaxStackSize = function() { throw("GetItemIDMaxStackSize is not available!"); };
+var SetItemIDMaxStackSize = function() { throw("SetItemIDMaxStackSize is not available!"); };
 
 (function ()
 {
@@ -250,7 +252,8 @@ var GetItem            = function() { throw("GetItem is not available!"); };
   GetItem = function(itemID)
   {
     return java.lang.reflect.Array.get(__itemsList, itemID);
-  }
+  };
+
   NewItemStack = function(itemID, stackSize, itemDamage)
   {
     if (typeof itemDamage == "undefined") itemDamage = 0;
@@ -414,31 +417,61 @@ var GetItem            = function() { throw("GetItem is not available!"); };
         break;
       }
     }
+    // Find live Item.maxStackSize
+    var testItem = GetItem(1);
+    var fields = __item.getDeclaredFields();
+    for (var i in fields)
+    {
+      var f = fields[i];
+      if (f.getType() == __int)
+      {
+        f.setAccessible(true);
+        if (f.getInt(testItem) == 64)
+        {
+          __item__maxStackSize = f;
+          GetItemIDMaxStackSize = function(id)
+          {
+            var item = GetItem(id);
+            if (item == null) throw("No such item: "+id+".");
+            return __item__maxStackSize.getInt(item);
+          }
+          SetItemIDMaxStackSize = function(id, size)
+          {
+            var item = GetItem(id);
+            if (item == null) throw("No such item: "+id+".");
+            if (size > 64) throw("Stack size cannot be larger than 64.");
+            __item__maxStackSize.setInt(item, size);
+            return true;
+          }
+          break;
+        }
+      }
+    }
     // Detect live some of obfuscated ItemStack fields/methods
-    var __accessItemID;
-    var __accessItemStackSize;
-    var __accessItemStackDamage;
+    var __itemStack__itemID;
+    var __itemStack__stackSize;
+    var __itemStack__getItemDamage;
     var stack = NewItemStack(44, 55, 66);
     for (var i in stack)
     {
       if (stack[i] == 44)
       {
-        __accessItemID = i;
+        __itemStack__itemID = i;
         GetItemID = function (stack) { 
-          return stack[__accessItemID];
+          return stack[__itemStack__itemID];
         };
         log("ItemStack."+i+" is itemID.", logLevel.debug);
       }
       if (stack[i] == 55)
       {
-        __accessItemStackSize = i;
+        __itemStack__stackSize = i;
         GetItemStackSize = function(stack)
         {
-          return stack[__accessItemStackSize];
+          return stack[__itemStack__stackSize];
         };
         SetItemStackSize = function(stack, size)
         {
-          stack[__accessItemStackSize] = size;
+          stack[__itemStack__stackSize] = size;
           return stack;
         };
         log("ItemStack."+i+" is stackSize.", logLevel.debug);
@@ -455,10 +488,10 @@ var GetItem            = function() { throw("GetItem is not available!"); };
         if (v == 66)
         {
           var name = __api.__getMethodName(methods[i]);
-          __accessItemStackDamage = name;
+          __itemStack__getItemDamage = name;
           GetItemDamage = function(stack)
           {
-            return stack[__accessItemStackDamage]();
+            return stack[__itemStack__getItemDamage]();
           };
           log("ItemStack."+name+"() is getItemDamage().", logLevel.debug);
           break;
