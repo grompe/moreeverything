@@ -121,35 +121,39 @@ var MakeMetaCycle = function()        { throw("MakeMetaCycle is not available!")
   {
     // Simple uncrafting
     QAddTransmutation(NewItemStack(item.glass, 3), ArrayOf(item.glassPane, 8));
-    QAddTransmutation(QNewItemStack(item.netherQuartz, 4), QNewItemStack(item.quartzBlock, 1));
-    QAddTransmutation(item.quartzBlock, item.quartzBlock);
-    QAddTransmutation(item.stone,        QNewItemStack(item.slab, 2, 0));
-    QAddTransmutation(item.sandstone,    QNewItemStack(item.slab, 2, 1));
-    QAddTransmutation(item.woodPlanks,   QNewItemStack(item.slab, 2, 2));
-    QAddTransmutation(item.cobblestone,  QNewItemStack(item.slab, 2, 3));
-    QAddTransmutation(item.bricks,       QNewItemStack(item.slab, 2, 4));
-    QAddTransmutation(item.stoneBricks,  QNewItemStack(item.slab, 2, 5));
-    QAddTransmutation(item.netherBricks, QNewItemStack(item.slab, 2, 6));
-    QAddTransmutation(item.quartzBlock,  QNewItemStack(item.slab, 2, 7));
-    for (var i = 0; i < 4; i++)
-    {
-      QAddTransmutation(QNewItemStack(item.woodPlanks, 1, i), QNewItemStack(item.woodenSlab, 2, i));
-    }
     QAddTransmutation(QNewItemStack(item.netherBrick, 4), item.netherBricks);
     QAddTransmutation(item.netherrack, item.netherBrick);
-    QAddTransmutation(QNewItemStack(item.woodPlanks, 3, 0), ArrayOf(item.oakWoodStairs, 2));
-    QAddTransmutation(QNewItemStack(item.woodPlanks, 3, 1), ArrayOf(item.spruceWoodStairs, 2));
-    QAddTransmutation(QNewItemStack(item.woodPlanks, 3, 2), ArrayOf(item.birchWoodStairs, 2));
-    QAddTransmutation(QNewItemStack(item.woodPlanks, 3, 3), ArrayOf(item.jungleWoodStairs, 2));
-    QAddTransmutation(QNewItemStack(item.cobblestone, 3), ArrayOf(item.cobblestoneStairs, 2));
-    QAddTransmutation(QNewItemStack(item.stoneBricks, 3), ArrayOf(item.stoneBrickStairs, 2));
-    QAddTransmutation(QNewItemStack(item.netherBricks, 3), ArrayOf(item.netherBrickStairs, 2));
-    QAddTransmutation(QNewItemStack(item.sandstone, 3), ArrayOf(item.sandstoneStairs, 2));
-    QAddTransmutation(QNewItemStack(item.quartzBlock, 3), ArrayOf(item.quartzStairs, 2));
+    QAddTransmutation(item.clay, item.brick);
     QAddTransmutation(QNewItemStack(item.stick, 3), item.fence);
-    QAddTransmutation(item.netherBricks, item.netherBrickFence);
-    QAddTransmutation(item.cobblestone, QNewItemStack(item.cobblestoneWall, 1, 0));
-    QAddTransmutation(item.mossStone,   QNewItemStack(item.cobblestoneWall, 1, 1));
+    QAddTransmutation(QNewItemStack(item.netherQuartz, 4), QNewItemStack(item.quartzBlock, 1));
+    QAddTransmutation(item.quartzBlock, item.quartzBlock);
+    if (optionalFeature.ee_stairs_slabs_walls_uncrafting)
+    {
+      QAddTransmutation(item.stone,        QNewItemStack(item.slab, 2, 0));
+      QAddTransmutation(item.sandstone,    QNewItemStack(item.slab, 2, 1));
+      QAddTransmutation(item.woodPlanks,   QNewItemStack(item.slab, 2, 2));
+      QAddTransmutation(item.cobblestone,  QNewItemStack(item.slab, 2, 3));
+      QAddTransmutation(item.bricks,       QNewItemStack(item.slab, 2, 4));
+      QAddTransmutation(item.stoneBricks,  QNewItemStack(item.slab, 2, 5));
+      QAddTransmutation(item.netherBricks, QNewItemStack(item.slab, 2, 6));
+      QAddTransmutation(item.quartzBlock,  QNewItemStack(item.slab, 2, 7));
+      for (var i = 0; i < 4; i++)
+      {
+        QAddTransmutation(QNewItemStack(item.woodPlanks, 1, i), QNewItemStack(item.woodenSlab, 2, i));
+      }
+      QAddTransmutation(QNewItemStack(item.woodPlanks, 3, 0), ArrayOf(item.oakWoodStairs, 2));
+      QAddTransmutation(QNewItemStack(item.woodPlanks, 3, 1), ArrayOf(item.spruceWoodStairs, 2));
+      QAddTransmutation(QNewItemStack(item.woodPlanks, 3, 2), ArrayOf(item.birchWoodStairs, 2));
+      QAddTransmutation(QNewItemStack(item.woodPlanks, 3, 3), ArrayOf(item.jungleWoodStairs, 2));
+      QAddTransmutation(QNewItemStack(item.cobblestone, 3), ArrayOf(item.cobblestoneStairs, 2));
+      QAddTransmutation(QNewItemStack(item.stoneBricks, 3), ArrayOf(item.stoneBrickStairs, 2));
+      QAddTransmutation(QNewItemStack(item.netherBricks, 3), ArrayOf(item.netherBrickStairs, 2));
+      QAddTransmutation(QNewItemStack(item.sandstone, 3), ArrayOf(item.sandstoneStairs, 2));
+      QAddTransmutation(QNewItemStack(item.quartzBlock, 3), ArrayOf(item.quartzStairs, 2));
+      QAddTransmutation(item.netherBricks, item.netherBrickFence);
+      QAddTransmutation(item.cobblestone, QNewItemStack(item.cobblestoneWall, 1, 0));
+      QAddTransmutation(item.mossStone,   QNewItemStack(item.cobblestoneWall, 1, 1));
+    }
   }
   if (optionalFeature.ee_ore_transmutations)
   {
@@ -263,11 +267,14 @@ var MakeMetaCycle = function()        { throw("MakeMetaCycle is not available!")
     // And from sedimentary stone, only flint block
     AddTransmutation(item.flint, NewItemStack(m.sedimentaryStone, 4, 5));
     
-    // Joining slabs
-    for (var i = 0; i < 8; i++)
+    if (optionalFeature.ee_stairs_slabs_walls_uncrafting)
     {
-      AddTransmutation(NewItemStack(m.igneousBrick,     1, i), NewItemStack(m.igneousBrickSlab,     2, i));
-      AddTransmutation(NewItemStack(m.metamorphicBrick, 1, i), NewItemStack(m.metamorphicStoneSlab, 2, i));
+      // Joining slabs
+      for (var i = 0; i < 8; i++)
+      {
+        AddTransmutation(NewItemStack(m.igneousBrick,     1, i), NewItemStack(m.igneousBrickSlab,     2, i));
+        AddTransmutation(NewItemStack(m.metamorphicBrick, 1, i), NewItemStack(m.metamorphicStoneSlab, 2, i));
+      }
     }
     // Uncrafting
     AddTransmutation(NewItemStack(item.coal, 4), m.anthracite);
@@ -279,6 +286,25 @@ var MakeMetaCycle = function()        { throw("MakeMetaCycle is not available!")
     AddTransmutation(NewItemStack(m.redRock, 1, 1), NewItemStack(m.redRock, 1));
     // 4 red rock cobblestone -> flint
     AddTransmutation(item.flint, NewItemStack(m.redRock, 4, 1));
+    // brown autumn leaves 2200:0 :1 :2 :3 :0 -> 2204:0 :1 :2 -> 2200:0
+    // red cobblestone slab 2206
+    // red rock slab 2206:1
+    // red rock brick slab 2206:2
+    // sapling 2207:0 -> :6 -> :0
+    // log 2208:0 -> :1 ->
+    // corner log 2209:0 :1 :2
+    // red cobblestone wall 2210 
+    // corner log 2211:0 :1 :2
+    // corner log 2212:0 :1 :2
+    // corner log 2213:0 :1 :2
+    // wood planks 2215 :0 :1 :2
+    // wood slabs 2216 :0 :1 :2 
+    // redwood stairs 2218
+    // fir stairs 2219
+    // acacia stairs 2220
+    // red rock brick stairs 2221
+    // red cobblestone stairs 2223
+
   }
   if (optionalFeature.ee_biome_mods_transmutations && (m = mods.biomesoplenty))
   {
@@ -286,10 +312,28 @@ var MakeMetaCycle = function()        { throw("MakeMetaCycle is not available!")
     AddTransmutation(NewItemStack(m.redRock, 1, 1), NewItemStack(m.redRock, 1));
     // 4 red rock cobblestone -> flint
     AddTransmutation(item.flint, NewItemStack(m.redRock, 4, 1));
-    // TODO: 1923 leaves -> :1 :2 :3 ... :7 -> 1924 leaves -> :1 :2 :3 -> 1923:0
+    // 1923 leaves -> :1 :2 :3 ... :7 -> 1924 leaves -> :1 :2 :3 -> 1962:0 -> :1 :2 :3 :4 -> 1923:0
+    // 2x mud brick stairs 1929 -> 3x mud bricks 1928
+    // 2x red rock cobblestone slab 1931:0 -> red rock :0
+    // 2x red rock bricks slab 1931:1 -> red rock bricks :2 
+    // 2x mud bricks slab 1931:2 -> mud bricks 
+    // wood 1933:0 -> :1 -> :2 -> :3 -> 1934:0 :1 :2 :3 -> 1935:0 :1 :2 -> 1933:0
+    // sapling 1937:0 -> ... -> :12 -> 1938:0 :1 :2 :3 :4 -> 1937:0
+    // 2x red rock cobblestone stairs 1939 -> 3x red rock cobblestone :1
+    // 2x red rock brick stairs 1940 -> 3x red rock bricks :2
+    // wood planks 1947:0 -> ... -> :9 -> 1947:0
+    // acacia wood slab 1949:0, cherry, dark, fir, holy, magic, mangrove, palm 1949:7 ===> 1947:*
+    // redwood wood slab 1951:0, willow 1951:1 ===> planks 1947:8 and 1947:9
+    // acacia wood stairs 1952, cherry 1953, dark 1954, fir 1955 holy 1956,
+    // magic 1957, mangrove 1958, palm 1959, redwood 1960, willow 1961
+
+    // mud brick 21266 -> mud ball 21267
   }
   if (optionalFeature.ee_biome_mods_transmutations && (m = mods.twilightforest))
   {
+    // twilight oak wood 2163:0 -> :1 :2 :3 -> 2166:1 -> 2163:0
+    // oak leaves 2164:0 -> :1 :2 :3 -> :0
+    // mazestone 2165:0 -> ... -> :7 -> :0
   }
   if (optionalFeature.ee_minefantasy_transmutations && (m = mods.minefantasy))
   {
@@ -301,10 +345,13 @@ var MakeMetaCycle = function()        { throw("MakeMetaCycle is not available!")
     AddTransmutation(item.obsidian, ArrayOf(m.ironbarkWood, 2));
     // 4 ironbark wood planks -> 1 ironbark wood
     AddTransmutation(m.ironbarkWood, ArrayOf(m.ironbarkPlanks, 4));
-    // 2 stone stairs -> 3 stone
-    AddTransmutation(NewItemStack(item.stone, 3), ArrayOf(m.stoneStairs, 2));
-    // 2 cobblestone brick stairs -> 3 cobblestone bricks
-    AddTransmutation(NewItemStack(m.cobblestoneBricks, 3), ArrayOf(m.cobblestoneBrickStairs, 2));
+    if (optionalFeature.ee_stairs_slabs_walls_uncrafting)
+    {
+      // 2 stone stairs -> 3 stone
+      AddTransmutation(NewItemStack(item.stone, 3), ArrayOf(m.stoneStairs, 2));
+      // 2 cobblestone brick stairs -> 3 cobblestone bricks
+      AddTransmutation(NewItemStack(m.cobblestoneBricks, 3), ArrayOf(m.cobblestoneBrickStairs, 2));
+    }
   }
   if (optionalFeature.ee_tinkersconstruct_transmutations && (m = mods.tinkersconstruct))
   {
