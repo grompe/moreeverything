@@ -1,17 +1,20 @@
 [1.5.2/universal] More Fuel, Tweaks, and Everything by Grom PE
 
+For usage info, see Minecraft Forum topic:
+http://www.minecraftforum.net/topic/1819835-/
 
-Setup
-=====
-Make sure you have Forge http://files.minecraftforge.net/
-or ModLoader http://www.minecraftforum.net/topic/75440-/ installed.
 
-Put the file mod_moreEverything.zip in /mods/ directory.
+How to build from source
+========================
+You don't require MCP to build this mod.
 
-After the first run, mod_moreEverything.js will appear in /config/ directory.
-
-For more info, see Minecraft Forum topic:
-http://www.minecraftforum.net/topic/1819835-
+Building on Windows with JRE 6 or 7:
+1. Put minecraft.jar with matching version of ModLoader inside to deps_modloader/
+2. (optional) put minecraft.jar with matching version of Forge inside to deps_forge/
+2. Put Minecraft libraries: jinput.jar, lwjgl.jar, lwjgl_util.jar to deps_common/
+3. Get Python 2.x (PyPy) and kzip to automate compiling and packing process.
+4. edit _.py to have correct paths to javac.exe, kzip.exe and JRE library rt.jar
+5. Run _compile.bat
 
 
 Goals of the mod
@@ -71,9 +74,14 @@ Supported block/item IDs:
   Underground Biomes
 
 
+Limitations
+===========
+Currently requires Oracle Java 6 or 7.
+
+
 Future
 ======
-- Look in TODO
+Look in TODO: https://raw.github.com/grompe/moreeverything/master/TODO
 
 
 If you find a bug

@@ -2,6 +2,10 @@ import time
 import sys
 import os
 
+JAVAC = "javac"
+KZIP = "kzip"
+RTJAR = "c:/things/jre6u26/lib/rt.jar"
+
 def increaseBuildVersion():
   global buildnumber
   buildnumber += 1
@@ -29,14 +33,14 @@ def compileAndPack():
   os.system(r"del mod_moreEverything\*.class /q >nul")
   os.system(r"del mod_moreEverything\mEScriptEngine\*.class /q >nul")
   increaseBuildVersion()
-  errcode = os.system("javac -source 1.6 -target 1.6 -bootclasspath c:/things/jre6u26/lib/rt.jar -d mod_moreEverything/ -Xlint:unchecked -cp deps_modloader/*;deps_common/*;mod_moreEverything/source mod_moreEverything/source/*.java")
+  errcode = os.system(JAVAC+" -source 1.6 -target 1.6 -bootclasspath "+RTJAR+" -d mod_moreEverything/ -Xlint:unchecked -cp deps_modloader/*;deps_common/*;mod_moreEverything/source mod_moreEverything/source/*.java")
   if errcode == 0:
     pack()
     print "=========\nComplete!"
 
 def pack():
   zipfile = "mod_moreEverything.%d.zip"%(buildnumber)
-  os.system("pushd mod_moreEverything & kzip /y /r ../%s * >nul & popd"%(zipfile))
+  os.system("pushd mod_moreEverything & "+KZIP+" /y /r ../%s * >nul & popd"%(zipfile))
   print "Wrote %s"%(zipfile)
 
 if __name__ == "__main__":
