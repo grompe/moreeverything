@@ -28,6 +28,7 @@ https://github.com/grompe/moreeverything/tree/master/mod_moreEverything/moreEver
 
 // Uncomment to enable optional features
 //optionalFeature.rotten_flesh_to_leather = 1;
+//optionalFeature.stack_more = 1;
 
 // Remove "Internal" word if you want the scripts to be extracted for you to modify
 // If you do extract default scripts, you'll have to update (delete) them manually

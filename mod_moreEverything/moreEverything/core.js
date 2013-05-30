@@ -43,6 +43,7 @@ var optionalFeature = {
   thaumcraft_mod_aspects: 1,
 
   rotten_flesh_to_leather: 0,
+  stack_more: 0,
 };
 
 function isEmpty(obj)
