@@ -82,5 +82,8 @@
     }
     // Silver block is missing from Ore Dictionary
     RegisterOre("blockSilver", NewItemStack(m.storageBlock, 1, 5));
+    // Wood planks now make MineFantasy plank items but other mods planks won't
+    // make even sticks - fix that and let them behave like vanilla wood planks
+    AddRecipe(NewItemStack(m.itemBaseId+4, 8), "x", "x", Chr("x"), "plankWood");
   }
 })();
