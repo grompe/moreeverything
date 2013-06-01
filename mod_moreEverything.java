@@ -287,7 +287,7 @@ public class mod_moreEverything extends BaseMod
     {
         try
         {
-            FileReader reader = new FileReader(file);
+            InputStreamReader reader = new InputStreamReader(new FileInputStream(file), "UTF-8");
             execStream(reader, file.toString());
             reader.close();
         }
