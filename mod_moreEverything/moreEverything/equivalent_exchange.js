@@ -205,6 +205,7 @@ var MakeMetaCycle = function()        { throw("MakeMetaCycle is not available!")
       }
     }
 
+    AddTransmutation(item.obsidian, "logWood", "logWood");
   }
   var m;
   if (optionalFeature.ee_thaumcraft_transmutations && (m = mods.thaumcraft))
@@ -312,28 +313,65 @@ var MakeMetaCycle = function()        { throw("MakeMetaCycle is not available!")
     AddTransmutation(NewItemStack(m.redRock, 1, 1), NewItemStack(m.redRock, 1));
     // 4 red rock cobblestone -> flint
     AddTransmutation(item.flint, NewItemStack(m.redRock, 4, 1));
-    // 1923 leaves -> :1 :2 :3 ... :7 -> 1924 leaves -> :1 :2 :3 -> 1962:0 -> :1 :2 :3 :4 -> 1923:0
-    // 2x mud brick stairs 1929 -> 3x mud bricks 1928
-    // 2x red rock cobblestone slab 1931:0 -> red rock :0
-    // 2x red rock bricks slab 1931:1 -> red rock bricks :2 
-    // 2x mud bricks slab 1931:2 -> mud bricks 
-    // wood 1933:0 -> :1 -> :2 -> :3 -> 1934:0 :1 :2 :3 -> 1935:0 :1 :2 -> 1933:0
-    // sapling 1937:0 -> ... -> :12 -> 1938:0 :1 :2 :3 :4 -> 1937:0
-    // 2x red rock cobblestone stairs 1939 -> 3x red rock cobblestone :1
-    // 2x red rock brick stairs 1940 -> 3x red rock bricks :2
-    // wood planks 1947:0 -> ... -> :9 -> 1947:0
-    // acacia wood slab 1949:0, cherry, dark, fir, holy, magic, mangrove, palm 1949:7 ===> 1947:*
-    // redwood wood slab 1951:0, willow 1951:1 ===> planks 1947:8 and 1947:9
-    // acacia wood stairs 1952, cherry 1953, dark 1954, fir 1955 holy 1956,
-    // magic 1957, mangrove 1958, palm 1959, redwood 1960, willow 1961
+    // Cycle leaves
+    AddEquivalency(MakeMetaCycle(m.leaves1, 8), MakeMetaCycle(m.leaves2, 4), MakeMetaCycle(m.leaves3, 5));
+    // Cycle wood
+    AddEquivalency(MakeMetaCycle(m.wood1, 4), MakeMetaCycle(m.wood2, 4), MakeMetaCycle(m.wood3, 3));
+    // Cycle saplings and colorized saplings together
+    AddEquivalency(MakeMetaCycle(m.sapling, 13), MakeMetaCycle(m.colorizedSapling, 5));
+    // Cycle wooden planks
+    AddEquivalency(MakeMetaCycle(m.planks, 10));
+    // Cycle flowers
+    AddEquivalency(MakeMetaCycle(m.flower, 13));
 
-    // mud brick 21266 -> mud ball 21267
+    if (optionalFeature.ee_stairs_slabs_walls_uncrafting)
+    {
+      // Uncraft stairs
+      AddTransmutation(NewItemStack(m.mudBricks, 3), ArrayOf(m.mudBrickStairs, 2));
+      AddTransmutation(NewItemStack(m.redRock, 3, 1), ArrayOf(m.redCobbleStairs, 2));
+      AddTransmutation(NewItemStack(m.redRock, 3, 2), ArrayOf(m.redBrickStairs, 2));
+      AddTransmutation(NewItemStack(m.planks, 3, 0), ArrayOf(m.acaciaStairs, 2));
+      AddTransmutation(NewItemStack(m.planks, 3, 1), ArrayOf(m.cherryStairs, 2));
+      AddTransmutation(NewItemStack(m.planks, 3, 2), ArrayOf(m.darkStairs, 2));
+      AddTransmutation(NewItemStack(m.planks, 3, 3), ArrayOf(m.firStairs, 2));
+      AddTransmutation(NewItemStack(m.planks, 3, 4), ArrayOf(m.holyStairs, 2));
+      AddTransmutation(NewItemStack(m.planks, 3, 5), ArrayOf(m.magicStairs, 2));
+      AddTransmutation(NewItemStack(m.planks, 3, 6), ArrayOf(m.mangroveStairs, 2));
+      AddTransmutation(NewItemStack(m.planks, 3, 7), ArrayOf(m.palmStairs, 2));
+      AddTransmutation(NewItemStack(m.planks, 3, 8), ArrayOf(m.redwoodStairs, 2));
+      AddTransmutation(NewItemStack(m.planks, 3, 9), ArrayOf(m.willowStairs, 2));
+
+      // Join slabs
+      AddTransmutation(NewItemStack(m.redRock, 1, 0), NewItemStack(m.stoneSlab, 2, 0));
+      AddTransmutation(NewItemStack(m.redRock, 1, 2), NewItemStack(m.stoneSlab, 2, 1));
+      AddTransmutation(NewItemStack(m.mudBricks, 1), NewItemStack(m.stoneSlab, 2, 2));
+      AddTransmutation(NewItemStack(m.planks, 1, 0), ArrayOf(m.woodenSlab1, 2, 0));
+      AddTransmutation(NewItemStack(m.planks, 1, 1), ArrayOf(m.woodenSlab1, 2, 1));
+      AddTransmutation(NewItemStack(m.planks, 1, 2), ArrayOf(m.woodenSlab1, 2, 2));
+      AddTransmutation(NewItemStack(m.planks, 1, 3), ArrayOf(m.woodenSlab1, 2, 3));
+      AddTransmutation(NewItemStack(m.planks, 1, 4), ArrayOf(m.woodenSlab1, 2, 4));
+      AddTransmutation(NewItemStack(m.planks, 1, 5), ArrayOf(m.woodenSlab1, 2, 5));
+      AddTransmutation(NewItemStack(m.planks, 1, 6), ArrayOf(m.woodenSlab1, 2, 6));
+      AddTransmutation(NewItemStack(m.planks, 1, 7), ArrayOf(m.woodenSlab1, 2, 7));
+      AddTransmutation(NewItemStack(m.planks, 1, 8), ArrayOf(m.woodenSlab2, 2, 0));
+      AddTransmutation(NewItemStack(m.planks, 1, 9), ArrayOf(m.woodenSlab2, 2, 1));
+    }
+
+    // Uncraft mud bricks block to 4 mud brick items
+    AddTransmutation(NewItemStack(m.miscItems, 4, 0), m.mudBricks);
+    // Uncook mud brick to mud ball
+    AddTransmutation(m.mudBall, NewItemStack(m.miscItems, 1, 0));
   }
   if (optionalFeature.ee_biome_mods_transmutations && (m = mods.twilightforest))
   {
-    // twilight oak wood 2163:0 -> :1 :2 :3 -> 2166:1 -> 2163:0
-    // oak leaves 2164:0 -> :1 :2 :3 -> :0
-    // mazestone 2165:0 -> ... -> :7 -> :0
+    // Cycle normal wood: twilight oak -> canopy tree -> mangrove -> darkwood -> twilight oak
+    AddEquivalency(MakeMetaCycle(m.wood, 4));
+    // Cycle normal leaves: twilight oak -> canopy tree -> mangrove -> darkwood -> twilight oak
+    AddEquivalency(MakeMetaCycle(m.wood, 3), NewItemStack(m.hedge, 1, 1));
+    // Cycle normal saplings (?)
+    AddEquivalency(MakeMetaCycle(m.sapling, 4));
+    // Cycle mazestone
+    AddEquivalency(MakeMetaCycle(m.mazestone, 8));
   }
   if (optionalFeature.ee_minefantasy_transmutations && (m = mods.minefantasy))
   {
@@ -355,11 +393,7 @@ var MakeMetaCycle = function()        { throw("MakeMetaCycle is not available!")
   }
   if (optionalFeature.ee_tinkersconstruct_transmutations && (m = mods.tinkersconstruct))
   {
-    // ?smeltery controller 1474:0 -> 8x seared brick 14276:2
-    // ?smeltery drain 1474:1 -> 6x seared brick 14276:2
-    // seared bricks 1474:2 -> 4x seared brick 14276:2
-    // ?casting table 1477:0 -> 7x seared brick 14276:2
-    // ?seared faucet 1477:1 -> 7x seared brick 14276:2
-    // ?casting basin 1477:2 -> 7x seared brick 14276:2
+    // Uncraft seared bricks -> 4x seared brick 14276:2
+    AddTransmutation(NewItemStack(m.materials, 4, 2), NewItemStack(m.smeltery, 1, 2));
   }
 })();

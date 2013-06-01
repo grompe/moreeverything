@@ -79,34 +79,34 @@ var mods;
       m.leafPile    = FindIntMatch(/I:leafpile.id=(\d+)/);
       m.woodenSlab  = FindIntMatch(/I:woodslab.id=(\d+)/);
     /*
-    I:acaciastairs.id=2220
-    I:autumnleaves.id=2200
-    I:cattail.id=2201
+    m. = FindIntMatch(/I:acaciastairs.id=(\d+)/); //2220
+    m. = FindIntMatch(/I:autumnleaves.id=(\d+)/); //2200
+    m. = FindIntMatch(/I:cattail.id=(\d+)/); //2201
 
-    I:crackedsand.id=255
-    I:customlog.id=2208
-    I:doubleredrockslab.id=2222
-    I:doublewoodslab.id=2217
-    I:firstairs.id=2219
-    I:flower.id=2202
-    I:grass.id=2203
-    I:greenleaves.id=2204
-    I:leafpile.id=2205
-    I:planks.id=2215
-    I:quarterlog0.id=2209
-    I:quarterlog1.id=2211
-    I:quarterlog2.id=2212
-    I:quarterlog3.id=2213
-    I:quicksand.id=2214
-    I:redcobblestairs.id=2223
+    m. = FindIntMatch(/I:crackedsand.id=(\d+)/); //255
+    m. = FindIntMatch(/I:customlog.id=(\d+)/); //2208
+    m. = FindIntMatch(/I:doubleredrockslab.id=(\d+)/); //2222
+    m. = FindIntMatch(/I:doublewoodslab.id=(\d+)/); //2217
+    m. = FindIntMatch(/I:firstairs.id=(\d+)/); //2219
+    m. = FindIntMatch(/I:flower.id=(\d+)/); //2202
+    m. = FindIntMatch(/I:grass.id=(\d+)/); //2203
+    m. = FindIntMatch(/I:greenleaves.id=(\d+)/); //2204
+    m. = FindIntMatch(/I:leafpile.id=(\d+)/); //2205
+    m. = FindIntMatch(/I:planks.id=(\d+)/); //2215
+    m. = FindIntMatch(/I:quarterlog0.id=(\d+)/); //2209
+    m. = FindIntMatch(/I:quarterlog1.id=(\d+)/); //2211
+    m. = FindIntMatch(/I:quarterlog2.id=(\d+)/); //2212
+    m. = FindIntMatch(/I:quarterlog3.id=(\d+)/); //2213
+    m. = FindIntMatch(/I:quicksand.id=(\d+)/); //2214
+    m. = FindIntMatch(/I:redcobblestairs.id=(\d+)/); //2223
 
-    I:redrock.id=254
-    I:redrockbrickstairs.id=2221
-    I:redrockslab.id=2206
-    I:redwoodstairs.id=2218
-    I:sapling.id=2207
-    I:wall.id=2210
-    I:woodslab.id=2216
+    m. = FindIntMatch(/I:redrock.id=(\d+)/); //254
+    m. = FindIntMatch(/I:redrockbrickstairs.id=(\d+)/); //2221
+    m. = FindIntMatch(/I:redrockslab.id=(\d+)/); //2206
+    m. = FindIntMatch(/I:redwoodstairs.id=(\d+)/); //2218
+    m. = FindIntMatch(/I:sapling.id=(\d+)/); //2207
+    m. = FindIntMatch(/I:wall.id=(\d+)/); //2210
+    m. = FindIntMatch(/I:woodslab.id=(\d+)/); //2216
     */
     } else {
       m = false;
@@ -117,59 +117,39 @@ var mods;
   {
     if (GetFile("BiomesOPlenty.cfg"))
     {
-      m.plant       = FindIntMatch(/I:"Plant ID"=(\d+)/);
-      m.woodenSlab1 = FindIntMatch(/I:"Wooden Single Slab 1 ID"=(\d+)/);
-      m.woodenSlab2 = FindIntMatch(/I:"Wooden Single Slab 2 ID"=(\d+)/);
-      m.foliage     = FindIntMatch(/I:"Foliage ID"=(\d+)/);
-      m.bamboo      = FindIntMatch(/I:"Bamboo ID"=(\d+)/);
-      m.redRock     = FindIntMatch(/I:"Red Rock ID"=(\d+)/);
-      /*
-
-    I:"Acacia Stairs ID"=1952
-    I:"Amethyst Ore ID"=1942
-    I:"Bamboo ID"=1927
-    I:"Cherry Stairs ID"=1953
-    I:"Colourized Leaves ID"=1962
-    I:"Colourized Sapling ID"=1938
-    I:"Dark Stairs ID"=1954
-    I:"Fir Stairs ID"=1955
-    I:"Flower ID"=1921
-    I:"Foliage ID"=1925
-    I:"Fruit Leaf Block ID"=1926
-    I:"Holy Stairs ID"=1956
-    I:"Leaf Block ID 1"=1923
-    I:"Leaf Block ID 2"=1924
-    I:"Log Block ID 1"=1933
-    I:"Log Block ID 2"=1934
-    I:"Log Block ID 3"=1935
-    I:"Magic Stairs ID"=1957
-    I:"Mangrove Stairs ID"=1958
-    I:"Moss ID"=4095
-    I:"Mud Brick Stairs ID"=1929
-    I:"Mud Bricks ID"=1928
-    I:"Palm Stairs ID"=1959
-    I:"Petal ID"=1936
-    I:"Planks ID"=1947
-    I:"Plant ID"=1920
-    I:"Promised Land Portal ID"=1941
-    I:"Red Brick Stairs ID"=1940
-    I:"Red Cobble Stairs ID"=1939
-    I:"Redwood Stairs ID"=1960
-    I:"Sapling ID"=1937
-    I:"Stone Double Slab ID"=1930
-    I:"Stone Single Slab ID"=1931
-    I:"Tree Moss ID"=1932
-    I:"Willow ID"=1922
-    I:"Willow Stairs ID"=1961
-    I:"Wooden Double Slab 1 ID"=1948
-    I:"Wooden Double Slab 2 ID"=1950
-    I:"Wooden Single Slab 1 ID"=1949
-    I:"Wooden Single Slab 2 ID"=1951
-    
-    I:"Misc Items ID"=21010
-    I:"Mud Ball ID"=21011
-      
-      */
+      m.plant            = FindIntMatch(/I:"Plant ID"=(\d+)/);
+      m.woodenSlab1      = FindIntMatch(/I:"Wooden Single Slab 1 ID"=(\d+)/);
+      m.woodenSlab2      = FindIntMatch(/I:"Wooden Single Slab 2 ID"=(\d+)/);
+      m.foliage          = FindIntMatch(/I:"Foliage ID"=(\d+)/);
+      m.bamboo           = FindIntMatch(/I:"Bamboo ID"=(\d+)/);
+      m.redRock          = FindIntMatch(/I:"Red Rock ID"=(\d+)/);
+      m.leaves1          = FindIntMatch(/I:"Leaf Block ID 1"=(\d+)/);
+      m.leaves2          = FindIntMatch(/I:"Leaf Block ID 2"=(\d+)/);
+      m.leaves3          = FindIntMatch(/I:"Colourized Leaves ID"=(\d+)/);
+      m.acaciaStairs     = FindIntMatch(/I:"Acacia Stairs ID"=(\d+)/);
+      m.cherryStairs     = FindIntMatch(/I:"Cherry Stairs ID"=(\d+)/);
+      m.darkStairs       = FindIntMatch(/I:"Dark Stairs ID"=(\d+)/);
+      m.firStairs        = FindIntMatch(/I:"Fir Stairs ID"=(\d+)/);
+      m.holyStairs       = FindIntMatch(/I:"Holy Stairs ID"=(\d+)/);
+      m.magicStairs      = FindIntMatch(/I:"Magic Stairs ID"=(\d+)/);
+      m.mangroveStairs   = FindIntMatch(/I:"Mangrove Stairs ID"=(\d+)/);
+      m.palmStairs       = FindIntMatch(/I:"Palm Stairs ID"=(\d+)/);
+      m.redwoodStairs    = FindIntMatch(/I:"Redwood Stairs ID"=(\d+)/);
+      m.willowStairs     = FindIntMatch(/I:"Willow Stairs ID"=(\d+)/);
+      m.mudBrickStairs   = FindIntMatch(/I:"Mud Brick Stairs ID"=(\d+)/);
+      m.redBrickStairs   = FindIntMatch(/I:"Red Brick Stairs ID"=(\d+)/);
+      m.redCobbleStairs  = FindIntMatch(/I:"Red Cobble Stairs ID"=(\d+)/);
+      m.colorizedSapling = FindIntMatch(/I:"Colourized Sapling ID"=(\d+)/);
+      m.wood1            = FindIntMatch(/I:"Log Block ID 1"=(\d+)/);
+      m.wood2            = FindIntMatch(/I:"Log Block ID 2"=(\d+)/);
+      m.wood3            = FindIntMatch(/I:"Log Block ID 3"=(\d+)/);
+      m.mudBricks        = FindIntMatch(/I:"Mud Bricks ID"=(\d+)/);
+      m.planks           = FindIntMatch(/I:"Planks ID"=(\d+)/);
+      m.sapling          = FindIntMatch(/I:"Sapling ID"=(\d+)/);
+      m.stoneSlab        = FindIntMatch(/I:"Stone Single Slab ID"=(\d+)/);
+      m.miscItems        = FindIntMatch(/I:"Misc Items ID"=(\d+)/)+256;
+      m.mudBall          = FindIntMatch(/I:"Mud Ball ID"=(\d+)/)+256;
+      m.flower           = FindIntMatch(/I:"Flower ID"=(\d+)/);
     } else {
       m = false;
       log("Couldn't find config/BiomesOPlenty.cfg", logLevel.warning);
@@ -183,24 +163,9 @@ var mods;
       m.blankPattern = FindIntMatch(/I:"Blank Patterns"=(\d+)/)+256;
       m.woodPattern  = FindIntMatch(/I:"Wood Pattern"=(\d+)/)+256;
       m.materials    = FindIntMatch(/I:Materials=(\d+)/)+256;
-      /*
-    I:"Held Item Block"=1472
-    I:"Lava Tank"=1473
-    I:"Liquid Metal Flowing"=1479
-    I:"Liquid Metal Still"=1480
-    I:"Metal Storage"=1478
-    I:"Multi Brick"=1481
-    I:"Ore Berry One"=1485
-    I:"Ore Berry Two"=1486
-    I:"Ores Gravel"=1488
-    I:"Ores Slag"=1475
-    I:"Seared Table"=1477
-    I:Smeltery=1474
-    I:"Special Soil"=1476
-    I:"Speed Block"=1489
-    I:"Stone Torch"=1484
-    I:"Wood Tool Station"=1471
-      */
+      m.searedTable  = FindIntMatch(/I:"Seared Table"=(\d+)/);
+      m.smeltery     = FindIntMatch(/I:Smeltery=(\d+)/);
+      m.stoneTorch   = FindIntMatch(/I:"Stone Torch"=(\d+)/);
     } else {
       m = false;
       log("Couldn't find config/TinkersWorkshop.txt", logLevel.warning);
@@ -210,33 +175,11 @@ var mods;
   {
     if (GetFile("TwilightForest.cfg"))
     {
-      m.sapling = FindIntMatch(/I:Sapling=(\d+)/);
-      /*
-    I:BossSpawner=2167
-    I:Cicada=2171
-    I:Critter=2160
-    I:FireJet=2173
-    I:FireflyJar=2168
-    I:Hedge=2166
-    I:Leaves=2164
-    I:Log=2163
-    I:MagicLeaves=2177
-    I:MagicLog=2176
-    I:MagicLogSpecial=2179
-    I:Mazestone=2165
-    I:Moonworm=2178
-    I:Nagastone=2174
-    I:Plant=2169
-    I:Portal=2162
-    I:Roots=2170
-    I:Sapling=2175
-    I:TowerAntenna=2182
-    I:TowerDevice=2181
-    I:TowerTranslucent=2183
-    I:TowerWood=2180
-    I:Trophy=2184
-    I:UncraftingTable=2172
-      */
+      m.sapling   = FindIntMatch(/I:Sapling=(\d+)/);
+      m.wood      = FindIntMatch(/I:Log=(\d+)/);
+      m.hedge     = FindIntMatch(/I:Hedge=(\d+)/);
+      m.leaves    = FindIntMatch(/I:Leaves=(\d+)/);
+      m.mazestone = FindIntMatch(/I:Mazestone=(\d+)/);
     } else {
       m = false;
       log("Couldn't find config/TwilightForest.cfg", logLevel.warning);
