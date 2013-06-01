@@ -299,6 +299,14 @@ var MakeMetaCycle = function()        { throw("MakeMetaCycle is not available!")
     AddEquivalency(MakeMetaCycle(m.quarterLog3, 3));
     // Cycle wood planks
     AddEquivalency(MakeMetaCycle(m.planks, 3));
+    // Cycle slabs
+    AddEquivalency(MakeMetaCycle(m.woodenSlab, 3));
+    AddEquivalency(MakeMetaCycle(m.redRockSlab, 3));
+    // Cycle stairs
+    AddEquivalency(m.redwoodStairs, m.firStairs, m.acaciaStairs);
+    AddEquivalency(m.redBrickStairs, m.redCobbleStairs);
+    // Uncraft 4 planks -> 1 log
+    AddTransmutation(m.wood, NewItemStack(m.planks, 4, WILDCARD));
 
     if (optionalFeature.ee_stairs_slabs_walls_uncrafting)
     {
@@ -337,6 +345,16 @@ var MakeMetaCycle = function()        { throw("MakeMetaCycle is not available!")
     AddEquivalency(MakeMetaCycle(m.planks, 10));
     // Cycle flowers
     AddEquivalency(MakeMetaCycle(m.flower, 13));
+    // Cycle slabs
+    AddEquivalency(MakeMetaCycle(m.woodenSlab1, 8), MakeMetaCycle(m.woodenSlab2, 2));
+    AddEquivalency(MakeMetaCycle(m.stoneSlab, 3));
+    // Cycle stairs
+    AddEquivalency(m.acaciaStairs, m.cherryStairs, m.darkStairs, m.firStairs,
+                   m.holyStairs, m.magicStairs, m.mangroveStairs, m.palmStairs,
+                   m.redwoodStairs, m.willowStairs);
+    AddEquivalency(m.mudBrickStairs, m.redCobbleStairs, m.redBrickStairs);
+    // Uncraft 4 planks -> 1 log
+    AddTransmutation(m.wood1, NewItemStack(m.planks, 4, WILDCARD));
 
     if (optionalFeature.ee_stairs_slabs_walls_uncrafting)
     {
