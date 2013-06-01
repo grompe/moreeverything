@@ -1,10 +1,5 @@
 Easy
 ====
-- Add Equivalent Exchange support for some other mods:
-  ExtraBiomes and BOP logs/wood, saplings,
-
-- Add Thaumcraft aspects for mod items/blocks
-
 - Convert __getFile() and __findMatch() to JavaScript, put __getConfigDir()
 
 
@@ -15,6 +10,9 @@ Medium
 
 Hard/Tricky/Unknown
 ===================
+- Allow changing/adding mob drops
+  - add rare skulls drop
+
 - Hook CommandBase/ICommand to be Minecraft version independent
 
 - Figure out how to access ModLoader in Packages for easier API access,
@@ -31,6 +29,8 @@ Hard/Tricky/Unknown
 
 Maintenance/Boring
 ==================
+- Add Thaumcraft aspects for mod items/blocks
+
 - Ensure correct mod load order
 
 - Write better documentation, etc.
@@ -43,8 +43,6 @@ Future
 - existing IDs, recipes inspection to help adding missing ones
 - dispenser planting seeds
 - allow changing chests loot
-- allow changing mob drops
-  - also rare skulls drop?
 - allow nether warts to grow in overworld, if shielded from sky and having light level 15
 - make lava update properly and disappear when source block is removed, for Minecraft 1.5.2 and older
   (https://mojang.atlassian.net/browse/MC-4631)
@@ -59,6 +57,7 @@ Future
   if possible, such an egg hatches instead of disappearing in 5 minutes 
 - use lapis in brewing potions?
 - make bookshelves have direction
+- support Better Than Wolves
 
 
 Forum suggestions
