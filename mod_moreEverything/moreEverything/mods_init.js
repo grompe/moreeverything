@@ -62,6 +62,9 @@ var mods;
       m.cloud       = FindIntMatch(/I:"Cloud Block"=(\d+)/);
       m.sapling     = FindIntMatch(/I:Sapling=(\d+)/);
       m.door        = FindIntMatch(/I:"Door Item"=(\d+)/)+256;
+      m.bloodwood   = FindIntMatch(/I:"Bloodwood Block"=(\d+)/);
+      m.redwood     = FindIntMatch(/I:"Redwood Block"=(\d+)/);
+      m.wood        = FindIntMatch(/I:"Wood Block"=(\d+)/);
     } else {
       m = false;
       log("Couldn't find config/Natura.txt", logLevel.warning);
@@ -71,43 +74,29 @@ var mods;
   {
     if (GetFile("extrabiomes/extrabiomes.cfg"))
     {
-      m.redRock     = FindIntMatch(/I:redrock.id=(\d+)/);
-      m.crackedSand = FindIntMatch(/I:crackedsand.id=(\d+)/)
-      m.cattail     = FindIntMatch(/I:cattail.id=(\d+)/);
-      m.flower      = FindIntMatch(/I:flower.id=(\d+)/);
-      m.grass       = FindIntMatch(/I:grass.id=(\d+)/);
-      m.leafPile    = FindIntMatch(/I:leafpile.id=(\d+)/);
-      m.woodenSlab  = FindIntMatch(/I:woodslab.id=(\d+)/);
-    /*
-    m. = FindIntMatch(/I:acaciastairs.id=(\d+)/); //2220
-    m. = FindIntMatch(/I:autumnleaves.id=(\d+)/); //2200
-    m. = FindIntMatch(/I:cattail.id=(\d+)/); //2201
-
-    m. = FindIntMatch(/I:crackedsand.id=(\d+)/); //255
-    m. = FindIntMatch(/I:customlog.id=(\d+)/); //2208
-    m. = FindIntMatch(/I:doubleredrockslab.id=(\d+)/); //2222
-    m. = FindIntMatch(/I:doublewoodslab.id=(\d+)/); //2217
-    m. = FindIntMatch(/I:firstairs.id=(\d+)/); //2219
-    m. = FindIntMatch(/I:flower.id=(\d+)/); //2202
-    m. = FindIntMatch(/I:grass.id=(\d+)/); //2203
-    m. = FindIntMatch(/I:greenleaves.id=(\d+)/); //2204
-    m. = FindIntMatch(/I:leafpile.id=(\d+)/); //2205
-    m. = FindIntMatch(/I:planks.id=(\d+)/); //2215
-    m. = FindIntMatch(/I:quarterlog0.id=(\d+)/); //2209
-    m. = FindIntMatch(/I:quarterlog1.id=(\d+)/); //2211
-    m. = FindIntMatch(/I:quarterlog2.id=(\d+)/); //2212
-    m. = FindIntMatch(/I:quarterlog3.id=(\d+)/); //2213
-    m. = FindIntMatch(/I:quicksand.id=(\d+)/); //2214
-    m. = FindIntMatch(/I:redcobblestairs.id=(\d+)/); //2223
-
-    m. = FindIntMatch(/I:redrock.id=(\d+)/); //254
-    m. = FindIntMatch(/I:redrockbrickstairs.id=(\d+)/); //2221
-    m. = FindIntMatch(/I:redrockslab.id=(\d+)/); //2206
-    m. = FindIntMatch(/I:redwoodstairs.id=(\d+)/); //2218
-    m. = FindIntMatch(/I:sapling.id=(\d+)/); //2207
-    m. = FindIntMatch(/I:wall.id=(\d+)/); //2210
-    m. = FindIntMatch(/I:woodslab.id=(\d+)/); //2216
-    */
+      m.redRock         = FindIntMatch(/I:redrock.id=(\d+)/);
+      m.crackedSand     = FindIntMatch(/I:crackedsand.id=(\d+)/)
+      m.cattail         = FindIntMatch(/I:cattail.id=(\d+)/);
+      m.flower          = FindIntMatch(/I:flower.id=(\d+)/);
+      m.grass           = FindIntMatch(/I:grass.id=(\d+)/);
+      m.leafPile        = FindIntMatch(/I:leafpile.id=(\d+)/);
+      m.woodenSlab      = FindIntMatch(/I:woodslab.id=(\d+)/);
+      m.autumnLeaves    = FindIntMatch(/I:autumnleaves.id=(\d+)/);
+      m.leaves          = FindIntMatch(/I:greenleaves.id=(\d+)/);
+      m.redwoodStairs   = FindIntMatch(/I:redwoodstairs.id=(\d+)/);
+      m.firStairs       = FindIntMatch(/I:firstairs.id=(\d+)/);
+      m.acaciaStairs    = FindIntMatch(/I:acaciastairs.id=(\d+)/);
+      m.redBrickStairs  = FindIntMatch(/I:redrockbrickstairs.id=(\d+)/);
+      m.redCobbleStairs = FindIntMatch(/I:redcobblestairs.id=(\d+)/);
+      m.sapling         = FindIntMatch(/I:sapling.id=(\d+)/);
+      m.wood            = FindIntMatch(/I:customlog.id=(\d+)/);
+      m.quarterLog0     = FindIntMatch(/I:quarterlog0.id=(\d+)/);
+      m.quarterLog1     = FindIntMatch(/I:quarterlog1.id=(\d+)/);
+      m.quarterLog2     = FindIntMatch(/I:quarterlog2.id=(\d+)/);
+      m.quarterLog3     = FindIntMatch(/I:quarterlog3.id=(\d+)/);
+      m.planks          = FindIntMatch(/I:planks.id=(\d+)/);
+      m.redRockSlab     = FindIntMatch(/I:redrockslab.id=(\d+)/);
+      m.wall            = FindIntMatch(/I:wall.id=(\d+)/);
     } else {
       m = false;
       log("Couldn't find config/extrabiomes/extrabiomes.cfg", logLevel.warning);

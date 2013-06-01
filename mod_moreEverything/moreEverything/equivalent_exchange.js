@@ -287,25 +287,39 @@ var MakeMetaCycle = function()        { throw("MakeMetaCycle is not available!")
     AddTransmutation(NewItemStack(m.redRock, 1, 1), NewItemStack(m.redRock, 1));
     // 4 red rock cobblestone -> flint
     AddTransmutation(item.flint, NewItemStack(m.redRock, 4, 1));
-    // brown autumn leaves 2200:0 :1 :2 :3 :0 -> 2204:0 :1 :2 -> 2200:0
-    // red cobblestone slab 2206
-    // red rock slab 2206:1
-    // red rock brick slab 2206:2
-    // sapling 2207:0 -> :6 -> :0
-    // log 2208:0 -> :1 ->
-    // corner log 2209:0 :1 :2
-    // red cobblestone wall 2210 
-    // corner log 2211:0 :1 :2
-    // corner log 2212:0 :1 :2
-    // corner log 2213:0 :1 :2
-    // wood planks 2215 :0 :1 :2
-    // wood slabs 2216 :0 :1 :2 
-    // redwood stairs 2218
-    // fir stairs 2219
-    // acacia stairs 2220
-    // red rock brick stairs 2221
-    // red cobblestone stairs 2223
+    // Cycle leaves
+    AddEquivalency(MakeMetaCycle(m.autumnLeaves, 4), MakeMetaCycle(m.leaves, 3));
+    // Cycle saplings
+    AddEquivalency(MakeMetaCycle(m.sapling, 7));
+    // Cycle logs
+    AddEquivalency(MakeMetaCycle(m.wood, 2));
+    AddEquivalency(MakeMetaCycle(m.quarterLog0, 3));
+    AddEquivalency(MakeMetaCycle(m.quarterLog1, 3));
+    AddEquivalency(MakeMetaCycle(m.quarterLog2, 3));
+    AddEquivalency(MakeMetaCycle(m.quarterLog3, 3));
+    // Cycle wood planks
+    AddEquivalency(MakeMetaCycle(m.planks, 3));
 
+    if (optionalFeature.ee_stairs_slabs_walls_uncrafting)
+    {
+      // Uncraft stairs
+      AddTransmutation(NewItemStack(m.planks, 3, 0), ArrayOf(m.redwoodStairs, 2));
+      AddTransmutation(NewItemStack(m.planks, 3, 1), ArrayOf(m.firStairs, 2));
+      AddTransmutation(NewItemStack(m.planks, 3, 2), ArrayOf(m.acaciaStairs, 2));
+      AddTransmutation(NewItemStack(m.redRock, 3, 2), ArrayOf(m.redBrickStairs, 2));
+      AddTransmutation(NewItemStack(m.redRock, 3, 1), ArrayOf(m.redCobbleStairs, 2));
+
+      // Join slabs
+      AddTransmutation(NewItemStack(m.redRock, 1, 1), ArrayOf(m.redRockSlab, 2, 0));
+      AddTransmutation(NewItemStack(m.redRock, 1, 0), ArrayOf(m.redRockSlab, 2, 1));
+      AddTransmutation(NewItemStack(m.redRock, 1, 2), ArrayOf(m.redRockSlab, 2, 2));
+      AddTransmutation(NewItemStack(m.planks, 1, 0), ArrayOf(m.woodenSlab, 2, 0));
+      AddTransmutation(NewItemStack(m.planks, 1, 1), ArrayOf(m.woodenSlab, 2, 1));
+      AddTransmutation(NewItemStack(m.planks, 1, 2), ArrayOf(m.woodenSlab, 2, 2));
+
+      // Uncraft walls
+      AddTransmutation(NewItemStack(m.redRock, 1, 1), NewItemStack(m.wall, 1, 0));
+    }
   }
   if (optionalFeature.ee_biome_mods_transmutations && (m = mods.biomesoplenty))
   {

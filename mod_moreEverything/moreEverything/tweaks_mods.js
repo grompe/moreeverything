@@ -15,6 +15,10 @@
     AddFuel(150, m.woodenSlab2); 
     AddFuel(100, m.foliage, 4);  // Bush
     AddFuel(100, m.bamboo);
+    // Add missing ore dictionary entries
+    RegisterOre("logWood", NewItemStack(m.wood1, 1, WILDCARD));
+    RegisterOre("logWood", NewItemStack(m.wood2, 1, WILDCARD));
+    RegisterOre("logWood", NewItemStack(m.wood3, 1, WILDCARD));
   }
 
   if (m = mods.extrabiomesxl)
@@ -27,11 +31,19 @@
     AddFuel(20,  m.grass, 4);   // Short yellow dead grass
     AddFuel(40,  m.leafPile);
     AddFuel(150, m.woodenSlab); // Rebalancing to match vanilla 7.5s
+    // Add missing ore dictionary entries
+    RegisterOre("logWood", NewItemStack(m.wood, 1, WILDCARD));
+    RegisterOre("logWood", NewItemStack(m.quarterLog0, 1, WILDCARD));
+    RegisterOre("logWood", NewItemStack(m.quarterLog1, 1, WILDCARD));
+    RegisterOre("logWood", NewItemStack(m.quarterLog2, 1, WILDCARD));
+    RegisterOre("logWood", NewItemStack(m.quarterLog3, 1, WILDCARD));
   }
 
   if (m = mods.twilightforest)
   {
     AddFuel(100, m.sapling);
+    // Add missing ore dictionary entries
+    RegisterOre("logWood", NewItemStack(m.wood, 1, WILDCARD));
   }
 
   if (m = mods.thaumcraft)
@@ -45,6 +57,10 @@
     AddFuel(100, m.sapling);
     AddFuel(40,  m.foodItems, 0); // Barley
     AddFuel(300, m.door);
+    // Add missing ore dictionary entries
+    RegisterOre("logWood", NewItemStack(m.bloodwood, 1, WILDCARD));
+    RegisterOre("logWood", NewItemStack(m.redwood, 1, WILDCARD));
+    RegisterOre("logWood", NewItemStack(m.wood, 1, WILDCARD));
   }
 
   if (m = mods.tinkersconstruct)
