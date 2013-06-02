@@ -1,25 +1,18 @@
 Easy
 ====
-- Convert __getFile() and __findMatch() to JavaScript
 
 
 Medium
 ======
-- Use Forge's adding trades
+- Allow changing/adding mob drops
+  - add rare skulls drop
 
 
 Hard/Tricky/Unknown
 ===================
-- Allow changing/adding mob drops
-  - add rare skulls drop
+- Use Forge's adding trades
 
 - Hook CommandBase/ICommand to be Minecraft version independent
-
-- Figure out how to access ModLoader in Packages for easier API access,
-  considering that Forge moves it from the classpath.
-  Basically convert between java.lang.Class and JavaClass.
-  (Class -> JavaClass: WrapFactory.wrapJavaClass()?)
-  (JavaClass -> Class: getClassObject() or unwrap()?)
 
 - Wrap ItemStack and Method in JavaScript pseudo-classes for more straightforward work
   Alternatively, find out if it's possible to add fields into these specifically for JS engine

@@ -95,50 +95,8 @@ public class mod_moreEverything extends BaseMod
         return new File("config");
     }
     
-    public static class ScriptHandler
-    {
-        private static String buffer = null;
-
-        // Get file contents in the buffer
-        public static boolean __getFile(String filename)
-        {
-            if (buffer != null) buffer = null;
-            try
-            {
-                File f = new File(configDir, filename);
-                char[] buf = new char[(int)f.length()]; // No way someone's using gigabyte config file
-                FileReader r = new FileReader(f);
-                r.read(buf);
-                r.close();
-                buffer = new String(buf);
-                return true;
-            }
-            catch(FileNotFoundException e)
-            {
-                //log("File %s not found, ignoring.", filename);
-            }
-            catch(IOException e)
-            {
-                log("Error while reading %s, ignoring.", filename);
-            }
-            return false;
-        }
-
-        // Search regexp against the buffer
-        public static String __findMatch(String regex)
-        {
-            if (buffer == null)
-            {
-                log("Attempt to find a match with no file open.");
-                return null;
-            }
-            if (regex.charAt(0) == '/') regex = regex.substring(1, regex.length()-1);
-            Pattern pat = Pattern.compile(regex);
-            Matcher mat = pat.matcher(buffer);
-            if (!mat.find()) return null;
-            return mat.group(1);
-        }
-
+    //public static class ScriptHandler
+    //{
         public static String __getConfigDir()
         {
             return configDir.toString();
@@ -195,11 +153,6 @@ public class mod_moreEverything extends BaseMod
         // Java 6 doesn't like to provide these deep-code-digging functions
         // to JavaScript, so have to provide it with the following few helpers
 
-        public static Class __getClass(String s) throws Exception
-        {
-            return Class.forName(s);
-        }
-
         public static Method __getMethod(Class<?> c, String name, Class... paramtypes) throws Exception
         {
            return c.getMethod(name, paramtypes);
@@ -240,6 +193,11 @@ public class mod_moreEverything extends BaseMod
             return meth.invoke(null, args);
         }
 
+        public static Object __unwrap(Object o)
+        {
+            return o;
+        }
+        
         public static void __testException() throws Exception
         {
             throw new IllegalArgumentException("O_O");
@@ -255,7 +213,7 @@ public class mod_moreEverything extends BaseMod
             return errors += amount;
         }
     
-    }
+    //}
 
     public static void logRhinoException(RhinoException ex)
     {
@@ -362,9 +320,8 @@ public class mod_moreEverything extends BaseMod
 
         engine = new RhinoScriptEngine();
         
-        engine.put("__api", new ScriptHandler());
-        // Forge moves ModLoader class during deobfuscation process, so have to save it
-        engine.put("__modLoader", ModLoader.class);
+        //engine.put("__api", new ScriptHandler());
+        engine.put("__api", this);
         try
         {
             execResource("moreEverything/core.js");
@@ -396,7 +353,8 @@ public class mod_moreEverything extends BaseMod
 
     public int addFuel(int id, int damage)
     {
-        return ScriptHandler.__getBurnTime(id, damage);
+        //return ScriptHandler.__getBurnTime(id, WILDCARD);
+        return __getBurnTime(id, WILDCARD);
     }
 
     public String getVersion()
@@ -412,12 +370,14 @@ public class mod_moreEverything extends BaseMod
 
     public int addFuel(int id)
     {
-        return ScriptHandler.__getBurnTime(id, WILDCARD);
+        //return ScriptHandler.__getBurnTime(id, WILDCARD);
+        return __getBurnTime(id, WILDCARD);
     }
 
     public int AddFuel(int id)
     {
-        return ScriptHandler.__getBurnTime(id, WILDCARD);
+        //return ScriptHandler.__getBurnTime(id, WILDCARD);
+        return __getBurnTime(id, WILDCARD);
     }
 
     public String Version()
