@@ -129,6 +129,7 @@ var GetItemDamage;
 var GetItem;
 var GetItemIDMaxStackSize;
 var SetItemIDMaxStackSize;
+var AddDispenserBehavior;
 
 (function ()
 {
@@ -186,6 +187,9 @@ var SetItemIDMaxStackSize;
   var __getOreNames;
   var __entityPlayer;
   var __addCommand;
+  var __addDispenserBehavior;
+  var __IBehaviorDispenseItem;
+
   var __modLoader = Packages.net.minecraft.src.ModLoader;
   if (isEmpty(__modLoader)) __modLoader = Packages.ModLoader;
 
@@ -218,6 +222,11 @@ var SetItemIDMaxStackSize;
     {
       __addCommand = methods[i];
       __ICommand = __api.__getParameterTypes(__addCommand)[0];
+    }
+    else if (name == "addDispenserBehavior")
+    {
+      __addDispenserBehavior = methods[i];
+      __IBehaviorDispenseItem = __api.__getParameterTypes(__addDispenserBehavior)[1];
     }
   }
   try
@@ -550,6 +559,18 @@ var SetItemIDMaxStackSize;
       catch(e)
       {
         log("Couldn't add /eval command, likely due to version mismatch!");
+      }
+    }
+    if (typeof __addDispenserBehavior != "undefined")
+    {
+      var methods = __IBehaviorDispenseItem.getMethods();
+      var __IBehaviorDispenseItem__dispense = __api.__getMethodName(methods[0]);
+      AddDispenserBehavior = function(item, dispensefunc)
+      {
+        behavior = {};
+        behavior[__IBehaviorDispenseItem__dispense] = dispensefunc;
+        __modLoader.addDispenserBehavior(item, new Packages[__IBehaviorDispenseItem.getName()](behavior));
+        return true;
       }
     }
     if (hasForge)

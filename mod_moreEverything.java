@@ -193,6 +193,8 @@ public class mod_moreEverything extends BaseMod
             return meth.invoke(null, args);
         }
 
+        // Various utility functions
+
         public static Object __unwrap(Object o)
         {
             return o;

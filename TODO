@@ -12,6 +12,8 @@ Hard/Tricky/Unknown
 ===================
 - Use Forge's adding trades
 
+- Dispenser planting seeds
+
 - Hook CommandBase/ICommand to be Minecraft version independent
 
 - Wrap ItemStack and Method in JavaScript pseudo-classes for more straightforward work
@@ -33,8 +35,7 @@ Future
 ======
 - If Equivalent Exchange 3 doesn't crash with TFC, support them
 - more Thaumcraft API support
-- existing IDs, recipes inspection to help adding missing ones
-- dispenser planting seeds
+- recipes inspection to help adding missing ones
 - allow changing chests loot
 - allow nether warts to grow in overworld, if shielded from sky and having light level 15
 - make lava update properly and disappear when source block is removed, for Minecraft 1.5.2 and older
