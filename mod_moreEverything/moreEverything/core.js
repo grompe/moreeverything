@@ -4,6 +4,7 @@ var WILDCARD = 32767;
 var __int = java.lang.Integer.TYPE;
 var __float = java.lang.Float.TYPE;
 var __boolean = java.lang.Boolean.TYPE;
+var __char = java.lang.Character.TYPE;
 var __class = java.lang.Class.forName("java.lang.Class");
 var __objectArray = __class.forName("[Ljava.lang.Object;");
 var __method = __class.forName("java.lang.reflect.Method");
@@ -46,6 +47,11 @@ var optionalFeature = {
   rotten_flesh_to_leather: 0,
   stack_more: 0,
 };
+
+function getClass(s)
+{
+  return java.lang.Class.forName(s, true, __api.getClass().getClassLoader());
+}
 
 function isEmpty(obj)
 {
@@ -107,20 +113,22 @@ function IncludeInternal(filename) { return __api.__includeInternal(filename); }
 var log;
 var doneLoadingEvent;
 
-var AddRecipe          = function() { throw("AddRecipe is not available!"); };
-var AddShapelessRecipe = function() { throw("AddShapelessRecipe is not available!"); };
-var AddSmelting        = function() { throw("AddSmelting is not available!"); };
-var NewItemStack       = function() { throw("NewItemStack is not available!"); };
-var RegisterOre        = function() { throw("RegisterOre is not available!"); };
-var GetOres            = function() { throw("GetOres is not available!"); };
-var GetOreNames        = function() { throw("GetOreNames is not available!"); };
-var GetItemID          = function() { throw("GetItemID is not available!"); };
-var GetItemStackSize   = function() { throw("GetItemStackSize is not available!"); };
-var SetItemStackSize   = function() { throw("SetItemStackSize is not available!"); };
-var GetItemDamage      = function() { throw("GetItemDamage is not available!"); };
-var GetItem            = function() { throw("GetItem is not available!"); };
-var GetItemIDMaxStackSize = function() { throw("GetItemIDMaxStackSize is not available!"); };
-var SetItemIDMaxStackSize = function() { throw("SetItemIDMaxStackSize is not available!"); };
+var FindMatch;
+var GetFile;
+var AddRecipe;
+var AddShapelessRecipe;
+var AddSmelting;
+var NewItemStack;
+var RegisterOre;
+var GetOres;
+var GetOreNames;
+var GetItemID;
+var GetItemStackSize;
+var SetItemStackSize;
+var GetItemDamage;
+var GetItem;
+var GetItemIDMaxStackSize;
+var SetItemIDMaxStackSize;
 
 (function ()
 {
@@ -142,7 +150,29 @@ var SetItemIDMaxStackSize = function() { throw("SetItemIDMaxStackSize is not ava
       java.lang.System.out.println("[mE] "+msg);
     }
   }
-  
+
+  var __contentBuffer;
+
+  GetFile = function(filename)
+  {
+    __contentBuffer = null;
+    var f = new java.io.File(__api.__getConfigDir(), filename);
+    var buf = java.lang.reflect.Array.newInstance(__char, f.length());
+    var r = new java.io.FileReader(f);
+    r.read(buf);
+    r.close();
+    __contentBuffer = java.lang.String(buf);
+    return true;
+  }
+
+  FindMatch = function(regex)
+  {
+    if (!__contentBuffer) throw("Attempt to find a match with no file open.");
+    var m = __contentBuffer.match(regex);
+    if (!m) return;
+    return m[1];
+  }
+    
   var __addRecipe;
   var __addShapelessRecipe;
   var __addSmelting;
@@ -211,12 +241,12 @@ var SetItemIDMaxStackSize = function() { throw("SetItemIDMaxStackSize is not ava
 
   try
   {
-    var fmlGameRegistry = __api.__getClass("cpw.mods.fml.common.registry.GameRegistry");
-    var shaped = __api.__getClass("net.minecraftforge.oredict.ShapedOreRecipe");
-    var shapeless = __api.__getClass("net.minecraftforge.oredict.ShapelessOreRecipe");
+    var fmlGameRegistry = getClass("cpw.mods.fml.common.registry.GameRegistry");
+    var shaped = getClass("net.minecraftforge.oredict.ShapedOreRecipe");
+    var shapeless = getClass("net.minecraftforge.oredict.ShapelessOreRecipe");
     if (!__api.__isStandalone())
     {
-      var oredict = __api.__getClass("net.minecraftforge.oredict.OreDictionary");
+      var oredict = getClass("net.minecraftforge.oredict.OreDictionary");
     }
     hasForge = true;
   }
@@ -508,16 +538,13 @@ var SetItemIDMaxStackSize = function() { throw("SetItemIDMaxStackSize is not ava
         var dunEvenTry = false;
         try
         {
-          var __x = __api.__getClass("x");
+          var __x = getClass("x");
           dunEvenTry = java.lang.reflect.Modifier.isFinal(__x.getModifiers());
         }
         catch(e){}
         if (!dunEvenTry)
         {
-          var __mEDependentCommand = __api.__getClass("mEDependentCommand");
-          var __newmEDependentCommand = __api.__getConstructor(__mEDependentCommand, []);
-          var __evalCommand = __api.__newInstance(__newmEDependentCommand, []);
-          __api.__invokeStatic(__addCommand, [__evalCommand]);
+          __modLoader.addCommand(new Packages.mEDependentCommand());
         }
       }
       catch(e)
@@ -540,14 +567,12 @@ var SetItemIDMaxStackSize = function() { throw("SetItemIDMaxStackSize is not ava
 
 })();
 
-function FindMatch(regex) { return __api.__findMatch(regex); }
 function FindIntMatch(regex)
 {
-  var res = __api.__findMatch(regex);
+  var res = FindMatch(regex);
   if (res) return parseInt(res);
   throw("FindIntMatch: Couldn't find "+regex);
 }
-function GetFile(filename) { return __api.__getFile(filename); }
 
 function AddFuel(burnTime, id, damage)
 {
@@ -562,7 +587,7 @@ function AddFuel(burnTime, id, damage)
 // Quiet functions that don't throw exceptions - don't use unless you know what you're doing
 function QFindIntMatch(regex)
 {
-  var res = __api.__findMatch(regex);
+  var res = FindMatch(regex);
   if (res) return parseInt(res);
   return NaN;
 }

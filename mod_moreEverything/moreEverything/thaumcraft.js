@@ -8,19 +8,7 @@ var RegisterObjectTag = function() { throw("RegisterObjectTag is not available!"
   if (!mods.thaumcraft) return;
 
   var aspects = {}
-  var __thaumcraftApi = __api.__getClass("thaumcraft.api.ThaumcraftApi");
-  var __enumTag = __api.__getClass("thaumcraft.api.EnumTag");
-  var __objectTags = __api.__getClass("thaumcraft.api.ObjectTags");
-  var __newObjectTags = __api.__getConstructor(__objectTags, null);
-  var __registerObjectTag = __api.__getMethod(__thaumcraftApi, "registerObjectTag", [__int, __int, __objectTags]);
-
-  function NewObjectTags()
-  {
-    return __api.__newInstance(__newObjectTags, null);
-  }
-
-  var __getEnumValues = __api.__getMethod(__enumTag, "values", null);
-  var ev = __api.__invokeStatic(__getEnumValues, null);
+  var ev = Packages.thaumcraft.api.EnumTag.values();
   for (var i in ev)
   {
     aspects[LowerCase(ev[i].toString())] = ev[i];
@@ -37,7 +25,7 @@ var RegisterObjectTag = function() { throw("RegisterObjectTag is not available!"
       for (var i = 2; i < arguments.length; i++) tmp.push(arguments[i]);
       arr = tmp;
     }
-    var o = NewObjectTags();
+    var o = new Packages.thaumcraft.api.ObjectTags();
     for (var i = 0; i < arr.length; i+=2)
     {
       if ((typeof arr[i] != "string")||(typeof arr[i+1] != "number"))
@@ -51,8 +39,7 @@ var RegisterObjectTag = function() { throw("RegisterObjectTag is not available!"
       }
       o.tags.put(aspects[LowerCase(arr[i])], java.lang.Integer(arr[i+1]));
     }
-    __api.__invokeStatic(__registerObjectTag, [
-      java.lang.Integer(id), java.lang.Integer(damage), o]);
+    Packages.thaumcraft.api.ThaumcraftApi.registerObjectTag(id, damage, o);
     var logitem = (damage != -1) ? (id + ":" + damage) : id;
     log("Registered object tag for "+logitem+": "+o.tags, logLevel.debug);
     return true;
