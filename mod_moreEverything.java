@@ -141,7 +141,7 @@ public class mod_moreEverything extends BaseMod
 
         public static String __getConfigDir()
         {
-            return configDir;
+            return configDir.toString();
         }
 
         public static void __include(String str) throws RhinoException
@@ -240,6 +240,11 @@ public class mod_moreEverything extends BaseMod
             return meth.invoke(null, args);
         }
 
+        public static Object __unwrap(NativeJavaObject o)
+        {
+            return o.unwrap();
+        }
+        
         public static void __testException() throws Exception
         {
             throw new IllegalArgumentException("O_O");
@@ -363,8 +368,6 @@ public class mod_moreEverything extends BaseMod
         engine = new RhinoScriptEngine();
         
         engine.put("__api", new ScriptHandler());
-        // Forge moves ModLoader class during deobfuscation process, so have to save it
-        engine.put("__modLoader", ModLoader.class);
         try
         {
             execResource("moreEverything/core.js");

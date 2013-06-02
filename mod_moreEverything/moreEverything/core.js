@@ -1,11 +1,12 @@
 
 var WILDCARD = 32767;
 
-var __int= java.lang.Integer.TYPE;
-var __float= java.lang.Float.TYPE;
-var __boolean= java.lang.Boolean.TYPE;
-var __objectArray= java.lang.Class.forName("[Ljava.lang.Object;");
-var __method= java.lang.Class.forName("java.lang.reflect.Method");
+var __int = java.lang.Integer.TYPE;
+var __float = java.lang.Float.TYPE;
+var __boolean = java.lang.Boolean.TYPE;
+var __class = java.lang.Class.forName("java.lang.Class");
+var __objectArray = __class.forName("[Ljava.lang.Object;");
+var __method = __class.forName("java.lang.reflect.Method");
 var __item;
 var __block;
 var __itemStack;
@@ -155,16 +156,16 @@ var SetItemIDMaxStackSize = function() { throw("SetItemIDMaxStackSize is not ava
   var __getOreNames;
   var __entityPlayer;
   var __addCommand;
-  
-  //var __modLoader = __api.__getClass("ModLoader");
+  var __modLoader = Packages.net.minecraft.src.ModLoader;
+  if (isEmpty(__modLoader)) __modLoader = Packages.ModLoader;
 
   // textures directory appeared in Minecraft 1.5, as well as WILDCARD got changed to 32767
-  if (!__modLoader.getResourceAsStream("/textures/items/bed.png"))
+  if (!__class.getResourceAsStream("/textures/items/bed.png"))
   {
     WILDCARD = -1;
     log("Set WILDCARD to -1 according to the old version of Minecraft.");
   }
-  var methods = __modLoader.getMethods();
+  var methods = __api.__unwrap(__modLoader).getMethods();
   var found = 0;
   for (var i in methods)
   {
