@@ -141,7 +141,7 @@ public class mod_moreEverything extends BaseMod
 
         public static String __getConfigDir()
         {
-            return configDir;
+            return configDir.toString();
         }
 
         public static void __include(String str) throws RhinoException
