@@ -1,10 +1,10 @@
 // Equivalent Exchange transmutation addons
 // By Grom PE
 
-var AddTransmutation = function()     { throw("AddTransmutation is not available!"); };
-var AddTransmutation1to1 = function() { throw("AddTransmutation1to1 is not available!"); };
-var AddEquivalency = function()       { throw("AddEquivalency is not available!"); };
-var MakeMetaCycle = function()        { throw("MakeMetaCycle is not available!"); };
+var AddTransmutation;
+var AddTransmutation1to1;
+var AddEquivalency;
+var MakeMetaCycle;
 
 (function()
 {

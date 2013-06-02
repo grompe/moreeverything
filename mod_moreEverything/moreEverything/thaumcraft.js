@@ -1,7 +1,7 @@
 // Thaumcraft aspects addons
 // By Grom PE
 
-var RegisterObjectTag = function() { throw("RegisterObjectTag is not available!"); };
+var RegisterObjectTag;
 
 (function ()
 {
