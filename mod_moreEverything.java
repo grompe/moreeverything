@@ -139,6 +139,11 @@ public class mod_moreEverything extends BaseMod
             return mat.group(1);
         }
 
+        public static String __getConfigDir()
+        {
+            return configDir;
+        }
+
         public static void __include(String str) throws RhinoException
         {
             File file = new File(configDir, str);

@@ -1,6 +1,6 @@
 Easy
 ====
-- Convert __getFile() and __findMatch() to JavaScript, put __getConfigDir()
+- Convert __getFile() and __findMatch() to JavaScript
 
 
 Medium
