@@ -1,5 +1,5 @@
 
-var WILDCARD = 32767;
+var WILDCARD = -1; // Changed if 1.5 textures are detected (ModLoader/client) or Forge's value
 
 var __int = java.lang.Integer.TYPE;
 var __float = java.lang.Float.TYPE;
@@ -179,12 +179,8 @@ var AddDispenserBehavior;
   var __addSmelting;
   var __oldSmelting;
   var __itemStackConstructor;
-  var __forgeAddRecipe;
   var __shapedOreRecipeConstructor;
   var __shapelessOreRecipeConstructor;
-  var __registerOre;
-  var __getOres;
-  var __getOreNames;
   var __entityPlayer;
   var __addCommand;
   var __addDispenserBehavior;
@@ -196,10 +192,10 @@ var AddDispenserBehavior;
   // textures directory appeared in Minecraft 1.5, as well as WILDCARD got changed to 32767
   if (!__class.getResourceAsStream("/textures/items/bed.png"))
   {
-    WILDCARD = -1;
-    log("Set WILDCARD to -1 according to the old version of Minecraft.");
+    WILDCARD = 32767;
+    log("Set WILDCARD to 32767 according to Minecraft 1.5+.");
   }
-  var methods = __api.__unwrap(__modLoader).getMethods();
+  var methods = __api.__unwrap(__modLoader).getMethods(); // FIXME: breaks on server
   var found = 0;
   for (var i in methods)
   {
@@ -255,36 +251,15 @@ var AddDispenserBehavior;
     var shapeless = getClass("net.minecraftforge.oredict.ShapelessOreRecipe");
     if (!__api.__isStandalone())
     {
-      var oredict = getClass("net.minecraftforge.oredict.OreDictionary");
+      WILDCARD = Packages.net.minecraftforge.oredict.OreDictionary.WILDCARD_VALUE;
     }
     hasForge = true;
   }
   catch(e){}
   if (hasForge)
   {
-    var methods = fmlGameRegistry.getMethods();
-    found = 0;
-    for (var i in methods)
-    {
-      var name = __api.__getMethodName(methods[i]);
-      if (name == "addRecipe")
-      {
-        if (__api.__getParameterTypes(methods[i]).length == 1)
-        {
-          __forgeAddRecipe = methods[i];
-          found += 1;
-        }
-      }
-    }
-    if (found != 1) throw("Error: Found only "+found+" of 1 Forge hooks!");
     __shapedOreRecipeConstructor = __api.__getConstructor(shaped, [__itemStack, __objectArray]);
     __shapelessOreRecipeConstructor = __api.__getConstructor(shapeless, [__itemStack, __objectArray]);
-    if (!__api.__isStandalone())
-    {
-      __registerOre = __api.__getMethod(oredict, "registerOre", [java.lang.String, __itemStack]);
-      __getOres = __api.__getMethod(oredict, "getOres", [java.lang.String]);
-      __getOreNames = __api.__getMethod(oredict, "getOreNames", []);
-    }
     log("Got all Forge hooks!", logLevel.info);
   } else {
     log("Got ModLoader hooks, but no Forge present, some features will be unavailable.", logLevel.info);
@@ -335,7 +310,7 @@ var AddDispenserBehavior;
     }
     if (oredic) {
       var recipe = __api.__newInstance(__shapedOreRecipeConstructor, [stack, ObjectArray(arr)])
-      __api.__invokeStatic(__forgeAddRecipe, [recipe]);
+      Packages.cpw.mods.fml.common.registry.GameRegistry.addRecipe(recipe);
       log("Added shaped ore recipe for "+stack+".", logLevel.debug);
     } else {
       __api.__invokeStatic(__addRecipe, [stack, ObjectArray(arr)]);
@@ -371,7 +346,7 @@ var AddDispenserBehavior;
     if (oredic)
     {
       var recipe = __api.__newInstance(__shapelessOreRecipeConstructor, [stack, ObjectArray(arr)]);
-      __api.__invokeStatic(__forgeAddRecipe, [recipe]);
+      Packages.cpw.mods.fml.common.registry.GameRegistry.addRecipe(recipe);
       log("Added shapeless ore recipe for "+stack+".", logLevel.debug);
     } else {
       __api.__invokeStatic(__addShapelessRecipe, [stack, ObjectArray(arr)]);
@@ -406,18 +381,19 @@ var AddDispenserBehavior;
     {
       stackOrID = NewItemStack(stackOrID, 1, typeof itemDamage == "number" ? itemDamage : WILDCARD);
     }
-    __api.__invokeStatic(__registerOre, [java.lang.String(name), stackOrID]);
+    Packages.net.minecraftforge.oredict.OreDictionary.registerOre(name, stackOrID);
     return true;
   };
 
   GetOres = function(name)
   {
-    return NativeArray(__api.__invokeStatic(__getOres, [java.lang.String(name)]).toArray());
+    var list = Packages.net.minecraftforge.oredict.OreDictionary.getOres(name);
+    return NativeArray(list.toArray());
   };
   
   GetOreNames = function()
   {
-    return __api.__invokeStatic(__getOreNames, []);
+    return Packages.net.minecraftforge.oredict.OreDictionary.getOreNames();
   };
 
   if (!__api.__isStandalone())
@@ -525,7 +501,7 @@ var AddDispenserBehavior;
       var parTypes = __api.__getParameterTypes(methods[i]);
       if ((retType == __int) && (parTypes.length == 0))
       {
-        var v = __api.__invoke(methods[i], stack, null);
+        var v = __api.__invoke(methods[i], stack, null); // Dirty hack
         if (v == 66)
         {
           var name = __api.__getMethodName(methods[i]);
