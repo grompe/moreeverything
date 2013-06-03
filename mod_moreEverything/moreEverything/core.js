@@ -14,7 +14,12 @@ var __itemStack;
 var __itemsList;
 var logLevel = {debug: 0, info: 1, warning: 2, error: 3};
 
-var hasForge;
+var __modLoader = Packages.ModLoader;
+var __fml = Packages.cpw.mods.fml;
+var __forge = Packages.net.minecraftforge;
+
+var hasForge = !isEmpty(__fml.common.registry.GameRegistry);
+var isDedicatedServer = isEmpty(Packages.net.minecraft.client.Minecraft) && isEmpty(Packages.net.minecraft.client.main.Main);
 var currentLogLevel = logLevel.info;
 
 var defaultScripts = [
@@ -110,8 +115,24 @@ function ArrayOf(thing, count)
 function Include(filename) { return __api.__include(filename); }
 function IncludeInternal(filename) { return __api.__includeInternal(filename); }
 
-var log;
-var doneLoadingEvent;
+function log(msg, level)
+{
+  if (typeof level == "undefined") level = logLevel.info;
+  if (level == logLevel.warning)
+  {
+    msg = "Warning: "+msg;
+    __api.__incWarnings(1);
+  }
+  if (level == logLevel.error)
+  {
+    msg = "Error: "+msg;
+    __api.__incErrors(1);
+  }
+  if (level >= currentLogLevel)
+  {
+    java.lang.System.out.println("[mE] "+msg);
+  }
+}
 
 var FindMatch;
 var GetFile;
@@ -133,25 +154,6 @@ var AddDispenserBehavior;
 
 (function ()
 {
-  log = function(msg, level)
-  {
-    if (typeof level == "undefined") level = logLevel.info;
-    if (level == logLevel.warning)
-    {
-      msg = "Warning: "+msg;
-      __api.__incWarnings(1);
-    }
-    if (level == logLevel.error)
-    {
-      msg = "Error: "+msg;
-      __api.__incErrors(1);
-    }
-    if (level >= currentLogLevel)
-    {
-      java.lang.System.out.println("[mE] "+msg);
-    }
-  }
-
   var __contentBuffer;
 
   GetFile = function(filename)
@@ -174,96 +176,295 @@ var AddDispenserBehavior;
     return m[1];
   }
     
-  var __addRecipe;
-  var __addShapelessRecipe;
-  var __addSmelting;
-  var __oldSmelting;
-  var __itemStackConstructor;
-  var __shapedOreRecipeConstructor;
-  var __shapelessOreRecipeConstructor;
-  var __entityPlayer;
-  var __addCommand;
-  var __addDispenserBehavior;
-  var __IBehaviorDispenseItem;
+  function initOnModLoader()
+  {
+    // textures directory appeared in Minecraft 1.5, as well as WILDCARD got changed to 32767
+    if (!__class.getResourceAsStream("/textures/items/bed.png"))
+    {
+      WILDCARD = 32767;
+      log("Set WILDCARD to 32767 according to Minecraft 1.5+.");
+    }
 
-  var __modLoader = Packages.net.minecraft.src.ModLoader;
-  if (isEmpty(__modLoader)) __modLoader = Packages.ModLoader;
+    var __addRecipe;
+    var __addShapelessRecipe;
+    var __addSmelting;
+    var __oldSmelting;
+    var __addCommand;
+    var __addDispenserBehavior;
+    var __IBehaviorDispenseItem;
 
-  // textures directory appeared in Minecraft 1.5, as well as WILDCARD got changed to 32767
-  if (!__class.getResourceAsStream("/textures/items/bed.png"))
-  {
-    WILDCARD = 32767;
-    log("Set WILDCARD to 32767 according to Minecraft 1.5+.");
-  }
-  var methods = __api.__unwrap(__modLoader).getMethods(); // FIXME: breaks on server
-  var found = 0;
-  for (var i in methods)
-  {
-    var name = __api.__getMethodName(methods[i]);
-    if ((name == "addRecipe") || (name == "AddRecipe"))
+    var methods = __api.__unwrap(__modLoader).getMethods();
+    var found = 0;
+    for (var i in methods)
     {
-      __addRecipe = methods[i];
-      __itemStack = __api.__getParameterTypes(__addRecipe)[0];
+      var name = __api.__getMethodName(methods[i]);
+      if ((name == "addRecipe") || (name == "AddRecipe"))
+      {
+        __addRecipe = methods[i];
+        __itemStack = __api.__getParameterTypes(__addRecipe)[0];
+      }
+      else if ((name == "addShapelessRecipe") || (name == "AddShapelessRecipe"))
+      {
+        __addShapelessRecipe = methods[i];
+      }
+      else if (name == "addCommand")
+      {
+        __addCommand = methods[i];
+        __ICommand = __api.__getParameterTypes(__addCommand)[0];
+      }
+      else if (name == "addDispenserBehavior")
+      {
+        __addDispenserBehavior = methods[i];
+        __IBehaviorDispenseItem = __api.__getParameterTypes(__addDispenserBehavior)[1];
+      }
     }
-    else if ((name == "addShapelessRecipe") || (name == "AddShapelessRecipe"))
-    {
-      __addShapelessRecipe = methods[i];
-    }
-    else if ((name == "onItemPickup") || (name == "OnItemPickup")) // just to find EntityPlayer
-    {
-      __entityPlayer = __api.__getParameterTypes(methods[i])[0];
-      __entityPlayerDEBUG = __entityPlayer;
-    }
-    else if (name == "addCommand")
-    {
-      __addCommand = methods[i];
-      __ICommand = __api.__getParameterTypes(__addCommand)[0];
-    }
-    else if (name == "addDispenserBehavior")
-    {
-      __addDispenserBehavior = methods[i];
-      __IBehaviorDispenseItem = __api.__getParameterTypes(__addDispenserBehavior)[1];
-    }
-  }
-  try
-  {
-    __addSmelting = __api.__getMethod(__modLoader, "addSmelting", [__int, __itemStack, __float]);
-  }
-  catch(e)
-  {
-    __oldSmelting = true;
     try
     {
-      __addSmelting = __api.__getMethod(__modLoader, "addSmelting", [__int, __itemStack]);
+      __addSmelting = __api.__getMethod(__modLoader, "addSmelting", [__int, __itemStack, __float]);
     }
     catch(e)
     {
-      __addSmelting = __api.__getMethod(__modLoader, "AddSmelting", [__int, __itemStack]);
+      __oldSmelting = true;
+      try
+      {
+        __addSmelting = __api.__getMethod(__modLoader, "addSmelting", [__int, __itemStack]);
+      }
+      catch(e)
+      {
+        __addSmelting = __api.__getMethod(__modLoader, "AddSmelting", [__int, __itemStack]);
+      }
     }
-  }
-  __itemStackConstructor = __api.__getConstructor(__itemStack, [__int, __int, __int]);
-  if (!(__addRecipe && __addShapelessRecipe && __addSmelting)) throw("Error: unable to find mandatory ModLoader hooks!");
+    if (!(__addRecipe && __addShapelessRecipe && __addSmelting)) throw("Error: unable to find mandatory ModLoader hooks!");
 
-  try
-  {
-    var fmlGameRegistry = getClass("cpw.mods.fml.common.registry.GameRegistry");
-    var shaped = getClass("net.minecraftforge.oredict.ShapedOreRecipe");
-    var shapeless = getClass("net.minecraftforge.oredict.ShapelessOreRecipe");
     if (!__api.__isStandalone())
     {
-      WILDCARD = Packages.net.minecraftforge.oredict.OreDictionary.WILDCARD_VALUE;
+      // TODO: Temporary class till I find how to hook CommandBase
+      if (typeof __addCommand != "undefined")
+      {
+        try
+        {
+          var dunEvenTry = false;
+          try
+          {
+            var __x = getClass("x");
+            dunEvenTry = java.lang.reflect.Modifier.isFinal(__x.getModifiers());
+          }
+          catch(e){}
+          if (!dunEvenTry)
+          {
+            __modLoader.addCommand(new Packages.mEDependentCommand());
+          }
+        }
+        catch(e)
+        {
+          log("Couldn't add /eval command, likely due to version mismatch!");
+        }
+      }
+      if (typeof __addDispenserBehavior != "undefined")
+      {
+        var methods = __IBehaviorDispenseItem.getMethods();
+        var __IBehaviorDispenseItem__dispense = __api.__getMethodName(methods[0]);
+        AddDispenserBehavior = function(item, dispensefunc)
+        {
+          behavior = {};
+          behavior[__IBehaviorDispenseItem__dispense] = dispensefunc;
+          __modLoader.addDispenserBehavior(item, new Packages[__IBehaviorDispenseItem.getName()](behavior));
+          return true;
+        }
+      }
     }
-    hasForge = true;
-  }
-  catch(e){}
-  if (hasForge)
-  {
-    __shapedOreRecipeConstructor = __api.__getConstructor(shaped, [__itemStack, __objectArray]);
-    __shapelessOreRecipeConstructor = __api.__getConstructor(shapeless, [__itemStack, __objectArray]);
-    log("Got all Forge hooks!", logLevel.info);
-  } else {
+
+    AddRecipe = function(stack, arr)
+    {
+      if (!(arr instanceof Array))
+      {
+        var tmp = [];
+        for (var i = 1; i < arguments.length; i++) tmp.push(arguments[i]);
+        arr = tmp;
+      }
+      if (typeof stack == "undefined") throw("AddRecipe: stack is undefined.");
+      if (typeof stack == "number") stack = NewItemStack(stack);
+      var shapedone = false;
+      for (var i=0; i<arr.length; i++)
+      {
+        if (typeof arr[i] == "string")
+        {
+          if (!shapedone) continue;
+          throw("No Forge, cannot add OreDictionary recipe.");
+        }
+        shapedone = true;
+        if (typeof arr[i] == "number") arr[i] = NewItemStack(arr[i], 1, WILDCARD);
+      }
+      __api.__invokeStatic(__addRecipe, [stack, ObjectArray(arr)]);
+      log("Added shaped recipe for "+stack+".", logLevel.debug);
+      return true;
+    };
+
+    AddShapelessRecipe = function(stack, arr)
+    {
+      if (!(arr instanceof Array))
+      {
+        var tmp = [];
+        for (var i = 1; i < arguments.length; i++) tmp.push(arguments[i]);
+        arr = tmp;
+      }
+      if (typeof stack == "undefined") throw("AddShapelessRecipe: stack is undefined.");
+      if (typeof stack == "number") stack = NewItemStack(stack);
+      var oredic = false;
+      for (var i=0; i<arr.length; i++)
+      {
+        if (typeof arr[i] == "string") throw("No Forge, cannot add OreDictionary recipe.");
+        if (typeof arr[i] == "number") arr[i] = NewItemStack(arr[i], 1, WILDCARD);
+      }
+      __api.__invokeStatic(__addShapelessRecipe, [stack, ObjectArray(arr)]);
+      log("Added shapeless recipe for "+stack+".", logLevel.debug);
+      return true;
+    };
+
+    AddSmelting = function(input, output, experience)
+    {
+      if (typeof input != "number") throw("AddSmelting 1st argument must be a number.");
+      if (typeof output == "number") output = NewItemStack(output);
+      if (typeof experience == "undefined") experience = 1.0;
+      if (__oldSmelting)
+      {
+        __api.__invokeStatic(__addSmelting, [
+          java.lang.Integer(input),
+          java.lang.Object(output)]);
+      } else {
+        __api.__invokeStatic(__addSmelting, [
+          java.lang.Integer(input),
+          java.lang.Object(output),
+          java.lang.Float(experience)]);
+      }
+      log("Added smelting: ID "+input+" cooks into "+output+".", logLevel.debug);
+      return true;
+    };
+
     log("Got ModLoader hooks, but no Forge present, some features will be unavailable.", logLevel.info);
   }
+
+  function initOnForge()
+  {
+    if (!__api.__isStandalone())
+    {
+      WILDCARD = __forge.oredict.OreDictionary.WILDCARD_VALUE;
+      __fml.common.registry.GameRegistry.registerFuelHandler(new __fml.common.IFuelHandler(
+      {
+        getBurnTime: function(stack)
+        {
+          return __api.__getBurnTime(GetItemID(stack), GetItemDamage(stack));
+        }
+      }));
+
+      // TODO: Temporary class till I find how to hook CommandBase
+      try
+      {
+        var dunEvenTry = false;
+        try
+        {
+          var __x = getClass("x");
+          dunEvenTry = java.lang.reflect.Modifier.isFinal(__x.getModifiers());
+        }
+        catch(e){}
+        if (!dunEvenTry)
+        {
+          __fml.common.modloader.ModLoaderHelper.addCommand(new Packages.mEDependentCommand());
+        }
+      }
+      catch(e)
+      {
+        log("Couldn't add /eval command, likely due to version mismatch!");
+      }
+    }
+
+    var fun = __fml.common.registry.GameRegistry.getFuelValue;
+    var __itemStack_name = fun.toString().match(/int getFuelValue\((.+)\)/)[1];
+    __itemStack = __api.__unwrap(Packages[__itemStack_name]);
+    // FIXME: TODO: hook basic stuff
+    // Dispenser
+
+    AddRecipe = function(stack, arr)
+    {
+      if (!(arr instanceof Array))
+      {
+        var tmp = [];
+        for (var i = 1; i < arguments.length; i++) tmp.push(arguments[i]);
+        arr = tmp;
+      }
+      if (typeof stack == "undefined") throw("AddRecipe: stack is undefined.");
+      if (typeof stack == "number") stack = NewItemStack(stack);
+      for (var i=0; i<arr.length; i++)
+      {
+        if (typeof arr[i] == "number") arr[i] = NewItemStack(arr[i], 1, WILDCARD);
+      }
+      var recipe = new __forge.oredict.ShapedOreRecipe(stack, ObjectArray(arr));
+      __fml.common.registry.GameRegistry.addRecipe(recipe);
+      log("Added shaped recipe for "+stack+".", logLevel.debug);
+      return true;
+    };
+
+    AddShapelessRecipe = function(stack, arr)
+    {
+      if (!(arr instanceof Array))
+      {
+        var tmp = [];
+        for (var i = 1; i < arguments.length; i++) tmp.push(arguments[i]);
+        arr = tmp;
+      }
+      if (typeof stack == "undefined") throw("AddShapelessRecipe: stack is undefined.");
+      if (typeof stack == "number") stack = NewItemStack(stack);
+      var oredic = false;
+      for (var i=0; i<arr.length; i++)
+      {
+        if (typeof arr[i] == "number") arr[i] = NewItemStack(arr[i], 1, WILDCARD);
+      }
+      var recipe = new __forge.oredict.ShapelessOreRecipe(stack, ObjectArray(arr));
+      __fml.common.registry.GameRegistry.addRecipe(recipe);
+      log("Added shapeless recipe for "+stack+".", logLevel.debug);
+      return true;
+    };
+
+    AddSmelting = function(input, output, experience)
+    {
+      if (typeof input != "number") throw("AddSmelting 1st argument must be a number.");
+      if (typeof output == "number") output = NewItemStack(output);
+      if (typeof experience == "undefined") experience = 1.0;
+      __fml.common.registry.GameRegistry.addSmelting(input, output, experience);
+      log("Added smelting: ID "+input+" cooks into "+output+".", logLevel.debug);
+      return true;
+    };
+
+    RegisterOre = function(name, stackOrID, itemDamage)
+    {
+      if (typeof stackOrID == "number")
+      {
+        stackOrID = NewItemStack(stackOrID, 1, typeof itemDamage == "number" ? itemDamage : WILDCARD);
+      }
+      __forge.oredict.OreDictionary.registerOre(name, stackOrID);
+      return true;
+    };
+
+    GetOres = function(name)
+    {
+      var list = __forge.oredict.OreDictionary.getOres(name);
+      return NativeArray(list.toArray());
+    };
+    
+    GetOreNames = function()
+    {
+      return __forge.oredict.OreDictionary.getOreNames();
+    };
+  
+    log("Got all Forge hooks!", logLevel.info);
+  }
+
+  if (isDedicatedServer && !hasForge)
+  {
+    throw("Don't know how to operate on a dedicated server without Forge. Aborting.");
+  }
+
+  if (hasForge) initOnForge(); else initOnModLoader();
 
   GetItem = function(itemID)
   {
@@ -275,125 +476,7 @@ var AddDispenserBehavior;
     if (typeof itemDamage == "undefined") itemDamage = 0;
     if (typeof stackSize == "undefined") stackSize = 1;
     if (GetItem(itemID) == null) throw("NewItemStack: no such itemID "+itemID);
-    return __api.__newInstance(__itemStackConstructor, [
-      java.lang.Integer(itemID),
-      java.lang.Integer(stackSize),
-      java.lang.Integer(itemDamage)]);
-  };
-
-  AddRecipe = function(stack, arr)
-  {
-    if (!(arr instanceof Array))
-    {
-      var tmp = [];
-      for (var i = 1; i < arguments.length; i++) tmp.push(arguments[i]);
-      arr = tmp;
-    }
-    if (typeof stack == "undefined") throw("AddRecipe: stack is undefined.");
-    if (typeof stack == "number") stack = NewItemStack(stack);
-    var shapedone = false;
-    var oredic = false;
-    for (var i=0; i<arr.length; i++)
-    {
-      if (typeof arr[i] == "string")
-      {
-        if (!shapedone) continue;
-        if (hasForge)
-        {
-          oredic = true;
-        } else {
-          throw("No Forge, cannot add OreDictionary recipe.");
-        }
-      }
-      shapedone = true;
-      if (typeof arr[i] == "number") arr[i] = NewItemStack(arr[i], 1, WILDCARD);
-    }
-    if (oredic) {
-      var recipe = __api.__newInstance(__shapedOreRecipeConstructor, [stack, ObjectArray(arr)])
-      Packages.cpw.mods.fml.common.registry.GameRegistry.addRecipe(recipe);
-      log("Added shaped ore recipe for "+stack+".", logLevel.debug);
-    } else {
-      __api.__invokeStatic(__addRecipe, [stack, ObjectArray(arr)]);
-      log("Added shaped recipe for "+stack+".", logLevel.debug);
-    }
-    return true;
-  };
-
-  AddShapelessRecipe = function(stack, arr)
-  {
-    if (!(arr instanceof Array))
-    {
-      var tmp = [];
-      for (var i = 1; i < arguments.length; i++) tmp.push(arguments[i]);
-      arr = tmp;
-    }
-    if (typeof stack == "undefined") throw("AddShapelessRecipe: stack is undefined.");
-    if (typeof stack == "number") stack = NewItemStack(stack);
-    var oredic = false;
-    for (var i=0; i<arr.length; i++)
-    {
-      if (typeof arr[i] == "string")
-      {
-        if (hasForge)
-        {
-          oredic = true;
-        } else {
-          throw("No Forge, cannot add OreDictionary recipe.");
-        }
-      }
-      if (typeof arr[i] == "number") arr[i] = NewItemStack(arr[i], 1, WILDCARD);
-    }
-    if (oredic)
-    {
-      var recipe = __api.__newInstance(__shapelessOreRecipeConstructor, [stack, ObjectArray(arr)]);
-      Packages.cpw.mods.fml.common.registry.GameRegistry.addRecipe(recipe);
-      log("Added shapeless ore recipe for "+stack+".", logLevel.debug);
-    } else {
-      __api.__invokeStatic(__addShapelessRecipe, [stack, ObjectArray(arr)]);
-      log("Added shapeless recipe for "+stack+".", logLevel.debug);
-    }
-    return true;
-  };
-
-  AddSmelting = function(input, output, experience)
-  {
-    if (typeof input != "number") throw("AddSmelting 1st argument must be a number.");
-    if (typeof output == "number") output = NewItemStack(output);
-    if (typeof experience == "undefined") experience = 1.0;
-    if (__oldSmelting)
-    {
-      __api.__invokeStatic(__addSmelting, [
-        java.lang.Integer(input),
-        java.lang.Object(output)]);
-    } else {
-      __api.__invokeStatic(__addSmelting, [
-        java.lang.Integer(input),
-        java.lang.Object(output),
-        java.lang.Float(experience)]);
-    }
-    log("Added smelting: ID "+input+" cooks into "+output+".", logLevel.debug);
-    return true;
-  };
-
-  RegisterOre = function(name, stackOrID, itemDamage)
-  {
-    if (typeof stackOrID == "number")
-    {
-      stackOrID = NewItemStack(stackOrID, 1, typeof itemDamage == "number" ? itemDamage : WILDCARD);
-    }
-    Packages.net.minecraftforge.oredict.OreDictionary.registerOre(name, stackOrID);
-    return true;
-  };
-
-  GetOres = function(name)
-  {
-    var list = Packages.net.minecraftforge.oredict.OreDictionary.getOres(name);
-    return NativeArray(list.toArray());
-  };
-  
-  GetOreNames = function()
-  {
-    return Packages.net.minecraftforge.oredict.OreDictionary.getOreNames();
+    return new Packages[__itemStack.getName()](itemID, stackSize, itemDamage);
   };
 
   if (!__api.__isStandalone())
@@ -514,51 +597,6 @@ var AddDispenserBehavior;
           break;
         }
       }
-    }
-    // Temporary class till I find how to hook CommandBase
-    if (typeof __addCommand != "undefined")
-    {
-      try
-      {
-        var dunEvenTry = false;
-        try
-        {
-          var __x = getClass("x");
-          dunEvenTry = java.lang.reflect.Modifier.isFinal(__x.getModifiers());
-        }
-        catch(e){}
-        if (!dunEvenTry)
-        {
-          __modLoader.addCommand(new Packages.mEDependentCommand());
-        }
-      }
-      catch(e)
-      {
-        log("Couldn't add /eval command, likely due to version mismatch!");
-      }
-    }
-    if (typeof __addDispenserBehavior != "undefined")
-    {
-      var methods = __IBehaviorDispenseItem.getMethods();
-      var __IBehaviorDispenseItem__dispense = __api.__getMethodName(methods[0]);
-      AddDispenserBehavior = function(item, dispensefunc)
-      {
-        behavior = {};
-        behavior[__IBehaviorDispenseItem__dispense] = dispensefunc;
-        __modLoader.addDispenserBehavior(item, new Packages[__IBehaviorDispenseItem.getName()](behavior));
-        return true;
-      }
-    }
-    if (hasForge)
-    {
-      var fml = Packages.cpw.mods.fml;
-      fml.common.registry.GameRegistry.registerFuelHandler(new fml.common.IFuelHandler(
-      {
-        getBurnTime: function(stack)
-        {
-          return __api.__getBurnTime(GetItemID(stack), GetItemDamage(stack));
-        }
-      }));
     }
   }
 
