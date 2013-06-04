@@ -13,6 +13,7 @@ Hard/Tricky/Unknown
 - Use Forge's adding trades
 
 - Make it compatible with dedicated server
+  (don't use "Packages." construct, try to fix Forge or modify Rhino)
 
 - Dispenser planting seeds
 
