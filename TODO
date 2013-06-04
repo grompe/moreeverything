@@ -12,6 +12,8 @@ Hard/Tricky/Unknown
 ===================
 - Use Forge's adding trades
 
+- Make it compatible with dedicated server
+
 - Dispenser planting seeds
 
 - Hook CommandBase/ICommand to be Minecraft version independent

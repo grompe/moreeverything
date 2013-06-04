@@ -381,8 +381,8 @@ var AddDispenserBehavior;
     var fun = __fml.common.registry.GameRegistry.getFuelValue;
     var __itemStack_name = fun.toString().match(/int getFuelValue\((.+)\)/)[1];
     __itemStack = __api.__unwrap(Packages[__itemStack_name]);
-    // FIXME: TODO: hook basic stuff
-    // Dispenser
+    
+    // TODO: Add dispenser behavior for Forge
 
     AddRecipe = function(stack, arr)
     {
