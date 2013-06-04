@@ -179,7 +179,7 @@ var AddDispenserBehavior;
   function initOnModLoader()
   {
     // textures directory appeared in Minecraft 1.5, as well as WILDCARD got changed to 32767
-    if (!__class.getResourceAsStream("/textures/items/bed.png"))
+    if (__class.getResourceAsStream("/textures/items/bed.png"))
     {
       WILDCARD = 32767;
       log("Set WILDCARD to 32767 according to Minecraft 1.5+.");
