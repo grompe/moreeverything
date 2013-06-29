@@ -35,6 +35,7 @@ var defaultScripts = [
 var optionalFeature = {
   more_vanilla_fuel: 1,
   wool_bleaching: 1,
+  hayblock_uncrafting: 1,
   mod_tweaks: 1,
   ee_vanilla_transmutations: 1,
   ee_vanilla_uncrafting: 1,

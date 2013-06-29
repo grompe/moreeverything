@@ -46,4 +46,8 @@
     // Allow bleaching wool with bonemeal
     AddShapelessRecipe(item.wool, NewItemStack(item.dye, 1, dye.boneMeal), item.wool);
   }
+  if (optionalFeature.hayblock_uncrafting)
+  {
+    QAddShapelessRecipe(NewItemStack(item.wheat, 9), item.hayBlock);
+  }
 })();

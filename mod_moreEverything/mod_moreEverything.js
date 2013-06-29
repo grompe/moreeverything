@@ -12,6 +12,7 @@ https://github.com/grompe/moreeverything/tree/master/mod_moreEverything/moreEver
 // Uncomment to disable default features
 //optionalFeature.more_vanilla_fuel = 0;
 //optionalFeature.wool_bleaching = 0;
+//optionalFeature.hayblock_uncrafting = 0;
 //optionalFeature.mod_tweaks = 0;
 //optionalFeature.ee_vanilla_transmutations = 0;
 //optionalFeature.ee_vanilla_uncrafting = 0;
