@@ -7,15 +7,17 @@ import java.lang.reflect.*;
 import sun.org.mozilla.javascript.internal.*;
 import com.sun.script.util.InterfaceImplementor;
 
-public final class RhinoScriptEngine extends AbstractScriptEngine implements Invocable
+public final class RhinoScriptEngine implements Invocable
 {
    private static final boolean DEBUG = false;
    private ImporterTopLevel topLevel;
    private Map<Object, Object> indexedProps;
    private InterfaceImplementor implementor;
+   protected ScriptContext context;
 
    public RhinoScriptEngine()
    {
+      this.context = new SimpleScriptContext();
       Context context = enterContext();
       try
       {
@@ -223,27 +225,19 @@ public final class RhinoScriptEngine extends AbstractScriptEngine implements Inv
       return var1 instanceof Undefined?null:var1;
    }
 
-   public ScriptEngineFactory getFactory()
+   public void put(String s, Object obj)
    {
-      return null; // FIXME: Shut up!
+      Bindings bindings = context.getBindings(100);
+      if(bindings != null)
+         bindings.put(s, obj);
    }
 
-   static
+   public Object get(String s)
    {
-      ContextFactory.initGlobal(new ContextFactory()
-      {
-         protected Context makeContext()
-         {
-            Context context = super.makeContext();
-            context.setWrapFactory(RhinoWrapFactory.getInstance());
-            return context;
-         }
-
-         public boolean hasFeature(Context context, int i)
-         {
-            if(i == 6) return false;
-            else return super.hasFeature(context, i);
-         }
-      });
+      Bindings bindings = context.getBindings(100);
+      if(bindings != null)
+         return bindings.get(s);
+      else
+         return null;
    }
 }
