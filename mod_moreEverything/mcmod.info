@@ -5,7 +5,7 @@
   "description": "Adds gameplay and balance tweaks, better mod integration, and allows scripting.",
   "version": "",
   "mcversion": "",
-  "logoFile": "moreEverything.png",
+  "logoFile": "/moreEverything.png",
   "url": "http://www.minecraftforum.net/topic/316316-/",
   "updateUrl": "",
   "authors": ["Grom PE"],
