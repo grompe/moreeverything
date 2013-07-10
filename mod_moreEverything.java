@@ -6,8 +6,7 @@ import java.util.*;
 import java.lang.reflect.*;
 import java.util.regex.*;
 import javax.script.*;
-import sun.org.mozilla.javascript.internal.*;
-import mEScriptEngine.*;
+import org.mozilla.javascript.*;
 
 public class mod_moreEverything extends BaseMod
 {
@@ -17,7 +16,7 @@ public class mod_moreEverything extends BaseMod
     protected static File configDir;
     protected static boolean standalone = false;
     protected static boolean loaded = false;
-    protected static RhinoScriptEngine engine;
+    protected static Scriptable scope;
     protected static int warnings = 0;
     protected static int errors = 0;
 
@@ -121,7 +120,7 @@ public class mod_moreEverything extends BaseMod
             execConfigFile(file);
         }
 
-        public static void __includeInternal(String str) throws RhinoException
+        public static void __includeInternal(String str) throws RhinoException, IOException
         {
             log("Including '%s' inside jar", str);
             execResource(str);
@@ -225,35 +224,65 @@ public class mod_moreEverything extends BaseMod
     public static String getScriptStacktrace(RhinoException ex)
     {
         errors += 1;
+        /*
         CharArrayWriter ca = new CharArrayWriter();
         ex.printStackTrace(new PrintWriter(ca));
         String boring = "sun\\.org\\.mozilla\\.javascript\\.internal\\.";
         return ca.toString().replaceAll("\tat "+boring+"[^\n]+\n", "").replaceFirst(boring, "");
+        //*/
+        return ex.details() + "\n" + ex.getScriptStackTrace();
     }
 
-    public static void execResource(String str) throws RhinoException
+    public static Object execResource(String str) throws RhinoException, IOException
     {
         InputStream s = mod_moreEverything.class.getResourceAsStream(str);
+        /*
         if (s == null)
         {
             log("Error: unable to find '%s' to include", str);
-            return;
+            return null;
         }
-        execStream(new InputStreamReader(s), str);
+        */
+        return execStream(new InputStreamReader(s), str);
     }
     
-    public static void execStream(Reader reader, String name) throws RhinoException
+    public static Object execStream(Reader reader, String name) throws RhinoException, IOException
     {
-        engine.put(ScriptEngine.FILENAME, name);
-        engine.eval(reader);
+        Object result = null;
+        Context ctx = Context.enter();
+        try
+        {
+            result = ctx.evaluateReader(scope, reader, name, 1, null);
+        }
+        finally
+        {
+            Context.exit();
+        }
+        return result;
     }
 
-    public static void execConfigFile(File file) throws RhinoException
+    public static Object execString(String code, String name) throws RhinoException
     {
+        Object result = null;
+        Context ctx = Context.enter();
+        try
+        {
+            result = ctx.evaluateString(scope, code, name, 1, null);
+        }
+        finally
+        {
+            Context.exit();
+        }
+        return result;
+    }
+
+    public static Object execConfigFile(File file) throws RhinoException
+    {
+        Object result = null;
         try
         {
             InputStreamReader reader = new InputStreamReader(new FileInputStream(file), "UTF-8");
-            execStream(reader, file.toString());
+            result = execStream(reader, file.toString());
             reader.close();
         }
         catch(FileNotFoundException e)
@@ -264,6 +293,7 @@ public class mod_moreEverything extends BaseMod
         {
             log("Error while reading the configuration file.");
         }
+        return result;
     }
 
     public static boolean hasResource(String name)
@@ -320,18 +350,25 @@ public class mod_moreEverything extends BaseMod
         File file = new File(configDir, "mod_moreEverything.js");
         if(!file.exists()) extractDefaultConfig();
 
-        engine = new RhinoScriptEngine();
-        
-        //engine.put("__api", new ScriptHandler());
-        engine.put("__api", this);
+        Context ctx = Context.enter();
         try
         {
+            scope = ctx.initStandardObjects();
+            scope.put("__api", scope, this);
             execResource("moreEverything/core.js");
             execConfigFile(file);
         }
         catch(RhinoException e)
         {
             logRhinoException(e);
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            Context.exit();
         }
         /*
         engine.put(ScriptEngine.FILENAME, "moreEverything/core.js");
@@ -348,7 +385,6 @@ public class mod_moreEverything extends BaseMod
             log("doneLoadingEvent() is missing from the script, did you mess it up?");
         }
         */
-        engine.put(ScriptEngine.FILENAME, null);
         loaded = true;
         log("Script load complete. "+warnings+" warnings, "+errors+" errors.");
     }

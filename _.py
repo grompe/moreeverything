@@ -27,11 +27,8 @@ def increaseBuildVersion():
 def compileAndPack():
 
   os.system(r"del mod_moreEverything\source\ /q >nul")
-  os.system(r"del mod_moreEverything\source\mEScriptEngine\ /q >nul")
   os.system(r"xcopy *.java mod_moreEverything\source\ /y >nul")
-  os.system(r"xcopy mEScriptEngine\* mod_moreEverything\source\mEScriptEngine\ /y >nul")
   os.system(r"del mod_moreEverything\*.class /q >nul")
-  os.system(r"del mod_moreEverything\mEScriptEngine\*.class /q >nul")
   increaseBuildVersion()
   errcode = os.system(JAVAC+" -source 1.6 -target 1.6 -bootclasspath "+RTJAR+" -d mod_moreEverything/ -Xlint:unchecked -cp deps_modloader/*;deps_common/*;mod_moreEverything/source mod_moreEverything/source/*.java")
   if errcode == 0:

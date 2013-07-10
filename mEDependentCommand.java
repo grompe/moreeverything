@@ -1,7 +1,6 @@
 
 import javax.script.*;
-import sun.org.mozilla.javascript.internal.*;
-import mEScriptEngine.*;
+import org.mozilla.javascript.*;
 
 // Temporary class till I find how to hook CommandBase
 public class mEDependentCommand extends x
@@ -21,18 +20,17 @@ public class mEDependentCommand extends x
         sb.append(args[0]);
         for (int i = 1; i < args.length; i++) sb.append(" ").append(args[i]);
         String command = sb.toString();
-        mod_moreEverything.engine.put(ScriptEngine.FILENAME, "chat");
         try
         {
-            String result = (String)mod_moreEverything.engine.eval("''+eval('"+command.replaceAll("'", "\\\\'")+"')");
+            String result = (String)mod_moreEverything.execString("''+eval('"+command.replaceAll("'", "\\\\'")+"')", null);
             caller.a("\u00a77>>> "+command+"\u00a7r\n"+result);
             //inv.invokeFunction("evalCommandEvent", caller, command));
         }
         catch(RhinoException e)
         {
             String msg = mod_moreEverything.getScriptStacktrace(e);
-            // Leave only the interesting part of the message
-            msg = msg.substring(0, msg.indexOf("\tat mEScriptEngine.")-2).replace("\t", "    ").replace("\r\n", "\n");
+            // Convert tabs and CRLF for Minecraft chat display
+            msg = msg.replace("\t", "    ").replace("\r\n", "\n");
             caller.a("\u00a77>>> "+command+"\u00a7c\n"+msg);
         }
     }
