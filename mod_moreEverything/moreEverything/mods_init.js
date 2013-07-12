@@ -208,7 +208,6 @@ var mods;
   {
     if (GetFile("UndergroundBiomes.cfg") || GetFile("Underground Biomes.cfg"))
     {
-      m.anthracite             = FindIntMatch(/I:"Anthracite Block ID:"=(\d+)/);
       m.igneousBrick           = FindIntMatch(/I:"Igneous Brick ID:"=(\d+)/);
       m.igneousCobblestone     = FindIntMatch(/I:"Igneous Cobblestone ID:"=(\d+)/);
       m.igneousBrickSlab       = FindIntMatch(/I:"Igneous Stone Brick Slab ID .half.:"=(\d+)/);
