@@ -40,6 +40,7 @@
     AddFuel(400, item.netherrack);
     AddFuel(100, item.grass, 0); // Shrub
     AddFuel(150, item.slab, 2); // Old wooden slab
+    QAddFuel(400, item.hayBlock);
   }
   if (optionalFeature.wool_bleaching)
   {
