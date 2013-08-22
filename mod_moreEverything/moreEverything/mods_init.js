@@ -1,4 +1,3 @@
-
 var mods;
 
 (function(){
@@ -104,7 +103,7 @@ var mods;
   }
   if (m = mods.biomesoplenty)
   {
-    if (GetFile("BiomesOPlenty.cfg"))
+    if (GetFile("biomesoplenty/main.cfg"))
     {
       m.plant            = FindIntMatch(/I:"Plant ID"=(\d+)/);
       m.woodenSlab1      = FindIntMatch(/I:"Wooden Single Slab 1 ID"=(\d+)/);
