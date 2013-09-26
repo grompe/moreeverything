@@ -277,9 +277,6 @@ var MakeMetaCycle;
         AddTransmutation(NewItemStack(m.metamorphicBrick, 1, i), NewItemStack(m.metamorphicStoneSlab, 2, i));
       }
     }
-    // Uncrafting
-    AddTransmutation(NewItemStack(item.coal, 4), m.anthracite);
-
   }
   if (optionalFeature.ee_biome_mods_transmutations && (m = mods.extrabiomesxl))
   {

@@ -94,8 +94,8 @@ public class mod_moreEverything extends BaseMod
         return new File("config");
     }
     
-    //public static class ScriptHandler
-    //{
+    public static class ScriptHandler
+    {
         public static String __getConfigDir()
         {
             return configDir.toString();
@@ -214,7 +214,7 @@ public class mod_moreEverything extends BaseMod
             return errors += amount;
         }
     
-    //}
+    }
 
     public static void logRhinoException(RhinoException ex)
     {
@@ -391,8 +391,8 @@ public class mod_moreEverything extends BaseMod
 
     public int addFuel(int id, int damage)
     {
-        //return ScriptHandler.__getBurnTime(id, WILDCARD);
-        return __getBurnTime(id, WILDCARD);
+        return ScriptHandler.__getBurnTime(id, WILDCARD);
+        //return __getBurnTime(id, WILDCARD);
     }
 
     public String getVersion()
@@ -408,14 +408,14 @@ public class mod_moreEverything extends BaseMod
 
     public int addFuel(int id)
     {
-        //return ScriptHandler.__getBurnTime(id, WILDCARD);
-        return __getBurnTime(id, WILDCARD);
+        return ScriptHandler.__getBurnTime(id, WILDCARD);
+        //return __getBurnTime(id, WILDCARD);
     }
 
     public int AddFuel(int id)
     {
-        //return ScriptHandler.__getBurnTime(id, WILDCARD);
-        return __getBurnTime(id, WILDCARD);
+        return ScriptHandler.__getBurnTime(id, WILDCARD);
+        //return __getBurnTime(id, WILDCARD);
     }
 
     public String Version()

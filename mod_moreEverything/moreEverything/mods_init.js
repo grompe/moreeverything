@@ -1,4 +1,3 @@
-
 var mods;
 
 (function(){
@@ -104,7 +103,7 @@ var mods;
   }
   if (m = mods.biomesoplenty)
   {
-    if (GetFile("BiomesOPlenty.cfg"))
+    if (GetFile("biomesoplenty/main.cfg") || GetFile("BiomesOPlenty.cfg"))
     {
       m.plant            = FindIntMatch(/I:"Plant ID"=(\d+)/);
       m.woodenSlab1      = FindIntMatch(/I:"Wooden Single Slab 1 ID"=(\d+)/);
@@ -208,7 +207,6 @@ var mods;
   {
     if (GetFile("UndergroundBiomes.cfg") || GetFile("Underground Biomes.cfg"))
     {
-      m.anthracite             = FindIntMatch(/I:"Anthracite Block ID:"=(\d+)/);
       m.igneousBrick           = FindIntMatch(/I:"Igneous Brick ID:"=(\d+)/);
       m.igneousCobblestone     = FindIntMatch(/I:"Igneous Cobblestone ID:"=(\d+)/);
       m.igneousBrickSlab       = FindIntMatch(/I:"Igneous Stone Brick Slab ID .half.:"=(\d+)/);
