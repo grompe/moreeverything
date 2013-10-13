@@ -21,6 +21,7 @@ var mods;
     buildcraft         : init("Buildcraft", Packages.buildcraft.BuildCraftCore),
     minefantasy        : init("MineFantasy", Packages.minefantasy.MineFantasyBase),
     undergroundbiomes  : init("Underground Biomes", Packages.exterminatorJeff.undergroundBiomes.common.UndergroundBiomes)
+    arsmagica          : init("Ars Magica", Packages.mithion.arsmagica.AMCore)
   };
   var m;
   if (m = mods.equivalentexchange)
@@ -228,6 +229,17 @@ var mods;
     } else {
       m = false;
       log("Couldn't find config/UndergroundBiomes.cfg or config/Underground Biomes.cfg", logLevel.warning);
+    }
+  }
+  
+  if (m= mods.arsmagica)
+  {
+	  if(GetFile("ArsMagica/AM_Main.cfg"))
+	  {
+		//coming soon
+		} else {
+      m = false;
+      log("Couldn't find ArsMagica/AM_Main.cfg", logLevel.warning);
     }
   }
 })();
