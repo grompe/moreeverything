@@ -20,7 +20,7 @@ var mods;
     twilightforest     : init("Twilight Forest", Packages.twilightforest.TwilightForestMod),
     buildcraft         : init("Buildcraft", Packages.buildcraft.BuildCraftCore),
     minefantasy        : init("MineFantasy", Packages.minefantasy.MineFantasyBase),
-    undergroundbiomes  : init("Underground Biomes", Packages.exterminatorJeff.undergroundBiomes.common.UndergroundBiomes)
+    undergroundbiomes  : init("Underground Biomes", Packages.exterminatorJeff.undergroundBiomes.common.UndergroundBiomes),
     arsmagica          : init("Ars Magica", Packages.mithion.arsmagica.AMCore)
   };
   var m;
