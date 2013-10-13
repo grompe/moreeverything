@@ -112,7 +112,7 @@ var mods;
   }
   if (m = mods.biomesoplenty)
   {
-    if (GetFile("biomesoplenty/main.cfg") || GetFile("BiomesOPlenty.cfg"))
+    if (GetFile("biomesoplenty/ids.cfg") || GetFile("BiomesOPlenty.cfg"))
     {
       m.plant            = FindIntMatch(/I:"Plant ID"=(\d+)/);
       m.woodenSlab1      = FindIntMatch(/I:"Wooden Single Slab 1 ID"=(\d+)/);
