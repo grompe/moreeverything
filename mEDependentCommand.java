@@ -18,7 +18,8 @@ public class mEDependentCommand extends z
     {
         if (args.length == 0)
         {
-            caller.a(cu.e("\u00a7cUsage: /eval <JavaScript code>"));
+            // cv = ChatMessageComponent
+            caller.a(cv.e("\u00a7cUsage: /eval <JavaScript code>"));
             return;
         }
         StringBuilder sb = new StringBuilder();
@@ -29,7 +30,7 @@ public class mEDependentCommand extends z
         try
         {
             String result = (String)mod_moreEverything.engine.eval("''+eval('"+command.replaceAll("'", "\\\\'")+"')");
-            caller.a(cu.e("\u00a77>>> "+command+"\u00a7r\n"+result));
+            caller.a(cv.e("\u00a77>>> "+command+"\u00a7r\n"+result));
             //inv.invokeFunction("evalCommandEvent", caller, command));
         }
         catch(RhinoException e)
@@ -37,7 +38,7 @@ public class mEDependentCommand extends z
             String msg = mod_moreEverything.getScriptStacktrace(e);
             // Leave only the interesting part of the message
             msg = msg.substring(0, msg.indexOf("\tat mEScriptEngine.")-2).replace("\t", "    ").replace("\r\n", "\n");
-            caller.a(cu.e("\u00a77>>> "+command+"\u00a7c\n"+msg));
+            caller.a(cv.e("\u00a77>>> "+command+"\u00a7c\n"+msg));
         }
     }
     public int compareTo(Object obj)
