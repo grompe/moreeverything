@@ -208,7 +208,7 @@ var MakeMetaCycle;
     AddTransmutation(item.obsidian, "logWood", "logWood");
   }
   var m;
-  if (optionalFeature.ee_thaumcraft_transmutations && (m = mods.thaumcraft))
+  if (optionalFeature.ee_thaumcraft_transmutations && (m = mods.thaumcraft) && (m.versionMajor == 3))
   {
     // Air shard -> fire shard -> water shard -> earth shard -> air shard; same for clusters
     AddEquivalency(MakeMetaCycle(m.shard, 4));
@@ -217,14 +217,16 @@ var MakeMetaCycle;
     AddTransmutation1to1(NewItemStack(m.shard, 1, 4), NewItemStack(m.shard, 3, 5));
 
     // Change marker, candle and warded stone colors
-    AddEquivalency(MakeMetaCycle(m.marker, 16));
+    if (m.marker) AddEquivalency(MakeMetaCycle(m.marker, 16));
     AddEquivalency(MakeMetaCycle(m.candle, 16));
     // Warded stone can't be transmuted in-place, only in crafting
-    for (var i = 0; i < 16; i++)
+    if (m.secure)
     {
-      AddTransmutation(NewItemStack(m.secure, 1, (i+1)%16), NewItemStack(m.secure, 1, i));
+      for (var i = 0; i < 16; i++)
+      {
+        AddTransmutation(NewItemStack(m.secure, 1, (i+1)%16), NewItemStack(m.secure, 1, i));
+      }
     }
-
     // Uncrafting: obsidian tile -> obsidian
     QAddTransmutation(item.obsidian, QNewItemStack(m.cosmeticSolid, 1, 1));
   }

@@ -40,10 +40,18 @@ var mods;
   {
     if (GetFile("Thaumcraft.cfg"))
     {
+      if (!isEmpty(Packages.thaumcraft.api.aspects.Aspect.aspects))
+      {
+        // Assume Thaumcraft 4
+        m.versionMajor = 4;
+      } else {
+        // Assume Thaumcraft 3
+        m.versionMajor = 3;
+        m.marker        = FindIntMatch(/I:BlockMarker=(\d+)/);
+        m.secure        = FindIntMatch(/I:BlockSecure=(\d+)/);
+      }
       m.shard         = FindIntMatch(/I:ItemShard=(\d+)/)+256;
-      m.marker        = FindIntMatch(/I:BlockMarker=(\d+)/);
       m.candle        = FindIntMatch(/I:BlockCandle=(\d+)/);
-      m.secure        = FindIntMatch(/I:BlockSecure=(\d+)/);
       m.crystal       = FindIntMatch(/I:BlockCrystal=(\d+)/);
       m.cosmeticSolid = QFindIntMatch(/I:BlockCosmeticSolid=(\d+)/);
       m.customPlant   = FindIntMatch(/I:BlockCustomPlant=(\d+)/);
