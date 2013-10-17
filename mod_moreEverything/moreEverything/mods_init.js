@@ -243,14 +243,4 @@ var mods;
     }
   }
   
-  if (m= mods.arsmagica)
-  {
-	  if(GetFile("ArsMagica/AM_Main.cfg"))
-	  {
-		//coming soon
-		} else {
-      m = false;
-      log("Couldn't find ArsMagica/AM_Main.cfg", logLevel.warning);
-    }
-  }
 })();
