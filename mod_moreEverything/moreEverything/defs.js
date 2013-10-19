@@ -39,7 +39,7 @@ var item =
   ironBlock           : 42,
   slab                : 44,
   bricks              : 45,
-  tNT                 : 46,
+  tnt                 : 46,
   bookshelf           : 47,
   mossStone           : 48,
   obsidian            : 49,
