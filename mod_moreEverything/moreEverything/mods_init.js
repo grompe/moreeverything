@@ -26,15 +26,15 @@ var mods;
   var m;
   if (m = mods.equivalentexchange)
   {
-    if (GetFile("EE3/EE3.cfg") || GetFile("EE3.cfg"))
+    if (GetFile("EE3/item.properties") || GetFile("EE3/EE3.cfg") || GetFile("EE3.cfg"))
     {
-      m.miniumStone = QFindIntMatch(/I:stoneMinium=(\d+)/) || FindIntMatch(/I:miniumStone=(\d+)/);
-      m.philosophersStone = QFindIntMatch(/I:stonePhilosophers=(\d+)/) || FindIntMatch(/I:philStone=(\d+)/);
-      m.inertStone = QFindIntMatch(/I:stoneInert=(\d+)/) || FindIntMatch(/I:inertStone=(\d+)/);
-      m.miniumShard = QFindIntMatch(/I:shardMinium=(\d+)/) || FindIntMatch(/I:miniumShard=(\d+)/);
+      m.miniumStone = QFindIntMatch(/item \{[^{]+I:stoneMinium=(\d+)/) || FindIntMatch(/I:miniumStone=(\d+)/);
+      m.philosophersStone = QFindIntMatch(/item \{[^{]+I:stonePhilosophers=(\d+)/) || FindIntMatch(/I:philStone=(\d+)/);
+      m.inertStone = QFindIntMatch(/item \{[^{]+I:stoneInert=(\d+)/) || FindIntMatch(/I:inertStone=(\d+)/);
+      m.miniumShard = QFindIntMatch(/item \{[^{]+I:shardMinium=(\d+)/) || FindIntMatch(/I:miniumShard=(\d+)/);
     } else {
       m = false;
-      log("Couldn't find config/EE3/EE3.cfg or config/EE3.cfg", logLevel.warning);
+      log("Couldn't find config/EE3/item.properties or config/EE3/EE3.cfg or config/EE3.cfg", logLevel.warning);
     }
   }
   if (m = mods.thaumcraft)
