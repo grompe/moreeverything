@@ -20,30 +20,39 @@ var mods;
     twilightforest     : init("Twilight Forest", Packages.twilightforest.TwilightForestMod),
     buildcraft         : init("Buildcraft", Packages.buildcraft.BuildCraftCore),
     minefantasy        : init("MineFantasy", Packages.minefantasy.MineFantasyBase),
-    undergroundbiomes  : init("Underground Biomes", Packages.exterminatorJeff.undergroundBiomes.common.UndergroundBiomes)
+    undergroundbiomes  : init("Underground Biomes", Packages.exterminatorJeff.undergroundBiomes.common.UndergroundBiomes),
+    arsmagica          : init("Ars Magica", Packages.mithion.arsmagica.AMCore)
   };
   var m;
   if (m = mods.equivalentexchange)
   {
-    if (GetFile("EE3/EE3.cfg") || GetFile("EE3.cfg"))
+    if (GetFile("EE3/item.properties") || GetFile("EE3/EE3.cfg") || GetFile("EE3.cfg"))
     {
-      m.miniumStone = QFindIntMatch(/I:stoneMinium=(\d+)/) || FindIntMatch(/I:miniumStone=(\d+)/);
-      m.philosophersStone = QFindIntMatch(/I:stonePhilosophers=(\d+)/) || FindIntMatch(/I:philStone=(\d+)/);
-      m.inertStone = QFindIntMatch(/I:stoneInert=(\d+)/) || FindIntMatch(/I:inertStone=(\d+)/);
-      m.miniumShard = QFindIntMatch(/I:shardMinium=(\d+)/) || FindIntMatch(/I:miniumShard=(\d+)/);
+      m.miniumStone = QFindIntMatch(/item \{[^{]+I:stoneMinium=(\d+)/) || FindIntMatch(/I:miniumStone=(\d+)/);
+      m.philosophersStone = QFindIntMatch(/item \{[^{]+I:stonePhilosophers=(\d+)/) || FindIntMatch(/I:philStone=(\d+)/);
+      m.inertStone = QFindIntMatch(/item \{[^{]+I:stoneInert=(\d+)/) || FindIntMatch(/I:inertStone=(\d+)/);
+      m.miniumShard = QFindIntMatch(/item \{[^{]+I:shardMinium=(\d+)/) || FindIntMatch(/I:miniumShard=(\d+)/);
     } else {
       m = false;
-      log("Couldn't find config/EE3/EE3.cfg or config/EE3.cfg", logLevel.warning);
+      log("Couldn't find config/EE3/item.properties or config/EE3/EE3.cfg or config/EE3.cfg", logLevel.warning);
     }
   }
   if (m = mods.thaumcraft)
   {
     if (GetFile("Thaumcraft.cfg"))
     {
+      if (!isEmpty(Packages.thaumcraft.api.aspects.Aspect.aspects))
+      {
+        // Assume Thaumcraft 4
+        m.versionMajor = 4;
+      } else {
+        // Assume Thaumcraft 3
+        m.versionMajor = 3;
+        m.marker        = FindIntMatch(/I:BlockMarker=(\d+)/);
+        m.secure        = FindIntMatch(/I:BlockSecure=(\d+)/);
+      }
       m.shard         = FindIntMatch(/I:ItemShard=(\d+)/)+256;
-      m.marker        = FindIntMatch(/I:BlockMarker=(\d+)/);
       m.candle        = FindIntMatch(/I:BlockCandle=(\d+)/);
-      m.secure        = FindIntMatch(/I:BlockSecure=(\d+)/);
       m.crystal       = FindIntMatch(/I:BlockCrystal=(\d+)/);
       m.cosmeticSolid = QFindIntMatch(/I:BlockCosmeticSolid=(\d+)/);
       m.customPlant   = FindIntMatch(/I:BlockCustomPlant=(\d+)/);
@@ -103,7 +112,7 @@ var mods;
   }
   if (m = mods.biomesoplenty)
   {
-    if (GetFile("biomesoplenty/main.cfg") || GetFile("BiomesOPlenty.cfg"))
+    if (GetFile("biomesoplenty/ids.cfg") || GetFile("BiomesOPlenty.cfg"))
     {
       m.plant            = FindIntMatch(/I:"Plant ID"=(\d+)/);
       m.woodenSlab1      = FindIntMatch(/I:"Wooden Single Slab 1 ID"=(\d+)/);
@@ -220,6 +229,17 @@ var mods;
     } else {
       m = false;
       log("Couldn't find config/UndergroundBiomes.cfg or config/Underground Biomes.cfg", logLevel.warning);
+    }
+  }
+  
+  if (m= mods.arsmagica)
+  {
+	  if(GetFile("ArsMagica/AM_Main.cfg"))
+	  {
+		//coming soon
+		} else {
+      m = false;
+      log("Couldn't find ArsMagica/AM_Main.cfg", logLevel.warning);
     }
   }
 })();

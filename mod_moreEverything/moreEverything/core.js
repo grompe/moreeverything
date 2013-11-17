@@ -469,6 +469,7 @@ var AddDispenserBehavior;
 
   GetItem = function(itemID)
   {
+    if (typeof itemID != "number") throw("GetItem: invalid itemID "+itemID);
     return java.lang.reflect.Array.get(__itemsList, itemID);
   };
 
