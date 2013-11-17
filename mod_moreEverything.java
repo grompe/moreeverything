@@ -342,7 +342,7 @@ public class mod_moreEverything extends BaseMod
     public void load()
     {
     }
-
+    
     // Need to load after all other mods...
     public void modsLoaded()
     {
@@ -354,7 +354,7 @@ public class mod_moreEverything extends BaseMod
         try
         {
             scope = ctx.initStandardObjects();
-            scope.put("__api", scope, this);
+            scope.put("__api", scope, new ScriptHandler());
             execResource("moreEverything/core.js");
             execConfigFile(file);
         }
