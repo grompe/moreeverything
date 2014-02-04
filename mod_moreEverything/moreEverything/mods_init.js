@@ -21,7 +21,18 @@ var mods;
     buildcraft         : init("Buildcraft", Packages.buildcraft.BuildCraftCore),
     minefantasy        : init("MineFantasy", Packages.minefantasy.MineFantasyBase),
     undergroundbiomes  : init("Underground Biomes", Packages.exterminatorJeff.undergroundBiomes.common.UndergroundBiomes),
-    arsmagica          : init("Ars Magica", Packages.mithion.arsmagica.AMCore)
+    //drzharksmocreatures : init("MoCreatures", Packages.drzhark.mocreatures.MoCreatures),
+    mrcrayfurniture    : init("cfm", Packages.com.mrcrayfish.furniture.MrCrayfishFurnitureMod),
+    immibislxp         : init("LiquidXP", Packages.mods.immibis.lxp.LiquidXPMod),
+    balkonsweapons     : init("weaponmod", Packages.weaponmod.BalkonsWeaponMod),
+    minefactoryrld     : init("MineFactory Reloaded", Packages.powercrystals.minefactoryreloaded.MineFactoryReloadedCore),
+    forestry           : init("Forestry", Packages.forestry.Forestry),
+    pluginsforforestry : init("PfF", Packages.denoflionsx.PluginsforForestry.Core.PfF),
+    binnieextratrees   : init("Binnie Mods - Extra Trees", Packages.binnie.extratrees.ExtraTrees),
+    binnieextrabees    : init("Binnie Mods - Extra Bees", Packages.binnie.extrabees.ExtraBees),
+    magicbees          : init("MagicBees", Packages.magicbees.main.MagicBees),
+    forestryextras     : init("Forestry Extras", Packages.mods.ForestryExtras.main.Main),
+    projectzulu        : init("ProjectZulu", Packages.projectzulu.common.ProjectZulu_Core)
   };
   var m;
   if (m = mods.equivalentexchange)
@@ -232,14 +243,4 @@ var mods;
     }
   }
   
-  if (m= mods.arsmagica)
-  {
-	  if(GetFile("ArsMagica/AM_Main.cfg"))
-	  {
-		//coming soon
-		} else {
-      m = false;
-      log("Couldn't find ArsMagica/AM_Main.cfg", logLevel.warning);
-    }
-  }
 })();
